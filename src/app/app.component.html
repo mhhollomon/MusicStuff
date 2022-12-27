@@ -2,7 +2,7 @@
     <span>Mark's Musical Miscellany</span>
     <span class="example-fill-remaining-space"></span>
 </mat-toolbar>
-<nav mat-tab-nav-bar>
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
     <a mat-tab-link *ngFor="let link of navLinks"
        [routerLink]="link.link"
        routerLinkActive #rla="routerLinkActive"
@@ -11,6 +11,8 @@
     </a>
 </nav>
 <div class="py-8">
-    <router-outlet></router-outlet>
+    <mat-tab-nav-panel #tabPanel>
+       <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
 </div>
 
