@@ -1,0 +1,11 @@
+<button mat-stroked-button color="primary" (click)="generate()">Generate New Idea</button>
+<div *ngIf="show_idea">
+<p>Compose a theme that: </p>
+    <mat-list>
+        <mat-list-item class="composition-idea-li" >is in {{form_type}} form</mat-list-item>
+        <mat-list-item class="composition-idea-li" >is at a {{speed}} {{time_sig}} tempo</mat-list-item>
+        <mat-list-item class="composition-idea-li" >is in the key of {{key_center}} {{tonality}} </mat-list-item>
+        <mat-list-item class="composition-idea-li" >starts with the notes on scale degrees {{note1}}, {{note2}} </mat-list-item>
+    </mat-list>
+</div>
+<p>Idea from <a href="http://www.brianavid.co.uk/ComposeWhat.html">ComposeWhat</a></p>
