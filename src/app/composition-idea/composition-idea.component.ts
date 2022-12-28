@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Choice, Chooser, mkch } from '../chooser';
 import { RandomKeyService } from '../random-key.service';
-
+import {capitalize} from '../capitalize.lib';
 
 function pickChoice<T>(choices : Choice<T>[]) : T {
     return (new Chooser(choices)).pick().choice;
@@ -44,10 +44,6 @@ export class CompositionIdeaComponent {
 
     }
 
-    capitalize(s : string) {
-        return s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
-    }
-
     generate() {
         
         this.form_type = pickChoice(formChoices);
@@ -56,7 +52,7 @@ export class CompositionIdeaComponent {
 
         let random_key = this.random_key_service.pick();
 
-        this.tonality = this.capitalize(random_key.sonority);
+        this.tonality = capitalize(random_key.sonority);
         this.key_center = random_key.rootDisplay();
 
         this.note1 = pickChoice(noteChoices);

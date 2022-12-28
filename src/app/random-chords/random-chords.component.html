@@ -1,3 +1,18 @@
-<p>random-chords works!</p>
+<div style="height: 20px"></div>
+<span style="width: 20px; display: inline-flex; height: 1em;"></span><button mat-stroked-button color="primary" (click)="generate()">Generate Chords</button>
 
-<h2>Nothing Here (Yet!)</h2>
+
+<label class="m-4">Chord count:</label><input matInput type="number" max="8" min="1" [(ngModel)]="chord_count" >
+
+<div style="height: 20px"></div>
+<div class="border-2 border-black border-solid rounded p-2">
+    <p>Key = <span *ngIf="show_chords">{{key.fullName()}}</span></p>
+    <mat-list>
+        <mat-list-item *ngFor="let c of chords" >{{c.name}}</mat-list-item>
+    </mat-list>
+</div>
+<div style="height: 20px"></div>
+<ul class="italic text-xs">
+    <li><span class="font-bold">Only</span> diatonic chords</li>
+    <li><span class="font-bold">Only</span> triads</li>
+</ul>

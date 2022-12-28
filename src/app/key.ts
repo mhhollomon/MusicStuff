@@ -1,9 +1,23 @@
+import {capitalize} from './capitalize.lib';
+
+
 export class Note {
     noteClass : string = 'A';
     alter : number = 0;
 
-    constructor(note: string) {
+    constructor(note: string, alter? : number ) {
+
+        if (alter) {
+            if (![-1, 0, 1].includes(alter)) {
+                throw Error("Invalid alter amount : " + alter);
+            }
+            this.alter = alter;
+        }
+
         if (note.length == 2) {
+            if (alter) {
+                throw Error("Cannot use alter with accidental");
+            }
             this.test_and_set_note(note.substring(0, 1));
             let accidental = note.substring(1, 2);
             if (['#', 'b'].includes(accidental)) {
@@ -63,5 +77,9 @@ export class Key {
 
     isMinor() {
         return (this.sonority == 'minor');
+    }
+
+    fullName() {
+        return this.root() + ' ' + capitalize(this.sonority);
     }
 }
