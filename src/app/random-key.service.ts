@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, mkch } from './chooser';
+import { Key } from './key'
 
 const sonorityChoices : Choice<string>[] = [
   mkch('Major'), mkch('Minor')
@@ -15,12 +16,6 @@ const majorKeyChoices : Choice<string>[] = [
   mkch('E\u266D', 5)
 ]
 
-export interface key {
-  root : string;
-  isMinor : boolean;
-  sonority : string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +27,7 @@ export class RandomKeyService {
 
   constructor() { }
 
-  pick() {
+  pick() : Key {
     let sonority = this.sonorityChooser.pick().choice;
     let is_minor = (sonority == 'Minor');
     let the_root = (is_minor ? this.minorChooser : this.majorChooser).pick().choice;

@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 
 import { Choice, Chooser, mkch } from '../chooser';
-import { RandomKeyService, key } from '../random-key.service';
+import { RandomKeyService } from '../random-key.service';
 
-/* Might be good to package these in an object so the weight
- * matrix can be precomputed
- */
-function pickChoice<Type>(choices : Choice<Type>[]) {
 
-    return (new Chooser(choices)).pick();
+function pickChoice<T>(choices : Choice<T>[]) : T {
+    return (new Chooser(choices)).pick().choice;
 }
 
 const formChoices : Choice<string>[] = [ mkch('sentence'), mkch('period') ];
@@ -28,9 +25,9 @@ const noteChoices : Choice<string>[] = [
 ]
 
 @Component({
-  selector: 'app-composition-idea',
-  templateUrl: './composition-idea.component.html',
-  styleUrls: ['./composition-idea.component.less']
+    selector: 'app-composition-idea',
+    templateUrl: './composition-idea.component.html',
+    styleUrls: ['./composition-idea.component.less']
 })
 export class CompositionIdeaComponent {
 
@@ -49,17 +46,17 @@ export class CompositionIdeaComponent {
 
     generate() {
         
-        this.form_type = pickChoice(formChoices).choice;
-        this.speed = pickChoice(speedChoices).choice;
-        this.time_sig = pickChoice(timeSignatureChoices).choice;
+        this.form_type = pickChoice(formChoices);
+        this.speed = pickChoice(speedChoices);
+        this.time_sig = pickChoice(timeSignatureChoices);
 
         let random_key = this.random_key_service.pick();
 
         this.tonality = random_key.sonority;
         this.key_center = random_key.root;
 
-        this.note1 = pickChoice(noteChoices).choice;
-        this.note2 = pickChoice(noteChoices).choice;
+        this.note1 = pickChoice(noteChoices);
+        this.note2 = pickChoice(noteChoices);
 
         this.show_idea = true;
     }
