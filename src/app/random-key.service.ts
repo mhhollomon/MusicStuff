@@ -3,17 +3,18 @@ import { Choice, Chooser, mkch } from './chooser';
 import { Key } from './key'
 
 const sonorityChoices : Choice<string>[] = [
-  mkch('Major'), mkch('Minor')
+  mkch('major'), mkch('minor')
 ]
 
 const minorKeyChoices : Choice<string>[] = [
-  mkch('A', 30), mkch('D', 17), mkch('G', 17), mkch('C', 17), mkch('E', 24), mkch('B', 10)
+  mkch('A', 30), mkch('D', 17), mkch('G', 17), 
+  mkch('C', 17), mkch('E', 24), mkch('B', 10)
 ]
 
 const majorKeyChoices : Choice<string>[] = [
   mkch('C', 30), mkch('F', 17), mkch('G', 17),
-  mkch('D', 14), mkch('B\u266D', 11), mkch('A', 5),
-  mkch('E\u266D', 5)
+  mkch('D', 14), mkch('Bb', 11), mkch('A', 5),
+  mkch('Eb', 5)
 ]
 
 @Injectable({
@@ -29,8 +30,8 @@ export class RandomKeyService {
 
   pick() : Key {
     let sonority = this.sonorityChooser.pick().choice;
-    let is_minor = (sonority == 'Minor');
+    let is_minor = (sonority == 'minor');
     let the_root = (is_minor ? this.minorChooser : this.majorChooser).pick().choice;
-    return { 'root' : the_root, 'isMinor' : is_minor, 'sonority' : sonority };
+    return new Key(the_root, sonority);
   }
 }
