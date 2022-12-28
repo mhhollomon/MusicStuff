@@ -15,6 +15,7 @@ echo "Building web app"
 echo "####################################################################"
 
 rm -rf ${BUILD_DIR};
+npm ci
 ng build --base-href "/MusicStuff/" --optimization --output-path ${BUILD_DIR};
 
 if [ ! -e  ${BUILD_DIR}/index.html ]; then
