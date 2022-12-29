@@ -14,13 +14,36 @@
     <option>Any</option>
     </select>
 </div>
+<div class="m-2" *ngIf="!scale_disabled">
+    <mat-label>Key</mat-label>
+    <mat-radio-group [(ngModel)]="scale_source">
+        <mat-radio-button value="Random">Random</mat-radio-button>
+        <mat-radio-button value="Selected">Selected</mat-radio-button>
+    </mat-radio-group>
+    <div class="m-4" *ngIf="scale_source == 'Selected'">
+        <select [(ngModel)]="selected_sonority">
+            <option>major</option>
+            <option>minor</option>
+        </select>
+        <select [(ngModel)]="selected_key">
+            <option>Random</option>
+            <option *ngFor="let k of (selected_sonority==='minor' ? minorkeys : majorkeys)">{{k}}</option>
+        </select>
+    </div>
+</div> 
 <div style="height: 20px"></div>
 <span style="width: 20px; display: inline-flex; height: 1em;"></span><button mat-stroked-button color="primary" (click)="generate()">Generate Chords</button>
 
 
 <div style="height: 20px"></div>
 <div class="border-2 border-black border-solid rounded p-2">
-    <p *ngIf="show_key">Key = <span *ngIf="show_chords">{{key.fullName()}}</span></p>
+    <div *ngIf="show_key">
+        <p >Key = <span *ngIf="show_chords">{{key.fullName()}} <mat-checkbox [(ngModel)]="show_scale" [disabled]="scale_disabled">Show Scale Notes</mat-checkbox>
+        </span></p>
+        <div *ngIf="show_scale">
+            <span class="m-1" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
+        </div>
+    </div>
     <mat-list>
         <mat-list-item *ngFor="let c of chords" >{{c.name}}</mat-list-item>
     </mat-list>

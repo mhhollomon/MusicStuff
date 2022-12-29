@@ -98,14 +98,14 @@ export class RandomChordService {
     let note = scale[root-1];
 
     let chQual = key.isMinor() ? minorQuality : majorQuality;
-    let name = note.note() + chQual[root-1];
+    let name = note.noteDisplay() + chQual[root-1];
 
     let invOffset = this.invertChooser.choose();
     if (invOffset > 0) {
       let bassDegree = ((root-1) + invOffset) % 7;
       let bassNote = scale[bassDegree];
 
-      name = name + '/' + bassNote.note();
+      name = name + '/' + bassNote.noteDisplay();
     }
 
     return new Chord(note.note(), name);
@@ -116,7 +116,7 @@ export class RandomChordService {
 
     let note = new Note(this.chromaticChooser.choose());
     let chQual = chromaticQualityChooser.choose();
-    let name = note.note() + chQual;
+    let name = note.noteDisplay() + chQual;
 
     if (chQual in qualityToScaleType) {
       const sn = new Scale(note, qualityToScaleType[chQual])
@@ -127,7 +127,7 @@ export class RandomChordService {
         let bassDegree = invOffset % 7;
         let bassNote = scale[bassDegree];
   
-        name = name + '/' + bassNote.note();
+        name = name + '/' + bassNote.noteDisplay();
       }
   
     }

@@ -37,7 +37,7 @@ export class Note {
     }
 
     noteDisplay() {
-        return this.noteClass + ['\u266D', '', '\u266F'][this.alter+1];
+        return this.noteClass + ['\uD834\uDD2B', '\u266D', '', '\u266F', '\uD834\uDD2A'][this.alter+2];
     }
 
 

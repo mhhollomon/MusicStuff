@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, mkch } from './chooser';
-import { Note, Scale } from './key'
+import { Note, Scale, ScaleType } from './key'
 
 interface GenericNoteData {
   name : string,
@@ -34,7 +34,7 @@ function mk_maj_kc(root: string, weight? : number) {
   return mkch(new Scale(root, 'major'), weight);
 }
 
-const sonorityChoices : Choice<string>[] = [
+const sonorityChoices : Choice<ScaleType>[] = [
   mkch('major'), mkch('minor')
 ]
 
@@ -63,8 +63,9 @@ export class ScaleService {
 
   constructor() { }
 
-  choose() : Scale {
-    let sonority = this.sonorityChooser.pick().choice;
+  choose(sonority? : ScaleType ) : Scale {
+
+    sonority = sonority ? sonority : this.sonorityChooser.choose();
     return ((sonority == 'minor') ? this.minorChooser : this.majorChooser).choose();
   }
 
@@ -120,5 +121,12 @@ export class ScaleService {
 
     return notes;
 
+  }
+
+  getMinorKeyList() : string[] {
+    return minorKeyChoices.map(v => v.choice.root());
+  }
+  getMajorKeyList() : string[] {
+    return majorKeyChoices.map(v => v.choice.root());
   }
 }

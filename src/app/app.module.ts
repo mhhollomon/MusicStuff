@@ -8,6 +8,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +38,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
+    MatCheckboxModule,
+    MatRadioModule,
     AppRoutingModule
   ],
   providers: [],
