@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Choice, Chooser, mkch } from '../chooser';
-import { RandomKeyService } from '../random-key.service';
+import { ScaleService } from '../scale.service';
 import {capitalize} from '../capitalize.lib';
 
 function pickChoice<T>(choices : Choice<T>[]) : T {
@@ -40,7 +40,7 @@ export class CompositionIdeaComponent {
     note1 : string = '';
     note2 : string = '';
 
-    constructor(private random_key_service : RandomKeyService) {
+    constructor(private random_key_service : ScaleService) {
 
     }
 
@@ -50,9 +50,9 @@ export class CompositionIdeaComponent {
         this.speed = pickChoice(speedChoices);
         this.time_sig = pickChoice(timeSignatureChoices);
 
-        let random_key = this.random_key_service.pick();
+        let random_key = this.random_key_service.choose();
 
-        this.tonality = capitalize(random_key.sonority);
+        this.tonality = capitalize(random_key.scaleType);
         this.key_center = random_key.rootDisplay();
 
         this.note1 = pickChoice(noteChoices);

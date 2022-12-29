@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RandomKeyService } from './random-key.service';
+import { ScaleService } from './scale.service';
 
-describe('RandomKeyService', () => {
-  let service: RandomKeyService;
+describe('ScaleService', () => {
+  let service: ScaleService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RandomKeyService);
+    service = TestBed.inject(ScaleService);
   });
 
   it('should be created', () => {

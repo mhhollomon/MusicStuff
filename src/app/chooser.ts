@@ -26,7 +26,7 @@ export class Chooser<T> {
     
     }
 
-    pick() {
+    pick() : Choice<T> {
         let rnd_num = Math.random() * this.total_weight;
         
         let index = 0;
@@ -39,4 +39,13 @@ export class Chooser<T> {
     
         return this.choices[this.choices.length - 1];        
     }
+
+    choose() : T {
+        return this.pick().choice
+    }
+}
+
+
+export function equalWeightedChooser<T>(choices : T[]) : Chooser<T> {
+    return new Chooser(choices.map(v => mkch(v)));
 }

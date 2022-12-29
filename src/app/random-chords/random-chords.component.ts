@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { RandomKeyService } from '../random-key.service';
+import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord } from '../random-chord.service';
-import { Key } from '../key';
+import { Scale } from '../key';
 
 @Component({
   selector: 'app-random-chords',
@@ -10,7 +10,7 @@ import { Key } from '../key';
 })
 export class RandomChordsComponent {
 
-  key : Key = new Key('C', 'major');
+  key : Scale = new Scale('C', 'major');
 
   chords : Chord[] = [];
 
@@ -23,17 +23,19 @@ export class RandomChordsComponent {
   mode : string = 'Diatonic';
   
 
-  constructor(private randomKeyService : RandomKeyService,
+  constructor(private scaleService : ScaleService,
     private randomChordService : RandomChordService) {
 
   }
 
   generate() {
 
-    let picked_key : Key | null = null;
+    console.log("--clicked---");
+
+    let picked_key : Scale | null = null;
 
     if (this.mode === 'Diatonic') {
-      this.key = this.randomKeyService.pick();
+      this.key = this.scaleService.choose();
       picked_key = this.key;
       this.show_key = true;
     } else {

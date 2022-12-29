@@ -8,7 +8,7 @@ export class Note {
     constructor(note: string, alter? : number ) {
 
         if (alter) {
-            if (![-1, 0, 1].includes(alter)) {
+            if (![-2, -1, 0, 1, 2].includes(alter)) {
                 throw Error("Invalid alter amount : " + alter);
             }
             this.alter = alter;
@@ -33,7 +33,7 @@ export class Note {
     }
 
     note() {
-        return this.noteClass + ['b', '', '#'][this.alter+1];
+        return this.noteClass + ['bb', 'b', '', '#', 'x'][this.alter+2];
     }
 
     noteDisplay() {
@@ -52,19 +52,24 @@ export class Note {
     }
 }
 
+export const ScaleTypeEnum = {
+    minor : 'minor',
+    major : 'major',
+    phrygian : 'phrygian',
+}
 
-export class Key {
+export type ScaleType = keyof typeof ScaleTypeEnum;
+
+export class Scale {
     rootNote : Note;
-    sonority : string;
+    scaleType : ScaleType;
  
 
-    constructor(rootNote : string | Note, sonority : string ) {
-        if ( ! ['minor', 'major'].includes(sonority)) {
-            throw Error("unknown sonority : " + sonority);
-        }
+    constructor(rootNote : string | Note, scaleType : ScaleType ) {
 
-        this.sonority = sonority;
+        this.scaleType = scaleType;
         this.rootNote = (typeof rootNote == 'string') ? new Note(rootNote) : rootNote;
+
     }
 
     root() {
@@ -76,10 +81,16 @@ export class Key {
     }
 
     isMinor() {
-        return (this.sonority == 'minor');
+        return (this.scaleType === ScaleTypeEnum.minor );
     }
 
     fullName() {
-        return this.root() + ' ' + capitalize(this.sonority);
+        return this.root() + ' ' + capitalize(this.scaleType);
     }
+
+    fullDisplay() {
+        return this.rootDisplay() + ' ' + capitalize(this.scaleType);
+    }
+
+    id() { return this.fullName(); }
 }
