@@ -32,9 +32,23 @@ const majorQuality = ['maj', 'min', 'min', 'maj', 'maj', 'min', 'dim' ];
 
 const inversionOffset = [0, 2, 4];
 
-export interface Chord {
+/* This is for Chromatic generation - much simpler */
+
+const chromaticNotes = ['A', 'Bb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'Ab'];
+const chromaticQualityChooser = new Chooser([ mkch('min', 3), mkch('maj', 3), mkch('dim', 1) ]);
+
+export class Chord {
   root : string;
   name : string;
+
+  constructor(root : string = 'C', name : string = 'Cmaj') {
+    this.root = root;
+    this.name = name;
+  }
+
+  isSame(other : Chord) {
+    return this.root === other.root;
+  }
 }
 
 
@@ -43,33 +57,63 @@ export interface Chord {
 })
 export class RandomChordService {
   private noteChooser = new Chooser(noteChoices);
-  private invertChoose = new Chooser(inversionOffset.map(v => mkch(v)));
+  private invertChooser = new Chooser(inversionOffset.map(v => mkch(v)));
+  private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
 
   private scaleCache : { [index: string] : Note[]} = {};
 
   constructor() { }
 
-  gen_chords(key : Key, count : number ) : Chord[] {
+  gen_chords(key : Key | null, count : number, duplicates : string = 'any' ) : Chord[] {
     count = Math.floor(count);
     if (count < 1) {
       throw Error("count must be at least 1");
     }
 
-    let scale = this.getScale(key);
+    duplicates = duplicates.toLowerCase();
+
+   
 
     let retval : Chord[] = [];
 
     if (count > 1) {
-      retval = this.gen_chords(key, count -1 );
+      retval = this.gen_chords(key, count -1, duplicates );
     }
 
+    let try_again = true;
+    let newChord = new Chord();
+    while (try_again) {
+      newChord = this.gen_one_chord(key);
+      try_again = false;
+      if (count > 1) {
+        if (duplicates === 'not adjacent') {
+          if (retval[retval.length-1].isSame(newChord)) {
+            try_again = true;
+          }
+        } else if (duplicates === 'none') {
+          for (let c of retval) {
+            if (c.isSame(newChord)) {
+              try_again = true;
+            }
+          }
+        }
+      }
+    }
+
+    retval.push(newChord)
+
+    return retval;
+  }
+
+  private gen_diatonic_chord(key : Key) {
+    let scale = this.getScale(key);
     let root = this.noteChooser.pick().choice;
     let note = scale[root-1];
 
     let chQual = key.isMinor() ? minorQuality : majorQuality;
     let name = note.note() + chQual[root-1];
 
-    let invOffset = this.invertChoose.pick().choice;
+    let invOffset = this.invertChooser.pick().choice;
     if (invOffset > 0) {
       let bassDegree = ((root-1) + invOffset) % 7;
       let bassNote = scale[bassDegree];
@@ -77,10 +121,28 @@ export class RandomChordService {
       name = name + '/' + bassNote.note();
     }
 
+    return new Chord(note.note(), name);
 
-    retval.push({ 'root' : note.note(), 'name' : name})
+  }
 
-    return retval;
+  private gen_chromatic_chord() : Chord {
+
+    let note = new Note(this.chromaticChooser.pick().choice);
+    let chQual = chromaticQualityChooser.pick().choice;
+
+    let name = note.note() + chQual;
+
+    return new Chord(note.note(), name);
+  }
+
+  private gen_one_chord(key: Key | null) : Chord {
+
+    if (key) {
+      return this.gen_diatonic_chord(key);
+    } else {
+      return this.gen_chromatic_chord();
+    }
+
   }
 
   private getScale(key : Key) : Note[] {
