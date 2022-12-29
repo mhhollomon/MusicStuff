@@ -32,6 +32,12 @@ echo "####################################################################"
     rm -rf assets *
 )
 
+# The 404 page used for gh-pages isn't really a part of the build.
+# So, copy it specially. Hopefully I can find a way around this at
+# some point.
+
+cp src/404.html ${OUTPUT_REPO_DIR}
+
 ( cd ${BUILD_DIR};
     cp -r *  ${OUTPUT_REPO_DIR}
 )
