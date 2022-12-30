@@ -1,6 +1,5 @@
 <mat-toolbar color="primary">
     <span>Mark's Musical Miscellany</span>
-    <span class="example-fill-remaining-space"></span>
 </mat-toolbar>
 <nav mat-tab-nav-bar [tabPanel]="tabPanel">
     <a mat-tab-link *ngFor="let link of navLinks"
@@ -10,7 +9,7 @@
         {{link.label}}
     </a>
 </nav>
-<div class="py-8">
+<div class="mh3 mt4">
     <mat-tab-nav-panel #tabPanel>
        <router-outlet></router-outlet>
     </mat-tab-nav-panel>
