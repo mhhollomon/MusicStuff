@@ -17,6 +17,7 @@ export class RandomChordsComponent {
   show_chords = false;
   show_key = true;
   show_scale = false;
+  show_chord_tones = true;
   scale_disabled = false;
   scale_notes : Note[] = [];
 
@@ -25,6 +26,7 @@ export class RandomChordsComponent {
   duplicates : string = 'None';
   mode : string = 'Diatonic';
   scale_source : string = "Random";
+
 
   selected_sonority : string = 'major';
   selected_key : string = 'Random';

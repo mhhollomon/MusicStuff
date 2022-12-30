@@ -3,6 +3,10 @@ import { Choice, Chooser, mkch } from './chooser';
 import { Scale, Note, ScaleTypeEnum, ScaleType } from './key';
 import { ScaleService } from './scale.service';
 
+function rotateArray(arr : any[], k : number) : any[] {
+  return arr.slice(k).concat(arr.slice(0, k));
+}
+
 const noteChoices : Choice<number>[] = [
   mkch(1, 3), mkch(2, 1),
   mkch(3, 2), mkch(4, 1),
@@ -16,10 +20,13 @@ const majorQuality = ['maj', 'min', 'min', 'maj', 'maj', 'min', 'dim' ];
 const qualityToScaleType : { [key : string] : ScaleType } = {
   'min' : 'minor',
   'maj' : 'major',
-  'dim' : 'phrygian'
+  'dim' : 'phrygian',
+  'aug' : 'augmented'
 }
 
 const inversionOffset = [0, 2, 4];
+
+const invertChooser = new Chooser([mkch(0, 5), mkch(1, 3), mkch(2, 2)]);
 
 /* This is for Chromatic generation - much simpler */
 
@@ -29,10 +36,13 @@ const chromaticQualityChooser = new Chooser([ mkch('min', 3), mkch('maj', 3), mk
 export class Chord {
   root : string;
   name : string;
+  inversion : number;
+  chordTones : Note[] = [];
 
-  constructor(root : string = 'C', name : string = 'Cmaj') {
+  constructor(root : string = 'C', name : string = 'Cmaj', inversion : number = 0) {
     this.root = root;
     this.name = name;
+    this.inversion = inversion;
   }
 
   isSame(other : Chord) {
@@ -46,7 +56,6 @@ export class Chord {
 })
 export class RandomChordService {
   private noteChooser = new Chooser(noteChoices);
-  private invertChooser = new Chooser(inversionOffset.map(v => mkch(v)));
   private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
 
   private scaleCache : { [index: string] : Note[]} = {};
@@ -94,21 +103,23 @@ export class RandomChordService {
 
   private gen_diatonic_chord(key : Scale) {
     let scale = this.scaleService.getScaleNotes(key);
-    let root = this.noteChooser.pick().choice;
+    let root = this.noteChooser.choose();
     let note = scale[root-1];
 
     let chQual = key.isMinor() ? minorQuality : majorQuality;
     let name = note.noteDisplay() + chQual[root-1];
 
-    let invOffset = this.invertChooser.choose();
-    if (invOffset > 0) {
-      let bassDegree = ((root-1) + invOffset) % 7;
-      let bassNote = scale[bassDegree];
+    const inversion = invertChooser.choose();
+
+    if (inversion > 0) {
+      const invOffset = inversionOffset[inversion];
+      const bassDegree = ((root-1) + invOffset) % 7;
+      const bassNote = scale[bassDegree];
 
       name = name + '/' + bassNote.noteDisplay();
     }
 
-    return new Chord(note.note(), name);
+    return this.mkchord(key, note, name, inversion, root);
 
   }
 
@@ -122,13 +133,18 @@ export class RandomChordService {
       const sn = new Scale(note, qualityToScaleType[chQual])
       let scale = this.scaleService.getScaleNotes(sn);
 
-      let invOffset = this.invertChooser.choose();
-      if (invOffset > 0) {
+      const inversion = invertChooser.choose();
+
+      if (inversion > 0) {
+        const invOffset = inversionOffset[inversion];
         let bassDegree = invOffset % 7;
         let bassNote = scale[bassDegree];
   
         name = name + '/' + bassNote.noteDisplay();
+
       }
+      
+      return this.mkchord(sn, note, name, inversion)
   
     }
 
@@ -142,6 +158,23 @@ export class RandomChordService {
     } else {
       return this.gen_chromatic_chord();
     }
+
+  }
+
+  private mkchord(key: Scale, note : Note, name : string, inv : number, rootDegree :  number = 1) : Chord {
+
+    const scale = this.scaleService.getScaleNotes(key);
+    let tones = inversionOffset.map(i => scale[(i+(rootDegree-1))%7]);
+
+    if (inv > 0) {
+      //tones = tones.slice(inv).concat(tones.slice(0, inv));
+      tones = rotateArray(tones, inv);
+    }
+
+    let chord = new Chord(note.note(), name, inv);
+    chord.chordTones = tones;
+
+    return chord;
 
   }
 

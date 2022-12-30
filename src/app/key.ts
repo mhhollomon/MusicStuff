@@ -56,6 +56,7 @@ export const ScaleTypeEnum = {
     minor : 'minor',
     major : 'major',
     phrygian : 'phrygian',
+    augmented : 'augmented'
 }
 
 export type ScaleType = keyof typeof ScaleTypeEnum;

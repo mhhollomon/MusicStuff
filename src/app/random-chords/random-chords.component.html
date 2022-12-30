@@ -14,6 +14,9 @@
     <option>Any</option>
     </select>
 </div>
+<div class="m-2">
+    <mat-checkbox [(ngModel)]="show_chord_tones" >Show Chord Tones</mat-checkbox>
+</div>
 <div class="m-2" *ngIf="!scale_disabled">
     <mat-label>Key</mat-label>
     <mat-radio-group [(ngModel)]="scale_source">
@@ -38,15 +41,21 @@
 <div style="height: 20px"></div>
 <div class="border-2 border-black border-solid rounded p-2">
     <div *ngIf="show_key">
-        <p >Key = <span *ngIf="show_chords">{{key.fullName()}} <mat-checkbox [(ngModel)]="show_scale" [disabled]="scale_disabled">Show Scale Notes</mat-checkbox>
+        <p >Key = <span *ngIf="show_chords">{{key.fullDisplay()}} 
+            <mat-checkbox [(ngModel)]="show_scale" [disabled]="scale_disabled">Show Scale Notes</mat-checkbox>
         </span></p>
         <div *ngIf="show_scale">
             <span class="m-1" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
         </div>
     </div>
-    <mat-list>
-        <mat-list-item *ngFor="let c of chords" >{{c.name}}</mat-list-item>
-    </mat-list>
+    <div class="chord-container">
+        <ng-template ngFor let-c [ngForOf]="chords">
+            <p class="chord-name">{{c.name}}</p>
+            <p class="chord-tones" *ngIf="show_chord_tones">
+                <span class="m-1" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
+            </p>
+        </ng-template>
+    </div>
 </div>
 <div style="height: 20px"></div>
 <ul class="italic text-xs">
