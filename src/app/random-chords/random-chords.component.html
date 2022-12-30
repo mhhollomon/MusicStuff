@@ -12,6 +12,7 @@
     </div>
 </div>    
 
+<!-- General Parameters -->
 <div class="ma2">
     <div class="flex-wrap">
 
@@ -35,8 +36,14 @@
 <!-- Chord Tones -->
 <mat-checkbox class="br2" [(ngModel)]="show_chord_tones" >Show Chord Tones</mat-checkbox>
 
+<!-- Chord Selection (Diatonic Only)-->
+<div class="ma2" *ngIf="!scale_disabled">
+    <mat-label class="mr2">Chord Types</mat-label>
+    <mat-checkbox [(ngModel)]="allow_triads">Triads</mat-checkbox>
+    <mat-checkbox [(ngModel)]="allow_sevenths">7ths</mat-checkbox>
+</div> 
 
-<!-- Key Selection -->
+<!-- Key Selection  (Diatonic only) -->
 <div class="ma2" *ngIf="!scale_disabled">
     <mat-label>Key</mat-label>
     <mat-radio-group [(ngModel)]="scale_source">
@@ -60,31 +67,45 @@
 </div> 
 
 <!-- Generate Button -->
-<button class="mv4 br2 ma2" mat-stroked-button color="primary" (click)="generate()">Generate Chords</button>
+<div class="db mv4 br2 ma2">
+    <button  mat-stroked-button color="primary" (click)="generate()">Generate Chords</button>
+</div>
 
 <!-- OUTPUT -->
-<div class="ba bw1 br3 ph2">
-    <div *ngIf="show_key">
-        <p >Key = <span *ngIf="show_chords">{{key.fullDisplay()}} 
-            <mat-checkbox [(ngModel)]="show_scale" [disabled]="scale_disabled">Show Scale Notes</mat-checkbox>
-        </span></p>
-        <div *ngIf="show_scale">
-            <span class="mh2" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
-        </div>
-    </div>
-    <div class="chord-container ml3">
+<div class="ba bw1 br3 ph2 min-h-2">
+    <!-- Key Information -->
+    <mat-expansion-panel hideToggle [disabled]="!show_chords" *ngIf="show_key">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Key = <span class="ml1" *ngIf="show_chords">{{key.fullDisplay()}}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <span class="mh2" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
+    </mat-expansion-panel>
+
+    <!-- Chord Information -->
+    <div class="chord-container ml3 pb3">
         <ng-template ngFor let-c [ngForOf]="chords">
-            <p class="chord-name">{{c.name}}</p>
-            <p class="chord-tones" *ngIf="show_chord_tones">
+            <div class="chord-name mv2">{{c.name}}</div>
+            <div class="chord-tones mv2" *ngIf="show_chord_tones">
                 <span class="mh2" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
-            </p>
+            </div>
         </ng-template>
     </div>
 </div>
 
 <!-- FOOTNOTES -->
 <ul class="mv4 i f6 indent-small">
-    <li><span class="b">Only</span> triads (for now).</li>
-    <li>Two chords are consider duplicate if the root notes are the same, inversion and quality are not consulted.</li>
-    <li>In <span class="b">Chromatic</span> mode, the chord qualities are weighted in the ratio they appear in a major scale.</li>    
+    <li>Two chords are consider duplicate if the root notes are the same - inversion and quality are not consulted.</li>
+    <li>In <span class="b">Diatonic</span> mode
+        <ul class="indent-small">
+            <li>only triads and 7ths (for now)</li>
+        </ul>
+    </li>   
+    <li>In <span class="b">Chromatic</span> mode
+        <ul class="indent-small">
+            <li>Only triads (for now).</li>    
+            <li>The chord qualities are weighted in the ratio they appear in a major scale.</li>  
+        </ul>
+    </li>  
 </ul>

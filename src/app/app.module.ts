@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,6 +43,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatCheckboxModule,
     MatRadioModule,
     MatGridListModule,
+    MatExpansionModule,
     
     AppRoutingModule,
   ],
