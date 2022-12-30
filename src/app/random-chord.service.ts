@@ -143,32 +143,36 @@ export class RandomChordService {
 
   }
 
-  private gen_chromatic_chord() : Chord {
+  private gen_chromatic_chord(chordTypes : ChordType[]) : Chord {
 
     let note = new Note(this.chromaticChooser.choose());
     let chQual = chromaticQualityChooser.choose();
     let name = note.noteDisplay() + chQual;
 
-    if (chQual in qualityToScaleType) {
-      const sn = new Scale(note, qualityToScaleType[chQual])
-      let scale = this.scaleService.getScaleNotes(sn);
+    let filtered = chordTypeWeights.filter(x => chordTypes.includes(x.choice));
 
-      const inversion = invertChooser.choose();
+    let chordType = (new Chooser(filtered)).choose();
 
-      if (inversion > 0) {
-        const invOffset = inversionOffset[inversion];
-        let bassDegree = invOffset % 7;
-        let bassNote = scale[bassDegree];
-  
-        name = name + '/' + bassNote.noteDisplay();
+    name += (chordType ==='7th' ? '7' : '');
+   
+    const sn = new Scale(note, qualityToScaleType[chQual]);
 
-      }
-      
-      return this.mkchord(sn, note, name, inversion)
+    let qualKey = sn.scaleType + '-' +  chordType;
+
+    let scale = this.scaleService.getScaleNotes(sn);
+
+    const inversion = invertChooser.choose();
+
+    if (inversion > 0) {
+      const invOffset = inversionOffset[inversion];
+      let bassDegree = invOffset % 7;
+      let bassNote = scale[bassDegree];
+
+      name = name + '/' + bassNote.noteDisplay();      
   
     }
 
-    return new Chord(note.note(), name);
+    return this.mkchord(sn, note, name, inversion, chordType);
   }
 
   private gen_one_chord(key: Scale | null, chordTypes : ChordType[]) : Chord {
@@ -176,7 +180,7 @@ export class RandomChordService {
     if (key) {
       return this.gen_diatonic_chord(key, chordTypes);
     } else {
-      return this.gen_chromatic_chord();
+      return this.gen_chromatic_chord(chordTypes);
     }
 
   }
