@@ -1,65 +1,90 @@
 
-<div style="height: 20px"></div>
-<div class="m-2">
-    <label class="m-4">Mode:</label><select  [(ngModel)]="mode" (change)="mode_change()" >
+<!--- CONTROLS -->
+
+<!-- Mode Selection -->
+<div class="ma2">
+    <div class="flex">
+    <label class="mr2">Mode:</label>
+    <select class="br2" [(ngModel)]="mode" (change)="mode_change()" >
         <option>Diatonic</option>
         <option>Chromatic</option>
     </select>
+    </div>
 </div>    
-<div class="m-2">
-<label class="m-4">Chord Count:</label><input matInput type="number" max="6" min="1" [(ngModel)]="chord_count" >
-<label class="m-4">Duplicates:</label><select  [(ngModel)]="duplicates" >
-    <option>None</option>
-    <option>Not Adjacent</option>
-    <option>Any</option>
-    </select>
+
+<div class="ma2">
+    <div class="flex-wrap">
+
+        <!-- Chord Count -->
+        <div class="dif">
+            <label class="mr2">Chord Count:</label>
+            <input class="br2 mr3" matInput type="number" max="6" min="1" [(ngModel)]="chord_count" >
+        </div>
+        <!-- Duplicates -->
+        <div class="dif mt1-ns mt2">
+            <label class="mr2">Duplicates:</label>
+            <select class="br2 mr3" [(ngModel)]="duplicates" >
+                <option>None</option>
+                <option>Not Adjacent</option>
+                <option>Any</option>
+            </select>
+        </div>
+    </div>
 </div>
-<div class="m-2">
-    <mat-checkbox [(ngModel)]="show_chord_tones" >Show Chord Tones</mat-checkbox>
-</div>
-<div class="m-2" *ngIf="!scale_disabled">
+
+<!-- Chord Tones -->
+<mat-checkbox class="br2" [(ngModel)]="show_chord_tones" >Show Chord Tones</mat-checkbox>
+
+
+<!-- Key Selection -->
+<div class="ma2" *ngIf="!scale_disabled">
     <mat-label>Key</mat-label>
     <mat-radio-group [(ngModel)]="scale_source">
         <mat-radio-button value="Random">Random</mat-radio-button>
         <mat-radio-button value="Selected">Selected</mat-radio-button>
     </mat-radio-group>
-    <div class="m-4" *ngIf="scale_source == 'Selected'">
-        <select [(ngModel)]="selected_sonority">
+    <div class="mt2 mh4" *ngIf="scale_source == 'Selected'">
+
+        <!-- Sonority -->
+        <select class="br2 mr2" [(ngModel)]="selected_sonority">
             <option>major</option>
             <option>minor</option>
         </select>
-        <select [(ngModel)]="selected_key">
+
+        <!-- Key Center -->
+        <select class="br2 mr3" [(ngModel)]="selected_key">
             <option>Random</option>
             <option *ngFor="let k of (selected_sonority==='minor' ? minorkeys : majorkeys)">{{k}}</option>
         </select>
     </div>
 </div> 
-<div style="height: 20px"></div>
-<span style="width: 20px; display: inline-flex; height: 1em;"></span><button mat-stroked-button color="primary" (click)="generate()">Generate Chords</button>
 
+<!-- Generate Button -->
+<button class="mv4 br2 ma2" mat-stroked-button color="primary" (click)="generate()">Generate Chords</button>
 
-<div style="height: 20px"></div>
-<div class="border-2 border-black border-solid rounded p-2">
+<!-- OUTPUT -->
+<div class="ba bw1 br3 ph2">
     <div *ngIf="show_key">
         <p >Key = <span *ngIf="show_chords">{{key.fullDisplay()}} 
             <mat-checkbox [(ngModel)]="show_scale" [disabled]="scale_disabled">Show Scale Notes</mat-checkbox>
         </span></p>
         <div *ngIf="show_scale">
-            <span class="m-1" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
+            <span class="mh2" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
         </div>
     </div>
-    <div class="chord-container">
+    <div class="chord-container ml3">
         <ng-template ngFor let-c [ngForOf]="chords">
             <p class="chord-name">{{c.name}}</p>
             <p class="chord-tones" *ngIf="show_chord_tones">
-                <span class="m-1" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
+                <span class="mh2" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
             </p>
         </ng-template>
     </div>
 </div>
-<div style="height: 20px"></div>
-<ul class="italic text-xs">
-    <li><span class="font-bold">Only</span> triads (for now).</li>
+
+<!-- FOOTNOTES -->
+<ul class="mv4 i f6 indent-small">
+    <li><span class="b">Only</span> triads (for now).</li>
     <li>Two chords are consider duplicate if the root notes are the same, inversion and quality are not consulted.</li>
-    <li>In <span class="font-bold">Chromatic</span> mode, the chord qualities are weighted in the ratio they appear in a major scale.</li>    
+    <li>In <span class="b">Chromatic</span> mode, the chord qualities are weighted in the ratio they appear in a major scale.</li>    
 </ul>

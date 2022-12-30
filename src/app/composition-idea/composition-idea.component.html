@@ -1,7 +1,7 @@
-<div style="height: 20px"></div>
-<span style="width: 20px; display: inline-flex; height: 1em;"></span><button mat-stroked-button color="primary" (click)="generate()">Generate New Idea</button>
-<div style="height: 20px"></div>
-<div class="border-2 border-black border-solid rounded p-2">
+
+<button mat-stroked-button class="pa4" color="primary" (click)="generate()">Generate New Idea</button>
+<div class="h2"></div>
+<div class="ba bw1 br3 ph2">
     <p>Compose a theme that: </p>
     <mat-list *ngIf="show_idea">
         <mat-list-item class="composition-idea-li" >is in {{form_type}} form</mat-list-item>
@@ -10,5 +10,5 @@
         <mat-list-item class="composition-idea-li" >starts with the notes on scale degrees {{note1}}, {{note2}} </mat-list-item>
     </mat-list>
 </div>
-<div style="height: 20px"></div>
-<p class="italic text-xs">Idea from <a href="http://www.brianavid.co.uk/ComposeWhat.html">ComposeWhat</a></p>
+<div class="h2"></div>
+<p class="i f6">Idea from <a href="http://www.brianavid.co.uk/ComposeWhat.html">ComposeWhat</a></p>
