@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
+import { AudioService } from '../audio.service';
 
 @Component({
   selector: 'app-random-chords',
@@ -39,7 +40,8 @@ export class RandomChordsComponent {
   
 
   constructor(private scaleService : ScaleService,
-    private randomChordService : RandomChordService) {
+    private randomChordService : RandomChordService,
+    private audioService : AudioService) {
 
   }
 
@@ -78,6 +80,23 @@ export class RandomChordsComponent {
 
     this.chords = this.randomChordService.gen_chords(picked_key, this.chord_count, this.duplicates, chordTypes);
     this.show_chords = true;
+
+  }
+
+  async play_chord(chord : Chord) {
+
+    let tones : string[] = [];
+    for (let i = 0; i < chord.chordTones.length; ++i ) {
+      if (i == 0) {
+        tones.push(chord.chordTones[i].note() + '3');
+      //} else if (i == 3 && chord.chordTones[i].note() < chord.chordTones[i-1].note()) {
+      //  tones.push(chord.chordTones[i].note() + '5');
+      } else {
+        tones.push(chord.chordTones[i].note() + '4');
+      }
+    }
+
+    this.audioService.play_chord(tones);
 
   }
 

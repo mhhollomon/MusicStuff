@@ -86,7 +86,7 @@
     <!-- Chord Information -->
     <div class="chord-container ml3 pb3">
         <ng-template ngFor let-c [ngForOf]="chords">
-            <div class="chord-name mv2">{{c.name}}</div>
+            <div class="chord-name mv2"><button class="dif" (click)="play_chord(c)" mat-mini-fab>>></button><span class="dif">{{c.name}}</span></div>
             <div class="chord-tones mv2" *ngIf="show_chord_tones">
                 <span class="mh2" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
             </div>
