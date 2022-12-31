@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { saveAs } from 'file-saver';
+import  * as Midiwriter  from 'midi-writer-js'
 import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
@@ -97,6 +99,38 @@ export class RandomChordsComponent {
     }
 
     this.audioService.play_chord(tones);
+
+  }
+
+  generate_midi(evnt : Event) {
+
+    evnt.stopPropagation();
+
+    const track = new Midiwriter.Track();
+
+    for (let c of this.chords) {
+
+      let options : Midiwriter.Options = {sequential: false, duration : '1', pitch : []}
+      let pitches : string[]  = [];
+
+      for (let i = 0; i < c.chordTones.length; ++i ) {
+        if (i == 0) {
+          (options.pitch as unknown as string[]).push(c.chordTones[i].note() + '2');
+        //} else if (i == 3 && chord.chordTones[i].note() < chord.chordTones[i-1].note()) {
+        //  tones.push(chord.chordTones[i].note() + '5');
+        } else {
+          (options.pitch as unknown as string[]).push(c.chordTones[i].note() + '3');
+        }
+      }
+
+      track.addEvent(new Midiwriter.NoteEvent(options))
+    }
+
+
+    let midi_writer = new Midiwriter.Writer(track);
+
+    let  blob = new Blob([midi_writer.buildFile()], {type: "audio/midi"});
+    saveAs(blob, "random-chords.mid");
 
   }
 

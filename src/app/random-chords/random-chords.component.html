@@ -5,7 +5,7 @@
 <div class="ma2">
     <div class="flex">
     <label class="mr2">Mode:</label>
-    <select class="br2" [(ngModel)]="mode" (change)="mode_change()" >
+    <select class="ba br2" [(ngModel)]="mode" (change)="mode_change()" >
         <option>Diatonic</option>
         <option>Chromatic</option>
     </select>
@@ -19,7 +19,7 @@
         <!-- Chord Count -->
         <div class="dif">
             <label class="mr2">Chord Count:</label>
-            <input class="br2 mr3" matInput type="number" max="6" min="1" [(ngModel)]="chord_count" >
+            <input class="ba br2 mr3" matInput type="number" max="6" min="1" [(ngModel)]="chord_count" >
         </div>
         <!-- Duplicates -->
         <div class="dif mt1-ns mt2">
@@ -74,10 +74,12 @@
 <!-- OUTPUT -->
 <div class="ba bw1 br3 ph2 min-h-2">
     <!-- Key Information -->
-    <mat-expansion-panel hideToggle [disabled]="!show_chords" *ngIf="show_key">
+    <mat-expansion-panel [disabled]="!show_chords" *ngIf="show_key">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Key = <span class="ml1" *ngIf="show_chords">{{key.fullDisplay()}}</span>
+            <label>Key =</label>
+            <span class="ml1" *ngIf="show_chords">{{key.fullDisplay()}}</span>
+            <button class="ml4 ba br2" (click)="generate_midi($event)" *ngIf="show_chords">midi</button>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <span class="mh2" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>
@@ -88,7 +90,7 @@
         <ng-template ngFor let-c [ngForOf]="chords">
             <div class="chord-name mv2"><button class="dif" (click)="play_chord(c)" mat-mini-fab>>></button><span class="dif">{{c.name}}</span></div>
             <div class="chord-tones mv2" *ngIf="show_chord_tones">
-                <span class="mh2" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
+                <span class="dib mh2" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
             </div>
         </ng-template>
     </div>
