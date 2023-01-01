@@ -5,7 +5,7 @@
 <div class="ma2">
     <div class="flex">
         <mat-form-field>
-            <mat-label>Mode:</mat-label>
+            <mat-label>Mode</mat-label>
             <mat-select [(ngModel)]="mode" (selectionChange)="mode_change()" >
                 <mat-option value="Diatonic">Diatonic</mat-option>
                 <mat-option value="Chromatic">Chromatic</mat-option>
@@ -20,14 +20,14 @@
 
         <!-- Chord Count -->
             <mat-form-field>
-                <mat-label>Chord Count:</mat-label>
+                <mat-label>Chord Count</mat-label>
                 <input name="chord_count" matNativeControl type="number" 
                     max="6" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
                 <mat-error *ngIf="count_control.invalid">count &lt;6 and &gt;1</mat-error>
             </mat-form-field>
         <!-- Duplicates -->
             <mat-form-field>
-                <mat-label>Duplicates:</mat-label>
+                <mat-label>Duplicates</mat-label>
                 <mat-select [(ngModel)]="duplicates" >
                     <mat-option value="None">None</mat-option>
                     <mat-option value="Not Adjacent">Not Adjacent</mat-option>
@@ -39,18 +39,20 @@
 
 <!-- Chord Selection -->
 <div class="ma2" >
-    <mat-label class="mr2">Chord Types</mat-label>
+    <mat-label class="mr2 mhh-mat-label">Chord Types</mat-label>
     <mat-checkbox [(ngModel)]="allow_triads">Triads</mat-checkbox>
     <mat-checkbox [(ngModel)]="allow_sevenths">7ths</mat-checkbox>
 </div> 
 
 <!-- Key Selection  (Diatonic only) -->
 <div class="ma2" *ngIf="!scale_disabled">
-    <mat-label>Key</mat-label>
+    <label class="mhh-mat-label">Key</label>
     <mat-radio-group [(ngModel)]="scale_source">
         <mat-radio-button value="Random">Random</mat-radio-button>
         <mat-radio-button value="Selected">Selected</mat-radio-button>
     </mat-radio-group>
+
+    
     <div class="mt2 mh4 param-container" *ngIf="scale_source == 'Selected'">
 
         <!-- Sonority -->
@@ -106,7 +108,10 @@
     <!-- Chord Information -->
     <div class="chord-container ml3 pb3">
         <ng-template ngFor let-c [ngForOf]="chords">
-            <div class="chord-name mv2"><button class="dif" (click)="play_chord(c)" mat-mini-fab>>></button><span class="dif">{{c.name}}</span></div>
+            <div class="chord-name mv2">
+                <button class="dif" (click)="play_chord(c)" mat-mini-fab>>></button>
+                <span class="dif">{{c.name}}</span>
+            </div>
             <div class="chord-tones mv2" *ngIf="show_chord_tones">
                 <span class="dib mh2" *ngFor="let t of c.chordTones" >{{t.noteDisplay()}}</span>
             </div>

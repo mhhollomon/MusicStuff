@@ -42,3 +42,7 @@
 .mdc-fab--mini {
     transform : scale(0.5);
 }
+
+.mhh-mat-label {
+    font-family: var(--mdc-typography-body2-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
+}
