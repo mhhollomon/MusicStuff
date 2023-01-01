@@ -51,19 +51,28 @@
         <mat-radio-button value="Random">Random</mat-radio-button>
         <mat-radio-button value="Selected">Selected</mat-radio-button>
     </mat-radio-group>
-    <div class="mt2 mh4" *ngIf="scale_source == 'Selected'">
+    <div class="mt2 mh4 param-container" *ngIf="scale_source == 'Selected'">
 
         <!-- Sonority -->
-        <select class="br2 mr2" [(ngModel)]="selected_sonority">
-            <option>major</option>
-            <option>minor</option>
-        </select>
+        <mat-form-field>
+            <mat-label>Tonality</mat-label>
+            <mat-select [(ngModel)]="selected_sonority">
+                <mat-option value="major">major</mat-option>
+                <mat-option value="minor">minor</mat-option>
+            </mat-select>
+        </mat-form-field>
 
         <!-- Key Center -->
-        <select class="br2 mr3" [(ngModel)]="selected_key">
-            <option>Random</option>
-            <option *ngFor="let k of (selected_sonority==='minor' ? minorkeys : majorkeys)">{{k}}</option>
-        </select>
+        <mat-form-field>
+            <mat-label>Key Center</mat-label>
+            <mat-select  [(ngModel)]="selected_key">
+                <mat-option value="Random">Random</mat-option>
+                <mat-option value={{k}} 
+                    *ngFor="let k of (selected_sonority==='minor' ? minorkeys : majorkeys)">
+                        {{k}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
 </div> 
 
@@ -80,7 +89,7 @@
           <mat-panel-title>
             <div class="chord-panel-title-container">
                 <label class="chord-panel-title-key mr2">{{getPanelTitle()}}</label>
-                <div class=".chord-panel-title-buttons">
+                <div class="chord-panel-title-buttons">
                     <mat-button-toggle [checked]="show_chord_tones" (change)="chord_tone_change($event)" (click)="stopPropagation($event)">
                         <span class="f7">Chord Tones</span>
                     </mat-button-toggle>
