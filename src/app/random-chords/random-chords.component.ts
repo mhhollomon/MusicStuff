@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
+
+import {FormControl, Validators} from '@angular/forms';
+
 import { saveAs } from 'file-saver';
 import  * as Midiwriter  from 'midi-writer-js'
+
+
 import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
@@ -51,9 +56,23 @@ export class RandomChordsComponent {
 
   }
 
+  getErrorMessage() {
+
+    return "you goofed";
+    /*
+    if (this.count_control.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.count_control.hasError('email') ? 'Not a valid email' : '';
+    */
+  }
+
   generate() {
 
-    console.log("--clicked---");
+    if (this.chord_count > 6 || this.chord_count < 1) {
+      return;
+    }
 
     let picked_key : Scale | null = null;
 

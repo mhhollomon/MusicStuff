@@ -4,32 +4,35 @@
 <!-- Mode Selection -->
 <div class="ma2">
     <div class="flex">
-    <label class="mr2">Mode:</label>
-    <select class="ba br2" [(ngModel)]="mode" (change)="mode_change()" >
-        <option>Diatonic</option>
-        <option>Chromatic</option>
-    </select>
+        <mat-form-field>
+            <mat-label>Mode:</mat-label>
+            <mat-select [(ngModel)]="mode" (selectionChange)="mode_change()" >
+                <mat-option value="Diatonic">Diatonic</mat-option>
+                <mat-option value="Chromatic">Chromatic</mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
 </div>    
 
 <!-- General Parameters -->
 <div class="ma2">
-    <div class="flex-wrap">
+    <div class="param-container">
 
         <!-- Chord Count -->
-        <div class="dif">
-            <label class="mr2">Chord Count:</label>
-            <input class="ba br2 mr3" matInput type="number" max="6" min="1" [(ngModel)]="chord_count" >
-        </div>
+            <mat-form-field>
+                <mat-label>Chord Count:</mat-label>
+                <input name="chord_count" matNativeControl type="number" max="6" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
+                <mat-error *ngIf="count_control.invalid">count &lt;6 and &gt;1</mat-error>
+            </mat-form-field>
         <!-- Duplicates -->
-        <div class="dif mt1-ns mt2">
-            <label class="mr2">Duplicates:</label>
-            <select class="br2 mr3" [(ngModel)]="duplicates" >
-                <option>None</option>
-                <option>Not Adjacent</option>
-                <option>Any</option>
-            </select>
-        </div>
+            <mat-form-field>
+                <mat-label>Duplicates:</mat-label>
+                <mat-select [(ngModel)]="duplicates" >
+                    <mat-option value="None">None</mat-option>
+                    <mat-option value="Not Adjacent">Not Adjacent</mat-option>
+                    <mat-option value="Any">Any</mat-option>
+                </mat-select>
+            </mat-form-field>
     </div>
 </div>
 
