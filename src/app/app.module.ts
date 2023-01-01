@@ -4,6 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCardModule} from '@angular/material/card';
@@ -37,6 +38,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatTabsModule,
     MatToolbarModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatListModule,
     MatSelectModule,
     MatCardModule,

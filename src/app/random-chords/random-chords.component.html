@@ -21,7 +21,8 @@
         <!-- Chord Count -->
             <mat-form-field>
                 <mat-label>Chord Count:</mat-label>
-                <input name="chord_count" matNativeControl type="number" max="6" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
+                <input name="chord_count" matNativeControl type="number" 
+                    max="6" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
                 <mat-error *ngIf="count_control.invalid">count &lt;6 and &gt;1</mat-error>
             </mat-form-field>
         <!-- Duplicates -->
@@ -35,9 +36,6 @@
             </mat-form-field>
     </div>
 </div>
-
-<!-- Chord Tones -->
-<mat-checkbox class="br2" [(ngModel)]="show_chord_tones" >Show Chord Tones</mat-checkbox>
 
 <!-- Chord Selection -->
 <div class="ma2" >
@@ -77,12 +75,20 @@
 <!-- OUTPUT -->
 <div class="ba bw1 br3 ph2 min-h-2">
     <!-- Key Information -->
-    <mat-expansion-panel [disabled]="!show_chords" *ngIf="show_key">
+    <mat-expansion-panel [disabled]="mode === 'Chromatic'">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <label>Key =</label>
-            <span class="ml1" *ngIf="show_chords">{{key.fullDisplay()}}</span>
-            <button class="ml4 ba br2" (click)="generate_midi($event)" *ngIf="show_chords">midi</button>
+            <div class="chord-panel-title-container">
+                <label class="chord-panel-title-key mr2">{{getPanelTitle()}}</label>
+                <div class=".chord-panel-title-buttons">
+                    <mat-button-toggle [checked]="show_chord_tones" (change)="chord_tone_change($event)" (click)="stopPropagation($event)">
+                        <span class="f7">Chord Tones</span>
+                    </mat-button-toggle>
+                    <span *ngIf="show_midi_button()">
+                        <button class="ml4 ba br2" (click)="generate_midi($event)" >midi</button>
+                    </span>
+                </div>
+            </div>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <span class="mh2" *ngFor="let n of scale_notes">{{n.noteDisplay()}}</span>

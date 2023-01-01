@@ -10,6 +10,7 @@ import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
 import { AudioService } from '../audio.service';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 const octavePlacement : any = {
   'C' : 0, 'D' : 1, 'E' : 2, 'F' : 3, 'G' : 4, 'A' : 5, 'B' : 6 
@@ -32,6 +33,8 @@ export class RandomChordsComponent {
   show_chord_tones = true;
   scale_disabled = false;
   scale_notes : Note[] = [];
+
+  new_chord_tones = true;
 
   // Model elements
   chord_count: number = 4;
@@ -56,16 +59,28 @@ export class RandomChordsComponent {
 
   }
 
-  getErrorMessage() {
+  show_midi_button() :boolean {
+    return (this.mode !== 'Chromatic');
+  }
 
-    return "you goofed";
-    /*
-    if (this.count_control.hasError('required')) {
-      return 'You must enter a value';
+  getPanelTitle() : string {
+
+    let retval = this.mode;
+    
+    if (this.mode === 'Diatonic' && this.show_chords) {
+        retval = this.key.fullDisplay();    
     }
 
-    return this.count_control.hasError('email') ? 'Not a valid email' : '';
-    */
+    return retval;
+  }
+
+  stopPropagation(evnt : Event) {
+    evnt.stopPropagation();
+  }
+
+  chord_tone_change(evnt : MatButtonToggleChange) {
+
+    this.show_chord_tones = evnt.source.checked
   }
 
   generate() {
@@ -135,7 +150,7 @@ export class RandomChordsComponent {
 
   generate_midi(evnt : Event) {
 
-    evnt.stopPropagation();
+    this.stopPropagation(evnt);
 
     const track = new Midiwriter.Track();
 

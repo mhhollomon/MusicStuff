@@ -3,3 +3,13 @@
     color: black;
     padding-right: 6px;
 }
+
+
+  mat-list-item.composition-idea-li {
+    margin-bottom : 1rem;
+    height: initial !important;
+    span {
+      word-wrap: break-word !important; 
+      white-space: pre-wrap !important;
+    }
+  }

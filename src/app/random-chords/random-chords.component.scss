@@ -1,21 +1,41 @@
 .chord-container {
     display : grid;
-    grid-template-columns: [chordname] 40% [tones] 60%;
+    grid-template-columns: [chordname] 10rem [tones] 1fr;
 }
+
+
 
 .chord-name {
     grid-column-start: chordname;
+    align-self: center;
 }
 
 .chord-tones {
     grid-column-start:  tones;
     align-self: center;
+    justify-self: start;
 }
 
 .param-container {
     display: flex;
-    flex-wrap: flex;
+    flex-wrap: wrap;
     gap : 1rem;
+}
+
+.chord-panel-title-container {
+    display : grid;
+    grid-template-columns: [key] 5rem [buttons] 1fr;
+}
+
+.chord-panel-title-key {
+    grid-column-start: key;
+    align-self: center;
+}
+
+.chord-panel-title-buttons {
+    grid-column-start:  buttons;
+    align-self: center;
+    justify-self: start;
 }
 
 

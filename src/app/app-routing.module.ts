@@ -7,7 +7,7 @@ import { MusicResourcesComponent } from './music-resources/music-resources.compo
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
-    { path : '', redirectTo: '/composition-idea', pathMatch: 'full' },
+    { path : '', redirectTo: '/random-chords', pathMatch: 'full' },
     { path : 'composition-idea', component : CompositionIdeaComponent },
     { path : 'random-chords', component : RandomChordsComponent },
     { path : 'music-resources', component : MusicResourcesComponent },
