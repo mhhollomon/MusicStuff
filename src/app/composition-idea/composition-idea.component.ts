@@ -27,7 +27,7 @@ const noteChoices : Choice<string>[] = [
 @Component({
     selector: 'app-composition-idea',
     templateUrl: './composition-idea.component.html',
-    styleUrls: ['./composition-idea.component.less']
+    styleUrls: ['./composition-idea.component.scss']
 })
 export class CompositionIdeaComponent {
 

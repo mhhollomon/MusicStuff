@@ -18,7 +18,7 @@ const octavePlacement : any = {
 @Component({
   selector: 'app-random-chords',
   templateUrl: './random-chords.component.html',
-  styleUrls: ['./random-chords.component.less']
+  styleUrls: ['./random-chords.component.scss']
 })
 export class RandomChordsComponent {
 
