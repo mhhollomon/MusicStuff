@@ -95,7 +95,7 @@
                     <mat-button-toggle [checked]="show_chord_tones" (change)="chord_tone_change($event)" (click)="stopPropagation($event)">
                         <span class="f7">Chord Tones</span>
                     </mat-button-toggle>
-                    <span *ngIf="show_midi_button()">
+                    <span>
                         <button class="ml4 ba br2" (click)="generate_midi($event)" >midi</button>
                     </span>
                 </div>

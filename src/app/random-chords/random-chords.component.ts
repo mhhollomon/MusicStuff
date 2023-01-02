@@ -59,10 +59,6 @@ export class RandomChordsComponent {
 
   }
 
-  show_midi_button() :boolean {
-    return (this.mode !== 'Chromatic');
-  }
-
   getPanelTitle() : string {
 
     let retval = this.mode;
@@ -154,6 +150,8 @@ export class RandomChordsComponent {
 
     const track = new Midiwriter.Track();
 
+    if (!this.show_chords || this.chords.length < 1) return;
+
     for (let c of this.chords) {
 
       // Want to place the bass note "down an octave"
@@ -164,10 +162,12 @@ export class RandomChordsComponent {
       let options : Midiwriter.Options = {sequential: false, duration : '1', pitch : []}
 
       for (let n of c.chordTones) {
-        if (octavePlacement[n.noteClass] < last) {
+
+        let simpleNote = n.toSharp();
+        if (octavePlacement[simpleNote.noteClass] < last) {
           octave += 1;
         }
-        (options.pitch as unknown as string[]).push(n.note() + octave );
+        (options.pitch as unknown as string[]).push(simpleNote.note() + octave );
         if (isBassNote) {
           octave += 1;
           isBassNote = false;
@@ -180,19 +180,26 @@ export class RandomChordsComponent {
       track.addEvent(new Midiwriter.NoteEvent(options))
     }
 
-    let octave = ['G', 'A', 'B'].includes(this.scale_notes[0].noteClass) ? 3 : 4;
-    let last : number = -1;
-    let scale_options : Midiwriter.Options = {sequential: true, duration : '4', pitch : []}
-    for (let n of this.scale_notes) {
+    if (this.mode === 'Diatonic' ) {
 
-      if (octavePlacement[n.noteClass] < last) {
-        octave += 1;
+      let octave = ['G', 'A', 'B'].includes(this.scale_notes[0].toSharp().noteClass) ? 3 : 4;
+      let last : number = -1;
+      let scale_options : Midiwriter.Options = {sequential: true, duration : '4', pitch : []}
+      for (let n of this.scale_notes) {
+
+        let simpleNote = n.toSharp();
+
+
+        if (octavePlacement[simpleNote.noteClass] < last) {
+          octave += 1;
+        }
+        (scale_options.pitch as unknown as string[]).push(simpleNote.note() + octave );
+        last = octavePlacement[simpleNote.noteClass];
       }
-      (scale_options.pitch as unknown as string[]).push(n.note() + octave );
-      last = octavePlacement[n.noteClass];
-    }
 
-    track.addEvent(new Midiwriter.NoteEvent(scale_options))
+      track.addEvent(new Midiwriter.NoteEvent(scale_options))
+
+    }
 
 
     let midi_writer = new Midiwriter.Writer(track);
