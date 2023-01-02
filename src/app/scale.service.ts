@@ -1,21 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, mkch } from './chooser';
-import { Note, Scale, ScaleType } from './key'
+import { Note, Scale, ScaleType, genericNotes } from './key'
 
-interface GenericNoteData {
-  name : string,
-  next : number,
-  prev : number
-}
-
-function gnd(name: string, prev : number, next : number) : GenericNoteData {
-  return {'name' : name, 'next' : next, 'prev' : prev };
-}
-
-const genericNotes : GenericNoteData[] = [
-  gnd('A', 2, 2), gnd('B', 2, 1), gnd('C', 1, 2), gnd('D', 2, 2), gnd('E', 2, 1), gnd('F', 1, 2), gnd('G', 2, 2),
-  gnd('A', 2, 2), gnd('B', 2, 1), gnd('C', 1, 2), gnd('D', 2, 2), gnd('E', 2, 1), gnd('F', 1, 2), gnd('G', 2, 2),
-]
 
 
 /* number of semi-tones between notes */

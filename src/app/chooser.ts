@@ -36,8 +36,12 @@ export class Chooser<T> {
             }
             index += 1;
         }
+
+        /* SHouldn't get here. Only way this could happen is if somebody
+         * messed with the fields of the object. Don't do that.
+         */
     
-        return this.choices[this.choices.length - 1];        
+        throw Error("Something went horribly wrong.");        
     }
 
     choose() : T {
