@@ -79,9 +79,17 @@ export class RandomChordsComponent {
     this.show_chord_tones = evnt.source.checked
   }
 
+  get_chord_count_max() : number {
+    if (this.duplicates !== 'None') {
+      return 30;
+    }
+
+    return 6;
+  }
+
   generate() {
 
-    if (this.chord_count > 6 || this.chord_count < 1) {
+    if (this.chord_count > this.get_chord_count_max() || this.chord_count < 1) {
       return;
     }
 
