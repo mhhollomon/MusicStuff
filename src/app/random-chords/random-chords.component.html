@@ -22,8 +22,8 @@
             <mat-form-field>
                 <mat-label>Chord Count</mat-label>
                 <input name="chord_count" matNativeControl type="number" 
-                    [max]="get_chord_count_max()" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
-                <mat-error *ngIf="count_control.invalid">count &lt;{{get_chord_count_max()}} and &gt;1</mat-error>
+                    [max]="chord_count_max" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
+                <mat-error *ngIf="count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
             </mat-form-field>
         <!-- Duplicates -->
             <mat-form-field>
