@@ -13,4 +13,9 @@ describe('AudioService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('returns correct frequency information', () => {
+    expect(service.get_note_freq("C#5")).toEqual(554.4);
+    expect(service.get_note_freq("Db5")).toEqual(554.4);
+  });
 });

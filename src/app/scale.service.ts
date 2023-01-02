@@ -3,15 +3,6 @@ import { Choice, Chooser, mkch } from './chooser';
 import { Note, Scale, ScaleType, genericNotes } from './key'
 
 
-
-/* number of semi-tones between notes */
-const scaleStepData = {
-  minor : [0, 2, 1, 2, 2, 1, 2],
-  major : [0, 2, 2, 1, 2, 2, 2],
-  phrygian : [0, 1, 2, 2, 1, 2, 2],
-  augmented : [0, 2, 2, 2, 2, 1, 2],
-} as const;
-
 function mk_min_kc(root: string, weight? : number) {
   return mkch(new Scale(root, 'minor'), weight);
 }
@@ -57,57 +48,13 @@ export class ScaleService {
 
   getScaleNotes(scale: Scale) : Note[] {
 
-    if (scale.id() in this.cache) {
-      return this.cache[scale.id()];
-    } else {
-      return this.generate_scale_notes(scale);
+    if (! (scale.id() in this.cache)) {
+      this.cache[scale.id()] = scale.notesOfScale();
     }
 
+    return this.cache[scale.id()];
   }
 
-  private generate_scale_notes(scale : Scale) : Note[] {
-    let notes :Note[] = [];
-
-    let scaleSteps = scaleStepData[scale.scaleType];
-
-    let current_generic_note = scale.rootNote.noteClass;
-    let index = 0;
-    while(genericNotes[index].name != current_generic_note) {
-      index += 1;
-    }
-
-    notes.push(scale.rootNote);
-    
-    let scaleDegree = 1;
-    while (scaleDegree < 7) {
-      index += 1;
-      let stepSize = genericNotes[index].prev;
-      let neededStepSize = scaleSteps[scaleDegree];
-
-      let newAlter = notes[notes.length-1].alter;
-
-      if (stepSize == neededStepSize) {
-        // We want this note, but it needs to be altered the same
-        // way that our current note is altered (to preserve the step size)
-
-        // So, do nothing.
-      } else if (stepSize < neededStepSize) {
-        // Need to alter this new note up one from the last;
-        newAlter += 1;
-      } else { // stepSize > neededStepSize
-        // Need to alter this new note down one from the last;
-        newAlter -= 1;
-      }
-
-      notes.push(new Note(genericNotes[index].name, newAlter));
-      scaleDegree += 1;
-    }
-
-    this.cache[scale.id()] = notes;
-
-    return notes;
-
-  }
 
   getMinorKeyList() : string[] {
     return minorKeyChoices.map(v => v.choice.root());

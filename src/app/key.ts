@@ -40,6 +40,14 @@ const accidentalToAlter : any = {
     'bb' : -2,
 }
 
+/* number of semi-tones between notes */
+const scaleStepData = {
+    minor : [0, 2, 1, 2, 2, 1, 2],
+    major : [0, 2, 2, 1, 2, 2, 2],
+    phrygian : [0, 1, 2, 2, 1, 2, 2],
+    augmented : [0, 2, 2, 2, 2, 1, 2],
+  } as const;
+
 export class Note {
     noteClass : string = 'A';
     alter : number = 0;
@@ -129,6 +137,8 @@ export class Note {
         return new Note(this.noteClass, this.alter);
     }
 
+    
+
 
     private test_and_set_note(note : string) {
         note = note.toUpperCase();
@@ -183,4 +193,47 @@ export class Scale {
     }
 
     id() { return this.fullName(); }
+
+    notesOfScale() : Note[] {
+        let notes :Note[] = [];
+    
+        let scaleSteps = scaleStepData[this.scaleType];
+    
+        let current_generic_note = this.rootNote.noteClass;
+        let index = 0;
+        while(genericNotes[index].name != current_generic_note) {
+          index += 1;
+        }
+    
+        notes.push(this.rootNote);
+        
+        let scaleDegree = 1;
+        while (scaleDegree < 7) {
+          index += 1;
+          let stepSize = genericNotes[index].prev;
+          let neededStepSize = scaleSteps[scaleDegree];
+    
+          let newAlter = notes[notes.length-1].alter;
+    
+          if (stepSize == neededStepSize) {
+            // We want this note, but it needs to be altered the same
+            // way that our current note is altered (to preserve the step size)
+    
+            // So, do nothing.
+          } else if (stepSize < neededStepSize) {
+            // Need to alter this new note up one from the last;
+            newAlter += 1;
+          } else { // stepSize > neededStepSize
+            // Need to alter this new note down one from the last;
+            newAlter -= 1;
+          }
+    
+          notes.push(new Note(genericNotes[index].name, newAlter));
+          scaleDegree += 1;
+        }
+        
+        return notes;
+    
+    }
+
 }
