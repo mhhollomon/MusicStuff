@@ -183,7 +183,7 @@ export class RandomChordsComponent {
           octave += 1;
           isBassNote = false;
         } else {
-          last = octavePlacement[n.noteClass];
+          last = octavePlacement[simpleNote.noteClass];
         }
   
       }
