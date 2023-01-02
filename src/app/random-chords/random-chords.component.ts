@@ -135,15 +135,18 @@ export class RandomChordsComponent {
     let isBassNote = true;
 
     for (let c of chord.chordTones) {
-      if (octavePlacement[c.noteClass] < last) {
+
+      let simpleNote = c.toSharp();
+
+      if (octavePlacement[simpleNote.noteClass] < last) {
         octave += 1;
       }
-      tones.push(c.note() + octave);
+      tones.push(simpleNote.note() + octave);
       if (isBassNote) {
         octave += 1;
         isBassNote = false;
       } else {
-        last = octavePlacement[c.noteClass];
+        last = octavePlacement[simpleNote.noteClass];
       }
 
     }
