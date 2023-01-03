@@ -11,13 +11,13 @@ export class Chooser<T> {
 
     choices : Choice<T>[] = [];
     weights : number[] = [];
-    total_weight : number = 0.0;
+    total_weight  = 0.0;
 
     constructor(choices : Choice<T>[] ) {
         this.choices = choices;
 
         let accum = 0.0;
-        for (let c of choices) {
+        for (const c of choices) {
             accum += c.weight;
             this.weights.push(accum);
         }
@@ -27,10 +27,10 @@ export class Chooser<T> {
     }
 
     pick() : Choice<T> {
-        let rnd_num = Math.random() * this.total_weight;
+        const rnd_num = Math.random() * this.total_weight;
         
         let index = 0;
-        for (let w of this.weights) {
+        for (const w of this.weights) {
             if (rnd_num < w) {
                 return this.choices[index];
             }

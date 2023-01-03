@@ -3,7 +3,7 @@ import { Note } from "./key";
 describe("Note constructor", () => {
     it ('should create instance with simple string note name', () => {
 
-        let note = new Note('C');
+        const note = new Note('C');
 
         expect(note).toBeTruthy();
         expect(note.noteClass).toEqual('C');
@@ -13,7 +13,7 @@ describe("Note constructor", () => {
 
     it ('should handle/parse sharp accidental in string note name', () => {
 
-        let note = new Note('D#');
+        const note = new Note('D#');
 
         expect(note).toBeTruthy();
         expect(note.noteClass).toEqual('D');
@@ -23,7 +23,7 @@ describe("Note constructor", () => {
 
     it ('should handle/parse flat accidental in string note name', () => {
 
-        let note = new Note('Gb');
+        const note = new Note('Gb');
 
         expect(note).toBeTruthy();
         expect(note.noteClass).toEqual('G');
@@ -33,7 +33,7 @@ describe("Note constructor", () => {
 
     it ('should handle/parse double sharp accidental in string note name', () => {
 
-        let note = new Note('Ex');
+        const note = new Note('Ex');
 
         expect(note).toBeTruthy();
         expect(note.noteClass).toEqual('E');
@@ -43,7 +43,7 @@ describe("Note constructor", () => {
 
     it ('should handle/parse double flat accidental in string note name', () => {
 
-        let note = new Note('Abb');
+        const note = new Note('Abb');
 
         expect(note).toBeTruthy();
         expect(note.noteClass).toEqual('A');
@@ -53,7 +53,7 @@ describe("Note constructor", () => {
 
     it('should properly record the passed-in alter amount', () => {
 
-        let note = new Note('A', -1);
+        const note = new Note('A', -1);
 
         expect(note).toBeTruthy();
         expect(note.noteClass).toEqual('A');
@@ -109,8 +109,8 @@ describe("Note.noteDisplay()", () => {
 describe ("Note.clone", () => {
     it("should clone", () => {
 
-        let x = new Note('D', 2);
-        let clone = x.clone();
+        const x = new Note('D', 2);
+        const clone = x.clone();
 
         expect(clone).toEqual(x);
 
@@ -119,14 +119,14 @@ describe ("Note.clone", () => {
 
 describe ("Note.equal()", () => {
     it("Should be equal for clones", () => {
-        let x = new Note('F', -2);
+        const x = new Note('F', -2);
         
         expect(x.clone().equal(x)).toBeTruthy();
     });
 
     it ("Should take into account the alter", () => {
 
-        let x = new Note('F', -2);
+        const x = new Note('F', -2);
         expect(x.equal(new Note('F#'))).toBeFalsy();
         expect(x.equal(new Note('Fb'))).toBeFalsy();
         expect(x.equal(new Note('Fbb'))).toBeTruthy();
@@ -135,7 +135,7 @@ describe ("Note.equal()", () => {
 
     it ("Should take into account the note class", () => {
 
-        let x = new Note('F', -2);
+        const x = new Note('F', -2);
         expect(x.equal(new Note('G'))).toBeFalsy();
         expect(x.equal(new Note('Gb'))).toBeFalsy();
         expect(x.equal(new Note('Gbb'))).toBeFalsy();
@@ -146,14 +146,14 @@ describe ("Note.equal()", () => {
 
 describe ("Note.same()", () => {
     it("Should be equal for clones", () => {
-        let x = new Note('F', -2);
+        const x = new Note('F', -2);
         
         expect(x.clone().same(x)).toBeTruthy();
     });
 
     it ("Should simplify", () => {
 
-        let x = new Note('Ex');
+        const x = new Note('Ex');
         expect(x.same(new Note('F#'))).toBeTruthy();
         expect(x.same(new Note('Gb'))).toBeTruthy();
 
@@ -166,42 +166,42 @@ describe ("Note.same()", () => {
 
 describe("Note.simplify", () => {
     it("should keep unaltered notes the same", () => {
-        let x = new Note('F');
+        const x = new Note('F');
         expect(x.simplify()).toEqual(x);
     });
 
     it("should simplify E# to F", () => {
-        let x = new Note('E#');
+        const x = new Note('E#');
         expect(x.simplify()).toEqual(new Note('F'));
     });
 
     it("should simplify Cb to B", () => {
-        let x = new Note('Cb');
+        const x = new Note('Cb');
         expect(x.simplify()).toEqual(new Note('B'));
     });
 
     it("should simplify C# to itself", () => {
-        let x = new Note('C#');
+        const x = new Note('C#');
         expect(x.simplify()).toEqual(new Note('C#'));
     });
 
     it("should simplify Bb to itself", () => {
-        let x = new Note('Bb');
+        const x = new Note('Bb');
         expect(x.simplify()).toEqual(new Note('Bb'));
     });
 
     it("should simplify Cx to D", () => {
-        let x = new Note('Cx');
+        const x = new Note('Cx');
         expect(x.simplify()).toEqual(new Note('D'));
     });
 
     it("should simplify Ex to F#", () => {
-        let x = new Note('Ex');
+        const x = new Note('Ex');
         expect(x.simplify()).toEqual(new Note('F#'));
     });
 
     it("should simplify Cbb to Bb", () => {
-        let x = new Note('Cbb');
+        const x = new Note('Cbb');
         expect(x.simplify()).toEqual(new Note('Bb'));
     });
 
@@ -210,42 +210,42 @@ describe("Note.simplify", () => {
 
 describe("Note.toSharp", () => {
     it("should keep unaltered notes the same", () => {
-        let x = new Note('F');
+        const x = new Note('F');
         expect(x.toSharp()).toEqual(x);
     });
 
     it("should simplify E# to F", () => {
-        let x = new Note('E#');
+        const x = new Note('E#');
         expect(x.toSharp()).toEqual(new Note('F'));
     });
 
     it("should simplify Cb to B", () => {
-        let x = new Note('Cb');
+        const x = new Note('Cb');
         expect(x.toSharp()).toEqual(new Note('B'));
     });
 
     it("should simplify C# to itself", () => {
-        let x = new Note('C#');
+        const x = new Note('C#');
         expect(x.toSharp()).toEqual(new Note('C#'));
     });
 
     it("should simplify Bb to A#", () => {
-        let x = new Note('Bb');
+        const x = new Note('Bb');
         expect(x.toSharp()).toEqual(new Note('A#'));
     });
 
     it("should simplify Cx to D", () => {
-        let x = new Note('Cx');
+        const x = new Note('Cx');
         expect(x.toSharp()).toEqual(new Note('D'));
     });
 
     it("should simplify Ex to F#", () => {
-        let x = new Note('Ex');
+        const x = new Note('Ex');
         expect(x.toSharp()).toEqual(new Note('F#'));
     });
 
     it("should simplify Cbb to A#", () => {
-        let x = new Note('Cbb');
+        const x = new Note('Cbb');
         expect(x.toSharp()).toEqual(new Note('A#'));
     });
 

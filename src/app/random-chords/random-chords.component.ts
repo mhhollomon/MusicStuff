@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-import {FormControl, Validators} from '@angular/forms';
-
 import { saveAs } from 'file-saver';
 import  * as Midiwriter  from 'midi-writer-js'
 
@@ -12,7 +10,7 @@ import { Note, Scale, ScaleType } from '../key';
 import { AudioService } from '../audio.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
-const octavePlacement : any = {
+const octavePlacement : { [ index : string ] : number } = {
   'C' : 0, 'D' : 1, 'E' : 2, 'F' : 3, 'G' : 4, 'A' : 5, 'B' : 6 
 }
 
@@ -37,17 +35,17 @@ export class RandomChordsComponent {
   new_chord_tones = true;
 
   // Model elements
-  chord_count: number = 4;
-  duplicates : string = 'None';
-  mode : string = 'Diatonic';
-  scale_source : string = "Random";
+  chord_count = 4;
+  duplicates  = 'None';
+  mode  = 'Diatonic';
+  scale_source  = "Random";
 
   allow_triads = true;
   allow_sevenths = false;
 
 
-  selected_sonority : string = 'major';
-  selected_key : string = 'Random';
+  selected_sonority  = 'major';
+  selected_key  = 'Random';
 
   minorkeys = this.scaleService.getMinorKeyList();
   majorkeys = this.scaleService.getMajorKeyList();
@@ -95,7 +93,7 @@ export class RandomChordsComponent {
 
     let picked_key : Scale | null = null;
 
-    let chordTypes : ChordType[] = [];
+    const chordTypes : ChordType[] = [];
     if (this.allow_triads) { chordTypes.push('triad'); }
     if (this.allow_sevenths) { chordTypes.push('7th'); }
 
@@ -129,14 +127,14 @@ export class RandomChordsComponent {
 
   async play_chord(chord : Chord) {
 
-    let tones : string[] = [];
+    const tones : string[] = [];
     let octave = 3;
-    let last : number = -1;
+    let last  = -1;
     let isBassNote = true;
 
-    for (let c of chord.chordTones) {
+    for (const c of chord.chordTones) {
 
-      let simpleNote = c.toSharp();
+      const simpleNote = c.toSharp();
 
       if (octavePlacement[simpleNote.noteClass] < last) {
         octave += 1;
@@ -163,18 +161,18 @@ export class RandomChordsComponent {
 
     if (!this.show_chords || this.chords.length < 1) return;
 
-    for (let c of this.chords) {
+    for (const c of this.chords) {
 
       // Want to place the bass note "down an octave"
       let octave = 3;
-      let last : number = -1;
+      let last  = -1;
       let isBassNote = true;
   
-      let options : Midiwriter.Options = {sequential: false, duration : '1', pitch : []}
+      const options : Midiwriter.Options = {sequential: false, duration : '1', pitch : []}
 
-      for (let n of c.chordTones) {
+      for (const n of c.chordTones) {
 
-        let simpleNote = n.toSharp();
+        const simpleNote = n.toSharp();
         if (octavePlacement[simpleNote.noteClass] < last) {
           octave += 1;
         }
@@ -194,11 +192,11 @@ export class RandomChordsComponent {
     if (this.mode === 'Diatonic' ) {
 
       let octave = ['G', 'A', 'B'].includes(this.scale_notes[0].toSharp().noteClass) ? 3 : 4;
-      let last : number = -1;
-      let scale_options : Midiwriter.Options = {sequential: true, duration : '4', pitch : []}
-      for (let n of this.scale_notes) {
+      let last  = -1;
+      const scale_options : Midiwriter.Options = {sequential: true, duration : '4', pitch : []}
+      for (const n of this.scale_notes) {
 
-        let simpleNote = n.toSharp();
+        const simpleNote = n.toSharp();
 
 
         if (octavePlacement[simpleNote.noteClass] < last) {
@@ -213,9 +211,9 @@ export class RandomChordsComponent {
     }
 
 
-    let midi_writer = new Midiwriter.Writer(track);
+    const midi_writer = new Midiwriter.Writer(track);
 
-    let  blob = new Blob([midi_writer.buildFile()], {type: "audio/midi"});
+    const  blob = new Blob([midi_writer.buildFile()], {type: "audio/midi"});
     saveAs(blob, "random-chords.mid");
 
   }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, mkch } from './chooser';
-import { Scale, Note, ScaleTypeEnum, ScaleType } from './key';
+import { Scale, Note, ScaleType } from './key';
 import { ScaleService } from './scale.service';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rotateArray(arr : any[], k : number) : any[] {
   return arr.slice(k).concat(arr.slice(0, k));
 }
@@ -37,7 +38,7 @@ export class Chord {
   chordType : ChordType;
   chordTones : Note[] = [];
 
-  constructor(root : string = 'C', name : string = 'Cmaj', chordType : ChordType = 'triad', inversion : number = 0) {
+  constructor(root  = 'C', name  = 'Cmaj', chordType : ChordType = 'triad', inversion  = 0) {
     this.root = root;
     this.name = name;
     this.inversion = inversion;
@@ -53,7 +54,7 @@ export type ChordType = 'triad' | '7th';
 
 const chordTypeWeights : Choice<ChordType>[] = [ mkch<ChordType>('triad', 5), mkch<ChordType>('7th', 2)];
 
-const diatonicChordQuailty : any = {
+const diatonicChordQuailty : { [ index : string ] : string[] } = {
   'minor-triad' : [ 'min', 'dim', 'maj', 'min', 'min', 'maj', 'maj'],
   'major-triad' : ['maj', 'min', 'min', 'maj', 'maj', 'min', 'dim' ],
   'minor-7th' : [ 'min7', 'dim7', 'maj7', 'min7', 'min7', 'maj7', 'maj7'],
@@ -71,7 +72,7 @@ export class RandomChordService {
 
   constructor(private scaleService : ScaleService) { }
 
-  gen_chords(key : Scale | null, count : number, duplicates : string = 'any',
+  gen_chords(key : Scale | null, count : number, duplicates  = 'any',
                 chordTypes : ChordType[] ) : Chord[] {
     count = Math.floor(count);
     if (count < 1) {
@@ -101,7 +102,7 @@ export class RandomChordService {
             try_again = true;
           }
         } else if (duplicates === 'none') {
-          for (let c of retval) {
+          for (const c of retval) {
             if (c.isSame(newChord)) {
               try_again = true;
             }
@@ -116,17 +117,17 @@ export class RandomChordService {
   }
 
   private gen_diatonic_chord(key : Scale, chordTypes : ChordType[]) {
-    let scale = this.scaleService.getScaleNotes(key);
-    let root = this.noteChooser.choose();
-    let note = scale[root-1];
+    const scale = this.scaleService.getScaleNotes(key);
+    const root = this.noteChooser.choose();
+    const note = scale[root-1];
 
-    let filtered = chordTypeWeights.filter(x => chordTypes.includes(x.choice));
+    const filtered = chordTypeWeights.filter(x => chordTypes.includes(x.choice));
 
-    let chordType = (new Chooser(filtered)).choose();
+    const chordType = (new Chooser(filtered)).choose();
 
-    let qualKey = key.scaleType + '-' +  chordType;
+    const qualKey = key.scaleType + '-' +  chordType;
 
-    let chQual =  diatonicChordQuailty[qualKey];
+    const chQual =  diatonicChordQuailty[qualKey];
     let name = note.noteDisplay() + chQual[root-1];
 
     const inversion = invertChooser.choose();
@@ -145,28 +146,26 @@ export class RandomChordService {
 
   private gen_chromatic_chord(chordTypes : ChordType[]) : Chord {
 
-    let note = new Note(this.chromaticChooser.choose());
-    let chQual = chromaticQualityChooser.choose();
+    const note = new Note(this.chromaticChooser.choose());
+    const chQual = chromaticQualityChooser.choose();
     let name = note.noteDisplay() + chQual;
 
-    let filtered = chordTypeWeights.filter(x => chordTypes.includes(x.choice));
+    const filtered = chordTypeWeights.filter(x => chordTypes.includes(x.choice));
 
-    let chordType = (new Chooser(filtered)).choose();
+    const chordType = (new Chooser(filtered)).choose();
 
     name += (chordType ==='7th' ? '7' : '');
    
     const sn = new Scale(note, qualityToScaleType[chQual]);
 
-    let qualKey = sn.scaleType + '-' +  chordType;
-
-    let scale = this.scaleService.getScaleNotes(sn);
+    const scale = this.scaleService.getScaleNotes(sn);
 
     const inversion = invertChooser.choose();
 
     if (inversion > 0) {
       const invOffset = inversionOffset[inversion];
-      let bassDegree = invOffset % 7;
-      let bassNote = scale[bassDegree];
+      const bassDegree = invOffset % 7;
+      const bassNote = scale[bassDegree];
 
       name = name + '/' + bassNote.noteDisplay();      
   
@@ -187,7 +186,7 @@ export class RandomChordService {
 
   private mkchord(key: Scale, note : Note, name : string, inv : number, 
           chordType : ChordType = 'triad', 
-          rootDegree :  number = 1) : Chord {
+          rootDegree  = 1) : Chord {
 
     const scale = this.scaleService.getScaleNotes(key);
     let tones = inversionOffset.slice(0, chordType === 'triad' ? 3 : 4).map(i => scale[(i+(rootDegree-1))%7]);
@@ -197,7 +196,7 @@ export class RandomChordService {
       tones = rotateArray(tones, inv);
     }
 
-    let chord = new Chord(note.note(), name, chordType, inv);
+    const chord = new Chord(note.note(), name, chordType, inv);
     chord.chordTones = tones;
 
     return chord;

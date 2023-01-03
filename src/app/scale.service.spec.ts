@@ -18,11 +18,11 @@ describe('ScaleService', () => {
   });
 
   it("correctly caches scale notes", () => {
-    let scale = new Scale("G", 'major');
+    const scale = new Scale("G", 'major');
 
     const retval = [ 'G', 'A', 'B', 'C', 'D', 'E', 'F#'].map(v => new Note(v));
 
-    let theSpy = spyOn(scale, 'notesOfScale').and.callThrough();
+    const theSpy = spyOn(scale, 'notesOfScale').and.callThrough();
 
     expect(service.getScaleNotes(scale)).withContext("first time").toEqual(retval);
     expect(theSpy).withContext("first time").toHaveBeenCalled();
@@ -34,7 +34,10 @@ describe('ScaleService', () => {
   });
 
   it ("correctly chooses from the correct list when sonority is given", () => {
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (<any>service).minorChooser = new Chooser([mkch(new Scale('A', 'minor'), 1)]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (<any>service).majorChooser = new Chooser([mkch(new Scale('C', 'major'), 1)]);
 
     expect(service.choose('minor').root()).withContext('choosing minor').toEqual('A');

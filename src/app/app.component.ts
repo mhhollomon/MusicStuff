@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,8 +6,11 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'music-stuff';
+
+  // might need to dig deeper on this.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navLinks :any[];
   activeLinkIndex = -1; 
     constructor(private router: Router) {
@@ -30,7 +32,7 @@ export class AppComponent {
     }
 
     ngOnInit(): void {
-    this.router.events.subscribe((res) => {
+    this.router.events.subscribe(() => {
         this.activeLinkIndex = this.navLinks.indexOf(
             this.navLinks.find(tab => tab.link === '.' + this.router.url));
     });

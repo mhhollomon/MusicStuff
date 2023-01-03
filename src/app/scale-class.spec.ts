@@ -1,10 +1,9 @@
-import { ignoreElements } from "rxjs";
 import { Scale, Note } from "./key";
 
 describe("Scale", () => {
     it("should properly use string for root note", () => {
 
-        let s = new Scale("C#", 'minor');
+        const s = new Scale("C#", 'minor');
         expect(s.rootNote.equal(new Note("C#"))).toBeTruthy();
         expect(s.scaleType).toEqual('minor');
 
@@ -12,8 +11,8 @@ describe("Scale", () => {
 
     it("should properly use a Note for root note", () => {
 
-        let n = new Note('F');
-        let s = new Scale(n, 'phrygian');
+        const n = new Note('F');
+        const s = new Scale(n, 'phrygian');
         expect(s.rootNote.equal(n));
         expect(s.scaleType).toEqual('phrygian');
 

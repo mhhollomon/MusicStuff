@@ -33,7 +33,7 @@ const noteGraph : { [ index : string ] : NoteGraphData } = {
     'G' : { name : 'G', nextNote : 'A', prevNote : 'F', nextDist : 2, prevDist : -2},
 }
   
-const accidentalToAlter : any = {
+const accidentalToAlter : { [ index : string ] : number } = {
     'b' : -1,
     '#' : +1,
     'x' : +2,
@@ -49,8 +49,8 @@ const scaleStepData = {
   } as const;
 
 export class Note {
-    noteClass : string = 'A';
-    alter : number = 0;
+    noteClass  = 'A';
+    alter  = 0;
 
     constructor(note: string, alter? : number ) {
 
@@ -66,9 +66,9 @@ export class Note {
                 throw Error("Cannot use alter with accidental");
             }
             this.test_and_set_note(note.substring(0, 1));
-            let accidental = note.substring(1);
+            const accidental = note.substring(1);
 
-            let computedAlter = accidentalToAlter[accidental];
+            const computedAlter = accidentalToAlter[accidental];
 
             if (computedAlter) {
                 this.alter = computedAlter;
@@ -96,7 +96,7 @@ export class Note {
             return this.clone();
         } 
 
-        let gnd = noteGraph[this.noteClass];
+        const gnd = noteGraph[this.noteClass];
 
         if (this.alter < 0) {
             if (gnd.prevDist >= this.alter )
@@ -113,10 +113,10 @@ export class Note {
     }
 
     toSharp() : Note {
-        let note = this.simplify();
+        const note = this.simplify();
 
         while (note.alter < 0) {
-            let gnd = noteGraph[note.noteClass];
+            const gnd = noteGraph[note.noteClass];
             note.alter -= gnd.prevDist;
             note.noteClass = gnd.prevNote;
         }
@@ -195,11 +195,11 @@ export class Scale {
     id() { return this.fullName(); }
 
     notesOfScale() : Note[] {
-        let notes :Note[] = [];
+        const notes :Note[] = [];
     
-        let scaleSteps = scaleStepData[this.scaleType];
+        const scaleSteps = scaleStepData[this.scaleType];
     
-        let current_generic_note = this.rootNote.noteClass;
+        const current_generic_note = this.rootNote.noteClass;
         let index = 0;
         while(genericNotes[index].name != current_generic_note) {
           index += 1;
@@ -210,8 +210,8 @@ export class Scale {
         let scaleDegree = 1;
         while (scaleDegree < 7) {
           index += 1;
-          let stepSize = genericNotes[index].prev;
-          let neededStepSize = scaleSteps[scaleDegree];
+          const stepSize = genericNotes[index].prev;
+          const neededStepSize = scaleSteps[scaleDegree];
     
           let newAlter = notes[notes.length-1].alter;
     

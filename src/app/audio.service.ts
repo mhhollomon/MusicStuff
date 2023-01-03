@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const pitch_map : any = {
+const pitch_map : { [ index : string] : number[] } = {
   'B#': [16.35, 32.70, 65.41, 130.8, 261.6, 523.3, 1047, 2093, 4186],
   'C': [16.35, 32.70, 65.41, 130.8, 261.6, 523.3, 1047, 2093, 4186],
   'C#': [17.32, 34.65, 69.3, 138.6, 277.2, 554.4, 1109, 2217, 4435],
@@ -68,7 +68,7 @@ export class AudioService {
         this.gains[i].gain.value = 0;
       } else {
         this.gains[i].gain.value = 1.0/notes.length;
-        let freq = this.get_note_freq(notes[i]);
+        const freq = this.get_note_freq(notes[i]);
         this.oscillators[i].frequency.value = freq;
       }
     }
@@ -81,12 +81,12 @@ export class AudioService {
 
   
   private createOsc(){
-    let gain = this.audioContext.createGain();
+    const gain = this.audioContext.createGain();
     gain.connect(this.topgain);
     gain.gain.value = 0;
     this.gains.push(gain);
 
-    let oscillator = this.audioContext.createOscillator();
+    const oscillator = this.audioContext.createOscillator();
     oscillator.connect(gain);
     oscillator.start();
     this.oscillators.push(oscillator);

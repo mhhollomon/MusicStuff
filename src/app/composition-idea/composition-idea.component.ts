@@ -31,14 +31,14 @@ const noteChoices : Choice<string>[] = [
 })
 export class CompositionIdeaComponent {
 
-    show_idea : boolean = false;
-    form_type : string = '';
-    speed : string = '';
-    time_sig : string = '';
-    tonality : string = '';
+    show_idea  = false;
+    form_type  = '';
+    speed  = '';
+    time_sig  = '';
+    tonality  = '';
     key_center  = '';
-    note1 : string = '';
-    note2 : string = '';
+    note1  = '';
+    note2  = '';
 
     constructor(private random_key_service : ScaleService) {
 
@@ -50,7 +50,7 @@ export class CompositionIdeaComponent {
         this.speed = pickChoice(speedChoices);
         this.time_sig = pickChoice(timeSignatureChoices);
 
-        let random_key = this.random_key_service.choose();
+        const random_key = this.random_key_service.choose();
 
         this.tonality = capitalize(random_key.scaleType);
         this.key_center = random_key.rootDisplay();
