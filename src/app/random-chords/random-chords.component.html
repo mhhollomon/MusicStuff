@@ -92,11 +92,12 @@
             <div class="chord-panel-title-container">
                 <label class="chord-panel-title-key mr2">{{getPanelTitle()}}</label>
                 <div class="chord-panel-title-buttons">
-                    <mat-button-toggle [checked]="show_chord_tones" (change)="chord_tone_change($event)" (click)="stopPropagation($event)">
+                    <mat-button-toggle [checked]="show_chord_tones" matTooltip="Show/Hide the actual chord tones" 
+                                    (change)="chord_tone_change($event)" (click)="stopPropagation($event)">
                         <span class="f7">Chord Tones</span>
                     </mat-button-toggle>
                     <span>
-                        <button class="ml4 ba br2" (click)="generate_midi($event)" >midi</button>
+                        <button class="ml4 ba br2" matTooltip="Download midi file for the chords" (click)="generate_midi($event)" >midi</button>
                     </span>
                 </div>
             </div>
@@ -109,7 +110,7 @@
     <div class="chord-container ml3 pb3">
         <ng-template ngFor let-c [ngForOf]="chords">
             <div class="chord-name mv2">
-                <button class="dif" (click)="play_chord(c)" mat-mini-fab>>></button>
+                <button class="dif" matTooltip="Play the chord through your speakers or headphones" (click)="play_chord(c)" mat-mini-fab>>></button>
                 <span class="dif">{{c.name}}</span>
             </div>
             <div class="chord-tones mv2" *ngIf="show_chord_tones">

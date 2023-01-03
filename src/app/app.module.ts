@@ -15,6 +15,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -50,12 +51,14 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatRadioModule,
     MatGridListModule,
     MatExpansionModule,
+    MatTooltipModule,
     
     AppRoutingModule,
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'always'}},
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue : {showDelay : 1000, }}
   ],
   bootstrap: [AppComponent]
 })
