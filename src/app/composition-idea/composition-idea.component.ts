@@ -1,12 +1,29 @@
 import { Component } from '@angular/core';
 
-import { Choice, Chooser, mkch } from '../chooser';
+import { Choice, Chooser, equalWeightedChooser, mkch } from '../chooser';
 import { ScaleService } from '../scale.service';
 import {capitalize} from '../capitalize.lib';
+
+import * as importedData from '../../assets/electronic-prompts.json';
 
 function pickChoice<T>(choices : Choice<T>[]) : T {
     return (new Chooser(choices)).pick().choice;
 }
+
+const promptData = [
+    "Spacey",
+    "Crunchy",
+    "Piano",
+    "Make some noisy noise. resample it. Get funky. Don't think, just do",
+    "juxtaposition - take incongruous elements, toss them together",
+    "Tonal percussion - Think water drops, tonal toms, maybe pick a sound and pitch it up and down. Build a pattern that utilizes the pitch of these elements to create a melodic pattern",
+    "Interlude - It’s not a drop, it’s not a breakdown, it’s not a build, it’s an interlude. ",
+    "Whispering winds - sample and chop woodwinds or just the wind.",
+    "Spaced out found sound rhythms. Use a traditional kick and snare if you want but build your groove out of snaps crackles and pops.",
+    "Stacked harmony. Be it traditional vocals, vocoder, vocal pads…Pump them, chop them, slice them dice them.",
+    "Long game dynamic changes. Make a transition that builds as slowly as possible… subtle moves that add up to a big emotional impact over time.",
+    "Use an element that gently modulates in pitch.",
+    ]
 
 const formChoices : Choice<string>[] = [ mkch('sentence'), mkch('period') ];
 
@@ -31,7 +48,11 @@ const noteChoices : Choice<string>[] = [
 })
 export class CompositionIdeaComponent {
 
+    suggestionType : string = 'Orchestral';
+
     show_idea  = false;
+
+    /* Orchestral Elements */
     form_type  = '';
     speed  = '';
     time_sig  = '';
@@ -40,25 +61,47 @@ export class CompositionIdeaComponent {
     note1  = '';
     note2  = '';
 
-    constructor(private random_key_service : ScaleService) {
+    /* Electronic Elements */
 
+    elchooser : Chooser<string>;
+
+    prompts : string[] = [];
+
+    constructor(private random_key_service : ScaleService) {
+        this.elchooser = equalWeightedChooser(promptData);
     }
 
     generate() {
+
+        if (this.suggestionType === 'Orchestral') {
         
-        this.form_type = pickChoice(formChoices);
-        this.speed = pickChoice(speedChoices);
-        this.time_sig = pickChoice(timeSignatureChoices);
+            this.form_type = pickChoice(formChoices);
+            this.speed = pickChoice(speedChoices);
+            this.time_sig = pickChoice(timeSignatureChoices);
 
-        const random_key = this.random_key_service.choose();
+            const random_key = this.random_key_service.choose();
 
-        this.tonality = capitalize(random_key.scaleType);
-        this.key_center = random_key.rootDisplay();
+            this.tonality = capitalize(random_key.scaleType);
+            this.key_center = random_key.rootDisplay();
 
-        this.note1 = pickChoice(noteChoices);
-        this.note2 = pickChoice(noteChoices);
+            this.note1 = pickChoice(noteChoices);
+            this.note2 = pickChoice(noteChoices);
+        } else {
+            this.prompts = [];
+            let prompt_count = equalWeightedChooser([2,3]).choose();
+            while(this.prompts.length < prompt_count) {
+                let new_choice = this.elchooser.choose();
+                if (! this.prompts.includes(new_choice)) {
+                    this.prompts.push(new_choice);
+                }
+            }
+        }
 
         this.show_idea = true;
+    }
+
+    type_change() {
+        this.show_idea = false;
     }
 
 
