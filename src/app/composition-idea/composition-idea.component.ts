@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
 
 import { Choice, Chooser, equalWeightedChooser, mkch } from '../chooser';
 import { ScaleService } from '../scale.service';
@@ -15,7 +18,7 @@ const promptData = [
     "Make some noisy noise. resample it. Get funky. Don't think, just do",
     "juxtaposition - take incongruous elements, toss them together",
     "Tonal percussion - Think water drops, tonal toms, maybe pick a sound and pitch it up and down. Build a pattern that utilizes the pitch of these elements to create a melodic pattern",
-    "Interlude - It’s not a drop, it’s not a breakdown, it’s not a build, it’s an interlude. ",
+    "Interlude - It's not a drop, it's not a breakdown, it's not a build, it's an interlude.",
     "Whispering winds - sample and chop woodwinds or just the wind.",
     "Spaced out found sound rhythms. Use a traditional kick and snare if you want but build your groove out of snaps crackles and pops.",
     "Stacked harmony. Be it traditional vocals, vocoder, vocal pads…Pump them, chop them, slice them dice them.",
@@ -44,7 +47,7 @@ const noteChoices : Choice<string>[] = [
     templateUrl: './composition-idea.component.html',
     styleUrls: ['./composition-idea.component.scss']
 })
-export class CompositionIdeaComponent {
+export class CompositionIdeaComponent implements OnInit {
 
     suggestionType = 'Orchestral';
 
@@ -65,8 +68,19 @@ export class CompositionIdeaComponent {
 
     prompts : string[] = [];
 
-    constructor(private random_key_service : ScaleService) {
+    constructor(private random_key_service : ScaleService, 
+                private activeRoute: ActivatedRoute, private router : Router) {
         this.elchooser = equalWeightedChooser(promptData);
+    }
+
+    ngOnInit(): void {
+        this.activeRoute.queryParams
+            .subscribe(params => {
+                const mode = capitalize(params['mode']);
+                if (['Orchestral', 'Electronic'].includes(mode)) {
+                    this.suggestionType = mode;
+                }
+            });
     }
 
     generate() {
@@ -100,6 +114,13 @@ export class CompositionIdeaComponent {
 
     type_change() {
         this.show_idea = false;
+        this.router.navigate( [], 
+            {
+              relativeTo: this.activeRoute,
+              queryParams: {mode : this.suggestionType}, 
+              queryParamsHandling: 'merge', // remove to replace all query params by provided
+            }
+        );
     }
 
 

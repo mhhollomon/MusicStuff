@@ -19,7 +19,6 @@ import {MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/t
 
 @NgModule({
     exports: [
-  
         MatTabsModule,
         MatToolbarModule,
         MatButtonModule,
