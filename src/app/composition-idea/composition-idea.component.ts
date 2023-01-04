@@ -4,8 +4,6 @@ import { Choice, Chooser, equalWeightedChooser, mkch } from '../chooser';
 import { ScaleService } from '../scale.service';
 import {capitalize} from '../capitalize.lib';
 
-import * as importedData from '../../assets/electronic-prompts.json';
-
 function pickChoice<T>(choices : Choice<T>[]) : T {
     return (new Chooser(choices)).pick().choice;
 }
@@ -48,7 +46,7 @@ const noteChoices : Choice<string>[] = [
 })
 export class CompositionIdeaComponent {
 
-    suggestionType : string = 'Orchestral';
+    suggestionType = 'Orchestral';
 
     show_idea  = false;
 
@@ -88,9 +86,9 @@ export class CompositionIdeaComponent {
             this.note2 = pickChoice(noteChoices);
         } else {
             this.prompts = [];
-            let prompt_count = equalWeightedChooser([2,3]).choose();
+            const prompt_count = equalWeightedChooser([2,3]).choose();
             while(this.prompts.length < prompt_count) {
-                let new_choice = this.elchooser.choose();
+                const new_choice = this.elchooser.choose();
                 if (! this.prompts.includes(new_choice)) {
                     this.prompts.push(new_choice);
                 }

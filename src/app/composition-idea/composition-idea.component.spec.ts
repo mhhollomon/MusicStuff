@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {FormsModule} from '@angular/forms';
+
 import { CompositionIdeaComponent } from './composition-idea.component';
 
 describe('CompositionIdeaComponent', () => {
@@ -8,7 +11,8 @@ describe('CompositionIdeaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CompositionIdeaComponent ]
+      imports: [MatButtonToggleModule, FormsModule],
+      declarations: [ CompositionIdeaComponent ],
     })
     .compileComponents();
 
