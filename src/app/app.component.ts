@@ -16,15 +16,15 @@ export class AppComponent implements OnInit {
     constructor(private router: Router) {
         this.navLinks = [
             {
-                label: 'Composition Idea',
+                label: 'IDEAS',
                 link: './composition-idea',
                 index: 0
             }, {
-                label: 'Random Chords',
+                label: 'CHORDS',
                 link: './random-chords',
                 index: 1
             }, {
-                label: 'Resources',
+                label: 'RESOURCES',
                 link: './music-resources',
                 index: 2
             }, 

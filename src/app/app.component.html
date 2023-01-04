@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
     <span>Mark's Musical Miscellany</span>
 </mat-toolbar>
-<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+<nav mat-tab-nav-bar mat-stretch-tabs='false' [tabPanel]="tabPanel">
     <a mat-tab-link *ngFor="let link of navLinks"
        [routerLink]="link.link"
        routerLinkActive #rla="routerLinkActive"

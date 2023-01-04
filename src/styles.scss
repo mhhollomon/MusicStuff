@@ -1,6 +1,11 @@
 @import "tachyons/css/tachyons.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+body {
+    margin : 0px;
+    padding : 0px;
+    font-family: var(--mdc-typography-font-family, Roboto, sans-serif);
+}
 
 .dif {
     display : inline-flex;
