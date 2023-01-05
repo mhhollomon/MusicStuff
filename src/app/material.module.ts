@@ -15,6 +15,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import {MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/t
         MatGridListModule,
         MatExpansionModule,
         MatTooltipModule,
+        MatSidenavModule,
     ],
     providers: [
         {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline', floatLabel: 'always'}},

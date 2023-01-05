@@ -1,0 +1,199 @@
+
+$fb-column-count : 5;
+$fb-cell-width : calc(100% / $fb-column-count);
+
+$fb-row-count : 6;
+$fb-cell-height : calc(100% / $fb-row-count);
+
+$fb-label-height : 25pt;
+$fb-label-width : 25pt;
+
+.fretboard-parent {
+    position : relative;
+    height : 75vh;
+}
+
+.fretboard-container {
+    display : grid;
+    height : 100%;
+    grid-template-columns : repeat($fb-column-count, $fb-cell-width);
+    grid-template-rows: repeat($fb-row-count, $fb-cell-height );
+}
+
+.fretboard-cell {
+    background-color: chocolate;
+    margin : 0;
+    padding : 0;
+    border-width : 1px;
+    border-color : black;
+    border-style : solid;
+    height : 100%;
+
+}
+
+.finger-label {
+    display : table-cell;
+    border-width : 1px;
+    border-color : black;
+    border-style : solid;
+    border-radius : 50%;
+    background-color: crimson;
+    height : $fb-label-height;
+    width : $fb-label-width;
+    line-height: $fb-label-height;
+    text-align: center;
+    font-size : 16pt;
+}
+
+@mixin nav-button-base {
+    display : block;
+    border: 0;
+    background-color: inherit;
+    text-align: start;
+    font-weight: 500;
+}
+
+.navButton {
+    color : gray;
+    font-size : 14pt;
+    @include nav-button-base();
+}
+
+.activeNavButton {
+    color : primary;
+    font-size : 15pt;
+    padding-left : 0.6rem;
+    @include nav-button-base();
+}
+
+.randomButton {
+    display : block;
+    background-color: inherit;
+    text-align: start;
+    font-weight: 500;
+    font-size : 15pt;
+}
+
+//
+// Classes to position the finger circles
+//
+.p-1-1  {
+    position : absolute;
+    top : calc($fb-cell-height - ($fb-label-height / 2));
+    left : calc($fb-cell-width - ($fb-label-width / 2));
+}
+
+.p-1-2  {
+    position : absolute;
+    top : calc($fb-cell-height - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 2 - ($fb-label-width / 2));
+}
+
+.p-1-3  {
+    position : absolute;
+    top : calc($fb-cell-height - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 3 - ($fb-label-width / 2));
+}
+
+.p-1-4  {
+    position : absolute;
+    top : calc($fb-cell-height - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 4 - ($fb-label-width / 2));
+}
+
+
+.p-2-1  {
+    position : absolute;
+    top : calc($fb-cell-height * 2 - ($fb-label-height / 2));
+    left : calc($fb-cell-width - ($fb-label-width / 2));
+}
+
+.p-2-2  {
+    position : absolute;
+    top : calc($fb-cell-height * 2 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 2 - ($fb-label-width / 2));
+}
+
+.p-2-3  {
+    position : absolute;
+    top : calc($fb-cell-height * 2 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 3 - ($fb-label-width / 2));
+}
+
+.p-2-4  {
+    position : absolute;
+    top : calc($fb-cell-height * 2 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 4 - ($fb-label-width / 2));
+}
+
+.p-3-1  {
+    position : absolute;
+    top : calc($fb-cell-height * 3 - ($fb-label-height / 2));
+    left : calc($fb-cell-width - ($fb-label-width / 2));
+}
+
+.p-3-2  {
+    position : absolute;
+    top : calc($fb-cell-height * 3 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 2 - ($fb-label-width / 2));
+}
+
+.p-3-3  {
+    position : absolute;
+    top : calc($fb-cell-height * 3 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 3 - ($fb-label-width / 2));
+}
+
+.p-3-4  {
+    position : absolute;
+    top : calc($fb-cell-height * 3 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 4 - ($fb-label-width / 2));
+}
+
+.p-4-1  {
+    position : absolute;
+    top : calc($fb-cell-height * 4 - ($fb-label-height / 2));
+    left : calc($fb-cell-width - ($fb-label-width / 2));
+}
+
+.p-4-2  {
+    position : absolute;
+    top : calc($fb-cell-height * 4 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 2 - ($fb-label-width / 2));
+}
+
+.p-4-3  {
+    position : absolute;
+    top : calc($fb-cell-height * 4 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 3 - ($fb-label-width / 2));
+}
+
+.p-4-4  {
+    position : absolute;
+    top : calc($fb-cell-height * 4 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 4 - ($fb-label-width / 2));
+}
+
+.p-5-1  {
+    position : absolute;
+    top : calc($fb-cell-height * 5 - ($fb-label-height / 2));
+    left : calc($fb-cell-width - ($fb-label-width / 2));
+}
+
+.p-5-2  {
+    position : absolute;
+    top : calc($fb-cell-height * 5 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 2 - ($fb-label-width / 2));
+}
+
+.p-5-3  {
+    position : absolute;
+    top : calc($fb-cell-height * 5 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 3 - ($fb-label-width / 2));
+}
+
+.p-5-4  {
+    position : absolute;
+    top : calc($fb-cell-height * 5 - ($fb-label-height / 2));
+    left : calc($fb-cell-width * 4 - ($fb-label-width / 2));
+}

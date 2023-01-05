@@ -4,6 +4,7 @@
 <nav mat-tab-nav-bar mat-stretch-tabs='false' [tabPanel]="tabPanel">
     <a mat-tab-link *ngFor="let link of navLinks"
        [routerLink]="link.link"
+       matTooltip="{{link.tooltip}}"
        routerLinkActive #rla="routerLinkActive"
        [active]="rla.isActive">
         {{link.label}}
@@ -11,7 +12,7 @@
 </nav>
 <div class="mh3 mt4">
     <mat-tab-nav-panel #tabPanel>
-       <router-outlet></router-outlet>
+       <router-outlet style="height:100%;"></router-outlet>
     </mat-tab-nav-panel>
 </div>
 

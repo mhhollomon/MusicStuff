@@ -5,12 +5,14 @@ import { CompositionIdeaComponent } from './composition-idea/composition-idea.co
 import { RandomChordsComponent } from './random-chords/random-chords.component';
 import { MusicResourcesComponent } from './music-resources/music-resources.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { BassScalesComponent } from './bass-scales/bass-scales.component';
 
 const routes: Routes = [
     { path : '', redirectTo: '/random-chords', pathMatch: 'full' },
     { path : 'composition-idea', component : CompositionIdeaComponent },
     { path : 'random-chords', component : RandomChordsComponent },
     { path : 'music-resources', component : MusicResourcesComponent },
+    { path : 'bass-scales', component : BassScalesComponent },
 
     // page not found
     {path : 'page-not-found', component : PageNotFoundComponent },

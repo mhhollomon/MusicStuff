@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import { AppComponent } from './app.component';
 
@@ -13,6 +14,7 @@ describe('AppComponent', () => {
         RouterTestingModule,
         MatToolbarModule,
         MatTabsModule,
+        MatTooltipModule,
       ],
       declarations: [
         AppComponent

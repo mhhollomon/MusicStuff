@@ -18,15 +18,19 @@ export class AppComponent implements OnInit {
             {
                 label: 'IDEAS',
                 link: './composition-idea',
-                index: 0
+                tooltip : 'Random compositional ideas',
             }, {
                 label: 'CHORDS',
                 link: './random-chords',
-                index: 1
+                tooltip : 'Generate random chords',
+            },{
+                label: 'BASS',
+                link: './bass-scales',
+                tooltip : 'Learn fingerings for scales on a bass guitar',
             }, {
                 label: 'RESOURCES',
                 link: './music-resources',
-                index: 2
+                tooltip : 'Links to resources about music',
             }, 
         ];
     }

@@ -1,0 +1,18 @@
+<mat-sidenav-container class="example-container">
+    <mat-sidenav class="pl1 pr2" mode="side" opened>
+        <!-- To be honest, just using the mat-* button type to get the ripple effect when pressed -->
+        <button mat-stroked-button class="randomButton mb3" (click)="randomScale()">Random</button>
+        
+        <button [className]="buttonClasses(k)" (click)="scaleChange(k)"  *ngFor="let k of scaleList">{{all_scales[k].name}}</button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="fretboard-parent mh7-l mh5-m mh3">
+            <div class="fretboard-container">
+                <div class="fretboard-cell" *ngFor="let _ of [].constructor(30); let isLast=last"></div>
+            </div>
+                <div class="{{p}}" *ngFor="let p of scalePositions; let i=index">
+                    <label class="finger-label">{{i+1}}</label>
+                </div>
+        </div>
+    </mat-sidenav-content>
+ </mat-sidenav-container>
