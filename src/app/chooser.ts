@@ -53,3 +53,7 @@ export class Chooser<T> {
 export function equalWeightedChooser<T>(choices : T[]) : Chooser<T> {
     return new Chooser(choices.map(v => mkch(v)));
 }
+
+export function chooseFrom<T>(choices : Choice<T>[]) : T {
+    return (new Chooser(choices)).choose();
+}

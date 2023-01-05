@@ -40,13 +40,13 @@ const beepLengthInSeconds = 0.5;
 })
 export class AudioService {
 
-  audioContext = new AudioContext();
+  //audioContext = new AudioContext();
 
   oscillators : OscillatorNode[] = [];
   gains : GainNode[] = [];
   topgain : GainNode;
 
-  constructor() { 
+  constructor(private audioContext : AudioContext) { 
     this.topgain =  this.audioContext.createGain();
     this.topgain.connect(this.audioContext.destination);
     this.topgain.gain.value = 0;

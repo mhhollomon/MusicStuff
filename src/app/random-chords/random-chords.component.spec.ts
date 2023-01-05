@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import {FormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -12,14 +12,16 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatGridListModule} from '@angular/material/grid-list';
 
 import { RandomChordsComponent } from './random-chords.component';
-
-
+import { AudioService } from '../audio.service';
 
 describe('RandomChordsComponent', () => {
   let component: RandomChordsComponent;
   let fixture: ComponentFixture<RandomChordsComponent>;
 
+  let audioServiceSpy : jasmine.SpyObj<AudioService>;
+
   beforeEach(async () => {
+    audioServiceSpy = jasmine.createSpyObj('MockAudioService', ['play_chord'])
     await TestBed.configureTestingModule({
       imports : [
         FormsModule,
@@ -33,7 +35,8 @@ describe('RandomChordsComponent', () => {
         MatGridListModule,
         NoopAnimationsModule,
       ],
-      declarations: [ RandomChordsComponent ]
+      declarations: [ RandomChordsComponent ],
+      providers: [{provide : AudioService, useValue : audioServiceSpy }]
     })
     .compileComponents();
 
@@ -45,4 +48,16 @@ describe('RandomChordsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should generate chords when button is clicked", fakeAsync(() => {
+    const topElement: HTMLElement = fixture.nativeElement;
+    const genButton  = topElement.querySelector('#generate_chords_buton');
+
+    expect(genButton).toBeTruthy();
+    (genButton as HTMLElement).click();
+
+    tick();
+
+    expect(component.chord_count).toBeGreaterThan(0);
+  }));
 });

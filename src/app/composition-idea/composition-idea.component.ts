@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
 
-import { Choice, Chooser, equalWeightedChooser, mkch } from '../chooser';
+import { Choice, Chooser, equalWeightedChooser, chooseFrom, mkch } from '../chooser';
 import { ScaleService } from '../scale.service';
 import {capitalize} from '../capitalize.lib';
-
-function pickChoice<T>(choices : Choice<T>[]) : T {
-    return (new Chooser(choices)).pick().choice;
-}
 
 const promptData = [
     "Spacey",
@@ -87,17 +82,17 @@ export class CompositionIdeaComponent implements OnInit {
 
         if (this.suggestionType === 'Orchestral') {
         
-            this.form_type = pickChoice(formChoices);
-            this.speed = pickChoice(speedChoices);
-            this.time_sig = pickChoice(timeSignatureChoices);
+            this.form_type = chooseFrom(formChoices);
+            this.speed = chooseFrom(speedChoices);
+            this.time_sig = chooseFrom(timeSignatureChoices);
 
             const random_key = this.random_key_service.choose();
 
             this.tonality = capitalize(random_key.scaleType);
             this.key_center = random_key.rootDisplay();
 
-            this.note1 = pickChoice(noteChoices);
-            this.note2 = pickChoice(noteChoices);
+            this.note1 = chooseFrom(noteChoices);
+            this.note2 = chooseFrom(noteChoices);
         } else {
             this.prompts = [];
             const prompt_count = equalWeightedChooser([2,3]).choose();

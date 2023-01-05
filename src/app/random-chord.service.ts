@@ -93,9 +93,13 @@ export class RandomChordService {
 
     let try_again = true;
     let newChord = new Chord();
+    let attempts = 300;
     while (try_again) {
       newChord = this.gen_one_chord(key, chordTypes);
       try_again = false;
+      attempts -= 1;
+
+      if (attempts < 1) throw Error("Could not create a nonduplicate chord after 300 tries.")
       if (count > 1) {
         if (duplicates === 'not adjacent') {
           if (retval[retval.length-1].isSame(newChord)) {
@@ -174,7 +178,7 @@ export class RandomChordService {
     return this.mkchord(sn, note, name, inversion, chordType);
   }
 
-  private gen_one_chord(key: Scale | null, chordTypes : ChordType[]) : Chord {
+  gen_one_chord(key: Scale | null, chordTypes : ChordType[]) : Chord {
 
     if (key) {
       return this.gen_diatonic_chord(key, chordTypes);

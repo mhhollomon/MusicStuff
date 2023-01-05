@@ -25,6 +25,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
     AppRoutingModule,
   ],
+  providers: [{ provide: AudioContext, useClass: AudioContext }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
