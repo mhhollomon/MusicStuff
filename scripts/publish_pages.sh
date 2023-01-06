@@ -6,6 +6,9 @@ OUTPUT_REPO_DIR=${HOME}/src/ms-pages
 # Build directory to be used - it will be wiped out if it exists
 BUILD_DIR=build-web-deploy
 
+#
+BASE_HREF='--base-href /MusicStuff/'
+
 # It is assumed that this is called sitting in the root
 # of the source repo.
 
@@ -16,7 +19,7 @@ echo "####################################################################"
 
 rm -rf ${BUILD_DIR};
 npm ci
-ng build --base-href "/MusicStuff/" --optimization --output-path ${BUILD_DIR};
+ng build ${BASE_HREF} --optimization --output-path ${BUILD_DIR} --configuration production;
 
 if [ ! -e  ${BUILD_DIR}/index.html ]; then
     echo "Can't find the web files. Something went wrong"
