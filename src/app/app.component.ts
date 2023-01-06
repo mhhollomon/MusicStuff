@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
                 label: 'RESOURCES',
                 link: './music-resources',
                 tooltip : 'Links to resources about music',
-            }, 
+            },
         ];
     }
 

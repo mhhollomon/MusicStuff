@@ -10,6 +10,7 @@ import { RandomChordsComponent } from './random-chords/random-chords.component';
 import { MusicResourcesComponent } from './music-resources/music-resources.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BassScalesComponent } from './bass-scales/bass-scales.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BassScalesComponent } from './bass-scales/bass-scales.component';
     RandomChordsComponent,
     MusicResourcesComponent,
     PageNotFoundComponent,
-    BassScalesComponent
+    BassScalesComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule, 
