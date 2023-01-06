@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { equalWeightedChooser } from '../chooser';
+import { HelpTextEmitterService } from '../help-text-emitter.service';
+
+const HELP_TEXT = "This page will show you fingerings to various scales on a 4 string bass guitar";
+const HELP_PAGE_NAME = "Bass Scales";
 
 
 interface fingering {
@@ -103,10 +108,13 @@ export class BassScalesComponent implements OnInit {
   scaleList = Object.keys(this.all_scales);
 
 
-  constructor(private activeRoute: ActivatedRoute, private router : Router) {
+  constructor(private activeRoute: ActivatedRoute, private router : Router,
+    private help_text : HelpTextEmitterService) {
   }
 
   ngOnInit(): void {
+    this.help_text.setHelp({ help_text : HELP_TEXT, page_name : HELP_PAGE_NAME });
+
     this.activeRoute.queryParams
     .subscribe(params => {
         const sn = params['scale'];

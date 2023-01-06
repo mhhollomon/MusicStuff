@@ -16,7 +16,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 import {MatSidenavModule} from '@angular/material/sidenav';
-
+import {MatIconModule} from '@angular/material/icon';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
     exports: [
@@ -37,6 +38,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
         MatExpansionModule,
         MatTooltipModule,
         MatSidenavModule,
+        MatIconModule,
+        MatDialogModule,
     ],
     providers: [
         {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline', floatLabel: 'always'}},

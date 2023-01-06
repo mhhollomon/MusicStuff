@@ -11,7 +11,9 @@ import { MusicResourcesComponent } from './music-resources/music-resources.compo
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BassScalesComponent } from './bass-scales/bass-scales.component';
 import { HomeComponent } from './home/home.component';
+import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
+import { HelpTextEmitterService } from './help-text-emitter.service'
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +22,8 @@ import { HomeComponent } from './home/home.component';
     MusicResourcesComponent,
     PageNotFoundComponent,
     BassScalesComponent,
-    HomeComponent
+    HomeComponent,
+    HelpDialogComponent
   ],
   imports: [
     BrowserModule, 
@@ -29,7 +32,10 @@ import { HomeComponent } from './home/home.component';
 
     AppRoutingModule,
   ],
-  providers: [{ provide: AudioContext, useClass: AudioContext }],
+  providers: [
+    HelpTextEmitterService,
+    { provide: AudioContext, useClass: AudioContext }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

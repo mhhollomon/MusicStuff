@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { saveAs } from 'file-saver';
 import  * as Midiwriter  from 'midi-writer-js'
 
-
+import { HelpTextEmitterService } from '../help-text-emitter.service';
 import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
 import { AudioService } from '../audio.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+
+const HELP_TEXT = "This page will let you generate a series of random chords";
+const HELP_PAGE_NAME = "Random Chords";
 
 const octavePlacement : { [ index : string ] : number } = {
   'C' : 0, 'D' : 1, 'E' : 2, 'F' : 3, 'G' : 4, 'A' : 5, 'B' : 6 
@@ -19,7 +22,7 @@ const octavePlacement : { [ index : string ] : number } = {
   templateUrl: './random-chords.component.html',
   styleUrls: ['./random-chords.component.scss']
 })
-export class RandomChordsComponent {
+export class RandomChordsComponent implements OnInit {
 
   key : Scale = new Scale('C', 'major');
 
@@ -53,9 +56,15 @@ export class RandomChordsComponent {
 
   constructor(private scaleService : ScaleService,
     private randomChordService : RandomChordService,
-    private audioService : AudioService) {
+    private audioService : AudioService,
+    private help_text : HelpTextEmitterService) {
 
   }
+
+  ngOnInit(): void {
+    this.help_text.setHelp({ help_text : HELP_TEXT, page_name : HELP_PAGE_NAME });
+  }
+
 
   getPanelTitle() : string {
 

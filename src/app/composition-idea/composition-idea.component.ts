@@ -5,6 +5,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { Choice, Chooser, equalWeightedChooser, chooseFrom, mkch } from '../chooser';
 import { ScaleService } from '../scale.service';
 import {capitalize} from '../capitalize.lib';
+import { HelpTextEmitterService } from '../help-text-emitter.service';
+
+const HELP_TEXT = "This is the conposition ideas page.";
+const HELP_PAGE_NAME = "Composition Idea";
 
 const promptData = [
     "Spacey",
@@ -64,11 +68,15 @@ export class CompositionIdeaComponent implements OnInit {
     prompts : string[] = [];
 
     constructor(private random_key_service : ScaleService, 
-                private activeRoute: ActivatedRoute, private router : Router) {
+                private activeRoute: ActivatedRoute, 
+                private router : Router,
+                private help_text : HelpTextEmitterService) {
         this.elchooser = equalWeightedChooser(promptData);
     }
 
     ngOnInit(): void {
+        this.help_text.setHelp({ help_text : HELP_TEXT, page_name : HELP_PAGE_NAME });
+
         this.activeRoute.queryParams
             .subscribe(params => {
                 const mode = capitalize(params['mode']);

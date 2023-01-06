@@ -1,5 +1,9 @@
 <mat-toolbar color="primary">
     <a class="header-link" routerLink="./home">Mark's Musical Miscellany</a>
+    <span class="flex-spacer"></span>
+    <button mat-icon-button  (click)="openHelpDialog()" class="material-symbols-outlined" aria-label="open help for current page">
+        <mat-icon>help</mat-icon>
+      </button>
 </mat-toolbar>
 <nav mat-tab-nav-bar mat-stretch-tabs='false' [tabPanel]="tabPanel">
     <a mat-tab-link *ngFor="let link of navLinks"
