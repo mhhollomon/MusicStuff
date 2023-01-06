@@ -3,9 +3,74 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { equalWeightedChooser } from '../chooser';
 
 
-const scale_positions : { [index : string] : { key : string, name : string, pos : string[] } } = {
-  'major-f1' : { key : 'major-f1', name : 'MAJOR F1', pos : ['p-1-1', 'p-3-1', 'p-5-1', 'p-1-2', 'p-3-2', 'p-5-2', 'p-2-3', 'p-3-3'] },
-  'minor-f1' : { key : 'minor-f1', name : 'MINOR F1', pos : ['p-1-1', 'p-3-1', 'p-4-1', 'p-1-2', 'p-3-2', 'p-4-2', 'p-1-3', 'p-3-3'] },
+interface fingering {
+  p : string,
+  f : number
+}
+
+function mkfg(p: string, f : number) : fingering {
+ return { p : p, f : f };
+}
+
+const scale_positions : { [index : string] : { key : string, name : string, pos : fingering[] } } = {
+  'blues' : { key : 'blues', name : 'Blues', 
+              pos : [ mkfg('p-1-1', 1), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-3-2', 3), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3),
+                      mkfg('p-1-4', 1), mkfg('p-3-4', 3), mkfg('p-4-4', 4), 
+                     ] },
+
+  'major-f1' : { key : 'major-f1', name : 'Major F1', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-3-1', 3), mkfg('p-5-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-5-2', 4), 
+                      mkfg('p-2-3', 2), mkfg('p-3-3', 3) ] },
+
+  'major-f2' : { key : 'major-f2', name : 'Major F2', 
+                pos : [mkfg('p-2-1', 2), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-4-2', 4),
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3), mkfg('p-4-3', 4)  ] },
+  
+  'major-f4' : { key : 'major-f4', name : 'Major F4', 
+                pos : [mkfg('p-4-1', 4), 
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-4-2', 4),
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3), mkfg('p-5-3', 4),
+                      mkfg('p-1-4', 1)  ] },
+       
+  'nat-minor' : { key : 'nat-minor', name : 'Nat Minor', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-3-1', 3), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-4-2', 4), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3)  ] },
+
+  'harm-minor' : { key : 'harm-minor', name : 'Harm Minor', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-3-1', 3), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-4-2', 4), 
+                      mkfg('p-2-3', 2), mkfg('p-3-3', 3)  ] },
+  
+  'mel-minor' : { key : 'mel-minor', name : 'Mel Minor', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-3-1', 3), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-5-2', 4), 
+                      mkfg('p-2-3', 2), mkfg('p-3-3', 3)  ] },
+
+  'maj-penta' : { key : 'maj-penta', name : 'Maj Penta', 
+                pos : [mkfg('p-2-1', 2), mkfg('p-4-1', 4), 
+                      mkfg('p-1-2', 1), mkfg('p-4-2', 4), 
+                      mkfg('p-1-3', 1), mkfg('p-4-3', 4) ] },
+                    
+  'min-penta' : { key : 'min-penta', name : 'Min Penta', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-4-1', 4), 
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3) ] },
+                          
+  'dorian' : { key : 'dorian', name : 'Dorian', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-3-1', 3), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-5-2', 4), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3) ] },
+                               
+  'phrygian' : { key : 'phrygian', name : 'Phrygian', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-2-1', 2), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-4-2', 4), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3) ] },
+                          
 }
 
 @Component({
@@ -57,10 +122,16 @@ export class BassScalesComponent implements OnInit {
   }
 
   buttonClasses(scale : string) {
-    return (this.scaleName === scale ? ' activeNavButton' : 'navButton');
+    return (this.scaleName === scale ? 'activeNavButton' : 'navButton');
   }
 
   randomScale() {
-    this.scaleChange(equalWeightedChooser(this.scaleList).choose());
+
+    let newScale = this.scaleName;
+    const chooser = equalWeightedChooser(this.scaleList);
+    while (newScale === this.scaleName) {
+      newScale = chooser.choose();
+    }
+    this.scaleChange(newScale);
   }
 }

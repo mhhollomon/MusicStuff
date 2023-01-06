@@ -45,17 +45,23 @@ $fb-label-width : 25pt;
     font-size : 16pt;
 }
 
+.octave {
+    background-color : white;
+}
+
 @mixin nav-button-base {
     display : block;
     border: 0;
-    background-color: inherit;
     text-align: start;
     font-weight: 500;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
 }
 
 .navButton {
     color : gray;
     font-size : 14pt;
+    background-color: inherit;
     @include nav-button-base();
 }
 
@@ -63,6 +69,7 @@ $fb-label-width : 25pt;
     color : primary;
     font-size : 15pt;
     padding-left : 0.6rem;
+    background-color: #def3fa;
     @include nav-button-base();
 }
 
