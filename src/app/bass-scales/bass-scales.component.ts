@@ -70,7 +70,23 @@ const scale_positions : { [index : string] : { key : string, name : string, pos 
                 pos : [mkfg('p-1-1', 1), mkfg('p-2-1', 2), mkfg('p-4-1', 4),
                       mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-4-2', 4), 
                       mkfg('p-1-3', 1), mkfg('p-3-3', 3) ] },
-                          
+  
+  'lydian' : { key : 'lydian', name : 'Lydian', 
+                pos : [mkfg('p-2-1', 2), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-4-2', 4),
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3), mkfg('p-4-3', 4)  ] },
+
+  'mixolydian' : { key : 'mixolydian', name : 'Mixolydian', 
+                pos : [mkfg('p-2-1', 2), mkfg('p-4-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-3-2', 3), mkfg('p-4-2', 4),
+                      mkfg('p-1-3', 1), mkfg('p-2-3', 2), mkfg('p-4-3', 4)  ] },
+
+  'locrian' : { key : 'locrian', name : 'Locrian', 
+                pos : [mkfg('p-1-1', 1), mkfg('p-2-1', 2), mkfg('p-5-1', 4),
+                      mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-5-2', 4), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3) ] },
+
+
 }
 
 @Component({
