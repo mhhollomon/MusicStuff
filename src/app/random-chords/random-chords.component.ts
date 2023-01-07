@@ -5,7 +5,7 @@ import  * as Midiwriter  from 'midi-writer-js'
 
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 import {ScaleService } from '../scale.service';
-import { RandomChordService, Chord, ChordType } from '../random-chord.service';
+import { RandomChordService, Chord, ChordType, DuplicateControl } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
 import { AudioService } from '../audio.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
@@ -39,7 +39,7 @@ export class RandomChordsComponent implements OnInit {
 
   // Model elements
   chord_count = 4;
-  duplicates  = 'None';
+  duplicates : DuplicateControl = 'none';
   mode  = 'Diatonic';
   scale_source  = "Random";
 
@@ -87,7 +87,7 @@ export class RandomChordsComponent implements OnInit {
   }
 
   get chord_count_max() : number {
-    if (this.duplicates !== 'None') {
+    if (this.duplicates !== 'none') {
       return 30;
     }
 
@@ -129,7 +129,12 @@ export class RandomChordsComponent implements OnInit {
       
     }
 
-    this.chords = this.randomChordService.gen_chords(picked_key, this.chord_count, this.duplicates, chordTypes);
+    const builder = this.randomChordService.builder();
+
+    builder.setChordTypes(chordTypes).setCount(this.chord_count).setDuplicate(this.duplicates).setKey(picked_key);
+
+    this.chords = builder.generate_chords();
+
     this.show_chords = true;
 
   }

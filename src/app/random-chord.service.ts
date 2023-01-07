@@ -61,52 +61,108 @@ const diatonicChordQuailty : { [ index : string ] : string[] } = {
   'major-7th' : ['maj7', 'min7', 'min7', 'maj7', '7', 'min7', 'dim7' ],
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RandomChordService {
+export type DuplicateControl = 'any' | 'not-adjacent' | 'none';
+
+export class ChordSequenceBuilder {
+
   private noteChooser = new Chooser(noteChoices);
   private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
 
   private scaleCache : { [index: string] : Note[]} = {};
 
+  // The options 
+  public key : Scale | null = null;
+  public count  = 4;
+  public duplicates : DuplicateControl = 'any';
+  public chordTypes : ChordType[] = [];
+
+  public chordList : Chord[] = [];
+
   constructor(private scaleService : ScaleService) { }
 
-  gen_chords(key : Scale | null, count : number, duplicates  = 'any',
-                chordTypes : ChordType[] ) : Chord[] {
-    count = Math.floor(count);
-    if (count < 1) {
+  setKey(newKey : Scale | null) : ChordSequenceBuilder;
+  setKey(newKey : string, scaleType : ScaleType) : ChordSequenceBuilder;
+  setKey(newKey : string | Scale | null, scaleType? : ScaleType) : ChordSequenceBuilder {
+
+    if (typeof newKey === 'string') {
+      if (! scaleType) { 
+        throw Error("No scale Type given with key name")
+      }
+      this.key = new Scale(newKey, scaleType);
+    } else {
+      this.key = newKey;
+    }
+
+    return this;
+  }
+
+  setCount(c : number) : ChordSequenceBuilder {
+
+    if (c < 1) {
+      throw Error("Count must be 1 or greater");
+    }
+    this.count = Math.floor(c);
+
+    return this;
+  }
+
+  setDuplicate(dc : DuplicateControl) : ChordSequenceBuilder {
+    this.duplicates = dc;
+    return this;
+  }
+
+  setChordTypes(ct : ChordType[]) : ChordSequenceBuilder {
+    this.chordTypes = ct;
+    return this;
+  }
+
+  addChordType(ct : ChordType) : ChordSequenceBuilder {
+    if (! this.chordTypes.includes(ct)) {
+      this.chordTypes.push(ct);
+    }
+    return this;
+  }
+
+  generate_chords() : Chord[] {
+
+    this.chordList = [];
+
+    if (this.count < 1) {
       throw Error("count must be at least 1");
     }
 
-    if (chordTypes.length < 1) {
+    if (this.chordTypes.length < 1) {
       throw Error("must give at least one allowed chord type");
     }
 
-    duplicates = duplicates.toLowerCase();
+    const retval : Chord[] = [];
 
-    let retval : Chord[] = [];
-
-    if (count > 1) {
-      retval = this.gen_chords(key, count -1, duplicates, chordTypes );
+    for (let index = 0; index < this.count; ++index) {
+      this.chordList.push(this.find_a_chord());
     }
+
+    return retval;
+  }
+
+  /* This tries to find a chord that meets the duplicates criteria */
+  find_a_chord() : Chord {
 
     let try_again = true;
     let newChord = new Chord();
     let attempts = 300;
     while (try_again) {
-      newChord = this.gen_one_chord(key, chordTypes);
+      newChord = this.gen_one_chord(this.key, this.chordTypes);
       try_again = false;
       attempts -= 1;
 
       if (attempts < 1) throw Error("Could not create a nonduplicate chord after 300 tries.")
-      if (count > 1) {
-        if (duplicates === 'not adjacent') {
-          if (retval[retval.length-1].isSame(newChord)) {
+      if (this.chordList.length > 0) {
+        if (this.duplicates === 'not-adjacent') {
+          if (this.chordList[this.chordList.length-1].isSame(newChord)) {
             try_again = true;
           }
-        } else if (duplicates === 'none') {
-          for (const c of retval) {
+        } else if (this.duplicates === 'none') {
+          for (const c of this.chordList) {
             if (c.isSame(newChord)) {
               try_again = true;
             }
@@ -115,9 +171,7 @@ export class RandomChordService {
       }
     }
 
-    retval.push(newChord)
-
-    return retval;
+    return newChord;
   }
 
   private gen_diatonic_chord(key : Scale, chordTypes : ChordType[]) {
@@ -205,6 +259,20 @@ export class RandomChordService {
 
     return chord;
 
+  }
+
+
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RandomChordService {
+
+  constructor(private scaleService : ScaleService) { }
+
+  builder() : ChordSequenceBuilder {
+    return new ChordSequenceBuilder(this.scaleService);
   }
 
 }

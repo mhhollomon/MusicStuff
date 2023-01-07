@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Chord, RandomChordService } from './random-chord.service';
+import { Chord, ChordSequenceBuilder, RandomChordService } from './random-chord.service';
+import { ScaleService } from './scale.service';
 
 describe('RandomChordService', () => {
   let service: RandomChordService;
@@ -14,23 +15,36 @@ describe('RandomChordService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe("gen_chords", () => {
-    it('should fail if requested count < 1', () => {
-      expect(()=> { service.gen_chords(null, 0, 'any', ['triad'])}).toThrow();
-    });
+});
 
-    it('should fail if no chord types are given' , () => {
-      expect(()=> { service.gen_chords(null, 1, 'any', [])}).toThrow();
-    });
 
-    it('should fail if it can\'t dedup', () => {
-      spyOn(service, 'gen_one_chord').and.returnValue(new Chord("C", "maj", 'triad', 0));
+describe('ChordSequenceBuilder', () => {
 
-      expect(() => {service.gen_chords(null, 2, 'none', ['triad'])}).withContext('none').toThrowError();
-      expect(() => {service.gen_chords(null, 2, 'not adjacent', ['triad'])}).withContext('not adjacent').toThrowError();
-      expect(() => {service.gen_chords(null, 2, 'any', ['triad'])}).withContext('any').not.toThrowError();
+  let builder : ChordSequenceBuilder;
 
-    });
+  beforeEach(() => {
+    builder = new ChordSequenceBuilder(new ScaleService());
+  });
+
+  it('should fail if requested count < 1', () => {
+    expect(()=> { builder.setCount(0); }).toThrow();
+  });
+
+  it('should fail if no chord types are given' , () => {
+    builder.setCount(3);
+    expect(()=> { builder.generate_chords(); }).toThrow();
+  });
+
+  it('should fail if it can\'t dedup', () => {
+    spyOn(builder, 'gen_one_chord').and.returnValue(new Chord("C", "maj", 'triad', 0));
+
+    builder.setCount(2).setChordTypes(['triad']);
+
+    expect(() => {builder.setDuplicate('none').generate_chords(); }).withContext('none').toThrowError();
+    expect(() => {builder.setDuplicate('not-adjacent').generate_chords(); }).withContext('not adjacent').toThrowError();
+    expect(() => {builder.setDuplicate('any').generate_chords(); }).withContext('any').not.toThrowError();
 
   });
+
+
 });
