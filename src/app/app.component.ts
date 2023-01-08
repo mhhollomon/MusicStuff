@@ -68,8 +68,6 @@ export class AppComponent implements OnInit {
     openHelpDialog() {
 
         this.dialog.open(HelpDialogComponent, {
-            height : '45vh',
-            width  : '45vw',
             data: {
                 help_text: this.current_help_text,
                 page_name : this.current_help_page,

@@ -1,4 +1,5 @@
 
+<!-- MODE -->
 <div class="mb4">
     <mat-button-toggle-group name="suggestionType" (change)="type_change()" [(ngModel)]="suggestionType" aria-label="==Suggestion Type">
         <mat-button-toggle value="Orchestral">
@@ -9,7 +10,11 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 </div>
-<button mat-stroked-button class="pa4" color="primary" (click)="generate()">Generate New Idea</button>
+
+<!-- Generate Button -->
+<button mat-raised-button class="pa4" color="primary" (click)="generate()">Generate New Idea</button>
+
+<!-- OUTPUT -->
 <div class="h2"></div>
 <div class="ba bw1 br3 ph2" *ngIf="suggestionType === 'Orchestral'">
     <p>Compose a theme that: </p>

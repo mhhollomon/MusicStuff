@@ -103,7 +103,7 @@ export class BassScalesComponent implements OnInit {
 
   all_scales = scale_positions;
 
-  scaleName = 'Major';
+  scaleName = 'major-f1';
   scalePositions = scale_positions['major-f1'].pos;
   scaleList = Object.keys(this.all_scales);
 
@@ -124,6 +124,15 @@ export class BassScalesComponent implements OnInit {
               this.scaleName = scaleName;
               this.scalePositions = scale_positions[scaleName].pos;
           }
+        } else {
+          this.router.navigate( [], 
+            {
+              relativeTo: this.activeRoute,
+              queryParams: {scale : this.scaleName}, 
+              queryParamsHandling: 'merge',
+            }
+          );
+          this.scalePositions = this.all_scales[this.scaleName].pos;
         }
     });
   }

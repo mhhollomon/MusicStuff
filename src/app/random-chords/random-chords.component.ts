@@ -11,7 +11,69 @@ import { AudioService } from '../audio.service';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
-const HELP_TEXT = "This page will let you generate a series of random chords";
+const HELP_TEXT = `
+<p>This page will let you generate a series of random chords</p>
+<table>
+<tr>
+  <td class="b">Mode</td>
+  <td>
+    <p>The mode sets how the generated chords are releated to each other and a  specified scale</p>
+    <ul>
+      <li><span class="b">Diatonic</span> - (default) The chords generate will be "in" a key. The root note for
+          each chord will be taken from the given scale. The quality will be set according to the scale.
+          In particular that means that there can be at most 7 unique chords.
+          <p>The key itself may be random or selected by the user (see below). <p>
+      </li>
+      <li><span class="b">Chromatic</span> - The chords are not related to each other. The root note
+          of each chord is selected at random from the keyboard. A quality (major, minor, augmented, diminished)
+          is choosen separately.
+    </ul>
+  </td>
+</tr>
+<tr class="bg-light-gray">
+  <td class="b">Chord Count</td>
+  <td>How many chords to generate. The allowable range depends on how duplicates are handled.</td>
+</tr>
+<tr>
+  <td class="b">Duplicates</td>
+  <td>What duplicates are allowed. A chord is considered a "duplicate" if it has the same root note. 
+      Quality (maj, min, etc), type (triad, 7th, etc), and inversion are not considered.
+      <ul>
+        <li><span class="b">None</span> - (default) No duplicates are allowed.</li>
+        <li><span class="b">Not Adjacent</span> - Duplicates are allowed as long as they are not next to each other in the set of chords</li>
+        <li><span class="b">Any</span> - All duplicates are allowed</li>
+      </ul>
+      
+  </td>
+</tr>
+<tr class="bg-light-gray">
+  <td class="b">Chord Types</td>
+  <td>Which chord types are allowed to be generated. At least one chord type must be allowed.
+      <ul>
+        <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
+        <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7)</li>
+        <li><span class="b">9ths</span> - Chords may contain the 9th degree. Note that both "pure" 9ths (1,3,5,7,9) as well
+                    as "add 9" (1,3,5,9) are generated with equal weighting.
+        </li>
+      </ul>
+      
+  </td>
+</tr>
+<tr>
+  <td class="b">Key</td>
+  <td>
+    <p class="b">Diatonic Only</b>
+    <p>Control how the key used by the Diatonic Mode is chosen.
+      <ul>
+        <li><span class="b">Random</span> - (default) Let the computer decide</li>
+        <li><span class="b">Selected</span> - The user selects. If chosen, another set of boxes will appear allowing you to choose
+              the tonality (major or minor) and the key center.</li>
+      </ul>
+      
+  </td>
+</tr>
+</table>
+`;
 const HELP_PAGE_NAME = "Random Chords";
 
 const octavePlacement : { [ index : string ] : number } = {
