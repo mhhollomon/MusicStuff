@@ -8,6 +8,8 @@ import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType, DuplicateControl } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
 import { AudioService } from '../audio.service';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const HELP_TEXT = "This page will let you generate a series of random chords";
 const HELP_PAGE_NAME = "Random Chords";
@@ -57,6 +59,8 @@ export class RandomChordsComponent implements OnInit {
   constructor(private scaleService : ScaleService,
     private randomChordService : RandomChordService,
     private audioService : AudioService,
+    public error_dialog: MatDialog, 
+
     private help_text : HelpTextEmitterService) {
 
   }
@@ -132,16 +136,30 @@ export class RandomChordsComponent implements OnInit {
       
     }
 
-    const builder = this.randomChordService.builder();
+    try {
+      const builder = this.randomChordService.builder();
 
-    builder.setChordTypes(chordTypes)
-        .setCount(this.chord_count)
-        .setDuplicate(this.duplicates)
-        .setKey(picked_key);
+      builder.setChordTypes(chordTypes)
+          .setCount(this.chord_count)
+          .setDuplicate(this.duplicates)
+          .setKey(picked_key);
 
-    this.chords = builder.generate_chords();
+      this.chords = builder.generate_chords();
 
-    this.show_chords = true;
+      this.show_chords = true;
+    } catch(e) {
+      let error_msg = 'oopsy - unknown error';
+      if (typeof e === "string") {
+        error_msg = e;
+      } else if (e instanceof Error) {
+          error_msg = e.message
+      }
+
+      this.error_dialog.open(ErrorDialogComponent, {
+        data: error_msg,
+    });
+
+    }
 
   }
 

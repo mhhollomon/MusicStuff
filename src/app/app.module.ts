@@ -13,7 +13,8 @@ import { BassScalesComponent } from './bass-scales/bass-scales.component';
 import { HomeComponent } from './home/home.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
-import { HelpTextEmitterService } from './help-text-emitter.service'
+import { HelpTextEmitterService } from './help-text-emitter.service';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,8 @@ import { HelpTextEmitterService } from './help-text-emitter.service'
     PageNotFoundComponent,
     BassScalesComponent,
     HomeComponent,
-    HelpDialogComponent
+    HelpDialogComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule, 
