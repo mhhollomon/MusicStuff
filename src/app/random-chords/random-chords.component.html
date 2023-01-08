@@ -37,20 +37,42 @@
     </div>
 </div>
 
-<!-- Chord Selection -->
-<div class="ma2" >
-    <mat-label class="mr2 mhh-mat-label">Chord Types</mat-label>
-    <mat-checkbox [(ngModel)]="allow_triads">Triads</mat-checkbox>
-    <mat-checkbox [(ngModel)]="allow_sevenths">7ths</mat-checkbox>
-    <mat-checkbox [(ngModel)]="allow_ninths">9ths</mat-checkbox>
+<!-- Chord Type Selection -->
+<div class="ma2 chord-type-container" >
+    <mat-label class="mr2 mt2 mhh-mat-label">Chord Types</mat-label>
+    <div class="chord-type-checkbox-container">
+        <div>
+            <mat-checkbox [(ngModel)]="allow_triads" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
+            <br>
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_triads" matTooltip="Set the relative weighting for triads">
+                <input matSliderThumb [(ngModel)]="triad_weight">
+            </mat-slider>
+        </div>
+
+        <div>
+            <mat-checkbox [(ngModel)]="allow_sevenths" matTooltip="Allow 7th chords to be generated">7ths</mat-checkbox>
+            <br>
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sevenths" matTooltip="Set the relative weighting for 7ths">
+                <input matSliderThumb [(ngModel)]="sevenths_weight">
+            </mat-slider>
+        </div>
+        
+        <div>
+            <mat-checkbox [(ngModel)]="allow_ninths" matTooltip="Allow 9th chords to be generated">9ths</mat-checkbox>
+            <br>
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_ninths" matTooltip="Set the relative weighting for 9ths">
+                <input matSliderThumb [(ngModel)]="ninths_weight">
+            </mat-slider>
+        </div>
+    </div>
 </div> 
 
 <!-- Key Selection  (Diatonic only) -->
 <div class="ma2" *ngIf="!scale_disabled">
     <label class="mhh-mat-label">Key</label>
     <mat-radio-group [(ngModel)]="scale_source">
-        <mat-radio-button value="Random">Random</mat-radio-button>
-        <mat-radio-button value="Selected">Selected</mat-radio-button>
+        <mat-radio-button value="Random" matTooltip="Let the computer choose the key">Random</mat-radio-button>
+        <mat-radio-button value="Selected" matTooltip="You pick the key">Selected</mat-radio-button>
     </mat-radio-group>
 
     

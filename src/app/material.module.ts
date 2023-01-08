@@ -18,6 +18,7 @@ import {MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/t
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSliderModule} from '@angular/material/slider';
 
 @NgModule({
     exports: [
@@ -40,6 +41,7 @@ import {MatDialogModule} from '@angular/material/dialog';
         MatSidenavModule,
         MatIconModule,
         MatDialogModule,
+        MatSliderModule,
     ],
     providers: [
         {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline', floatLabel: 'always'}},

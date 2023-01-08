@@ -23,8 +23,8 @@ describe('Chooser', () => {
       buckets[chooser.choose()] +=1;
     }
 
-    const upper_bound = Math.ceil((TEST_COUNT / 4) * 1.06);
-    const lower_bound = Math.floor((TEST_COUNT / 4) * 0.94);
+    const upper_bound = Math.ceil((TEST_COUNT / 4) * 1.05);
+    const lower_bound = Math.floor((TEST_COUNT / 4) * 0.95);
 
     expect(buckets[0]).toBeGreaterThan(lower_bound);
     expect(buckets[1]).toBeGreaterThan(lower_bound*2);
@@ -49,8 +49,8 @@ describe("Chooser.equalWeightedChooser", () => {
       buckets[chooser.choose()] +=1;
     }
 
-    const upper_bound = Math.ceil((TEST_COUNT / 3) * 1.06);
-    const lower_bound = Math.floor((TEST_COUNT / 3) * 0.94);
+    const upper_bound = Math.ceil((TEST_COUNT / 3) * 1.05);
+    const lower_bound = Math.floor((TEST_COUNT / 3) * 0.95);
 
     buckets.forEach((v) => {
       expect(v).toBeGreaterThan(lower_bound);

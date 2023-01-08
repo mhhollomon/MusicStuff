@@ -52,12 +52,6 @@ export class Chord {
 
 export type ChordType = 'triad' | '7th' | '9th';
 
-const chordTypeWeights : Choice<ChordType>[] = [
-      mkch<ChordType>('triad', 5), 
-      mkch<ChordType>('7th', 2), 
-      mkch<ChordType>('9th', 1)
-    ];
-
 const diatonicChordQuailty : { [ index : string ] : string[] } = {
   'minor-triad' : [ 'min', 'dim', '', 'min', 'min', '', 'maj'],
   'major-triad' : ['', 'min', 'min', '', '', 'min', 'dim' ],
@@ -71,10 +65,6 @@ export type DuplicateControl = 'any' | 'not-adjacent' | 'none';
 
 export class ChordSequenceBuilder {
 
-  private noteChooser = new Chooser(noteChoices);
-  private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
-
-  private scaleCache : { [index: string] : Note[]} = {};
 
   // The options 
   public key : Scale | null = null;
@@ -83,6 +73,12 @@ export class ChordSequenceBuilder {
   public chordTypes : ChordType[] = [];
 
   public chordList : Chord[] = [];
+
+
+  private noteChooser = new Chooser(noteChoices);
+  private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
+  private chordTypeChooser = new Chooser([mkch<ChordType>('triad', 1)])
+
 
   constructor(private scaleService : ScaleService) { }
 
@@ -119,12 +115,22 @@ export class ChordSequenceBuilder {
 
   setChordTypes(ct : ChordType[]) : ChordSequenceBuilder {
     this.chordTypes = ct;
+
+    this.chordTypeChooser = equalWeightedChooser(this.chordTypes);
+
     return this;
   }
 
-  addChordType(ct : ChordType) : ChordSequenceBuilder {
+  addChordType(ct : ChordType, weight = 1) : ChordSequenceBuilder {
     if (! this.chordTypes.includes(ct)) {
       this.chordTypes.push(ct);
+
+      const choices : Choice<ChordType>[] = 
+            (this.chordTypes.length > 0) ? this.chordTypeChooser.choices : [];
+
+      choices.push(mkch(ct, weight));
+
+      this.chordTypeChooser = new Chooser(choices);
     }
     return this;
   }
@@ -188,9 +194,7 @@ export class ChordSequenceBuilder {
     const root = this.noteChooser.choose();
     const note = scale[root-1];
 
-    const filtered = chordTypeWeights.filter(x => this.chordTypes.includes(x.choice));
-
-    const chordType = (new Chooser(filtered)).choose();
+    const chordType = this.chordTypeChooser.choose();
 
     const qualKey = this.key.scaleType + '-' +  chordType;
 
@@ -217,9 +221,7 @@ export class ChordSequenceBuilder {
     const chQual = chromaticQualityChooser.choose();
     let name = note.noteDisplay() + chQual;
 
-    const filtered = chordTypeWeights.filter(x => this.chordTypes.includes(x.choice));
-
-    const chordType = (new Chooser(filtered)).choose();
+    const chordType = this.chordTypeChooser.choose();
 
 
     name += (chordType ==='7th' ? '7' : (chordType == '9th' ? '9' : ''));

@@ -12,7 +12,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatSliderModule } from '@angular/material/slider';
 import { RandomChordsComponent } from './random-chords.component';
 import { AudioService } from '../audio.service';
 
@@ -37,6 +37,7 @@ describe('RandomChordsComponent', () => {
         MatGridListModule,
         MatIconModule,
         MatDialogModule,
+        MatSliderModule,
         NoopAnimationsModule,
       ],
       declarations: [ RandomChordsComponent ],

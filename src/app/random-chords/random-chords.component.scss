@@ -28,16 +28,33 @@
     width : 100%;
 }
 
+// main point of this is the color attribute.
+// Force the title to be shown not "grayed-out"
+// event when the expansion panel is disabled.
 .chord-panel-title-key {
     grid-column-start: key;
     align-self: center;
     color: rgba(0,0,0,.87);
 }
 
+
+// Force the action buttons to move to the
+// far right.
 .chord-panel-title-buttons {
     grid-column-start:  buttons;
     align-self: center;
     justify-self: end;
+}
+
+.chord-type-container {
+    display : flex;
+    flex-direction: row;
+}
+
+.chord-type-checkbox-container {
+    display : flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 

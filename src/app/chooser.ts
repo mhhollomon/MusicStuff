@@ -28,21 +28,17 @@ export class Chooser<T> {
 
     pick() : Choice<T> {
 
-        /* This might be optimized out since
-         * you can't see the results, but I hope
-         * not. The PNG in javascript seems to be
-         * very "streaky". Over the long run the 
-         * distribution is flat. But in short runs
-         * not so much.
+        /*
+         * Use the cryupto interface to get random nubmers.
+         * Math.random is really aweful. While it is indeed a flat 
+         * distribution, it is very "streaky", with relative long runs
+         * with only small changes in value.
          */
-        const drop_count = Math.floor( ( Math.random() * 100.0 ) % 10 );
-        for (let j = 0 ; j < drop_count; ++j ) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const _x = Math.random();
-        }
 
-        const rnd_num = Math.random() * this.total_weight;
-        
+        const a = new Uint32Array(1);
+        crypto.getRandomValues(a);
+
+        const rnd_num = a[0] * this.total_weight / Math.pow(2, 32);
         let index = 0;
         for (const w of this.weights) {
             if (rnd_num <= w) {

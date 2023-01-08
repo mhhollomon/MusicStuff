@@ -50,7 +50,9 @@ const HELP_TEXT = `
 
 <tr class="bg-light-gray"><td class="b">Chord Types</td></tr>
 <tr>
-  <td>Which chord types are allowed to be generated. At least one chord type must be allowed.
+  <td>
+      Which chord types are allowed to be generated. At least one chord type must be allowed.
+      <p>Underneath each checkbox is a slider which sets the relative wieghting of that chord types.</p>
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
         <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7)</li>
@@ -109,8 +111,13 @@ export class RandomChordsComponent implements OnInit {
   scale_source  = "Random";
 
   allow_triads = true;
+  triad_weight = 3;
+
   allow_sevenths = false;
+  sevenths_weight = 3;
+
   allow_ninths = false;
+  ninths_weight = 3;
 
 
   selected_sonority  = 'major';
@@ -203,8 +210,11 @@ export class RandomChordsComponent implements OnInit {
     try {
       const builder = this.randomChordService.builder();
 
-      builder.setChordTypes(chordTypes)
-          .setCount(this.chord_count)
+      if (this.allow_triads) builder.addChordType('triad', this.triad_weight);
+      if (this.allow_sevenths) builder.addChordType('7th', this.sevenths_weight);
+      if (this.allow_ninths) builder.addChordType('9th', this.ninths_weight);
+
+      builder.setCount(this.chord_count)
           .setDuplicate(this.duplicates)
           .setKey(picked_key);
 
