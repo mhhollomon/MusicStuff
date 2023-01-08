@@ -14,9 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 const HELP_TEXT = `
 <p>This page will let you generate a series of random chords</p>
 <table>
-<tr>
-  <td class="b">Mode</td>
-  <td>
+<tr class="bg-light-gray"><td class="b">Mode</td></tr>
+<tr><td>
     <p>The mode sets how the generated chords are releated to each other and a  specified scale</p>
     <ul>
       <li><span class="b">Diatonic</span> - (default) The chords generate will be "in" a key. The root note for
@@ -28,14 +27,15 @@ const HELP_TEXT = `
           of each chord is selected at random from the keyboard. A quality (major, minor, augmented, diminished)
           is choosen separately.
     </ul>
-  </td>
-</tr>
-<tr class="bg-light-gray">
-  <td class="b">Chord Count</td>
-  <td>How many chords to generate. The allowable range depends on how duplicates are handled.</td>
-</tr>
+</td></tr>
+
+<tr class="bg-light-gray"><td class="b">Chord Count</td></tr>
+<tr><td>
+  <p>How many chords to generate. The allowable range depends on how duplicates are handled.</p>
+</td></tr>
+
+<tr class="bg-light-gray"><td class="b">Duplicates</td></tr>
 <tr>
-  <td class="b">Duplicates</td>
   <td>What duplicates are allowed. A chord is considered a "duplicate" if it has the same root note. 
       Quality (maj, min, etc), type (triad, 7th, etc), and inversion are not considered.
       <ul>
@@ -46,8 +46,10 @@ const HELP_TEXT = `
       
   </td>
 </tr>
-<tr class="bg-light-gray">
-  <td class="b">Chord Types</td>
+
+
+<tr class="bg-light-gray"><td class="b">Chord Types</td></tr>
+<tr>
   <td>Which chord types are allowed to be generated. At least one chord type must be allowed.
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
@@ -59,10 +61,10 @@ const HELP_TEXT = `
       
   </td>
 </tr>
+
+<tr class="bg-light-gray"><td class="b">Key (Diatonic Only)</td></tr>
 <tr>
-  <td class="b">Key</td>
   <td>
-    <p class="b">Diatonic Only</b>
     <p>Control how the key used by the Diatonic Mode is chosen.
       <ul>
         <li><span class="b">Random</span> - (default) Let the computer decide</li>
