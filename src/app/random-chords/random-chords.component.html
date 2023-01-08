@@ -42,6 +42,7 @@
     <mat-label class="mr2 mhh-mat-label">Chord Types</mat-label>
     <mat-checkbox [(ngModel)]="allow_triads">Triads</mat-checkbox>
     <mat-checkbox [(ngModel)]="allow_sevenths">7ths</mat-checkbox>
+    <mat-checkbox [(ngModel)]="allow_ninths">9ths</mat-checkbox>
 </div> 
 
 <!-- Key Selection  (Diatonic only) -->
@@ -80,25 +81,28 @@
 
 <!-- Generate Button -->
 <div class="db mv4 br2 ma2">
-    <button  mat-stroked-button id="generate_chords_buton" color="primary" (click)="generate()">Generate Chords</button>
+    <button  mat-stroked-button id="generate_chords_button" color="primary" (click)="generate()">Generate Chords</button>
 </div>
 
 <!-- OUTPUT -->
 <div class="ba bw1 br3 ph2 min-h-2">
+    <div class="mt2"></div>
     <!-- Key Information -->
     <mat-expansion-panel [disabled]="mode === 'Chromatic'">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <div class="chord-panel-title-container">
+            <div class="chord-panel-title-container mt1">
                 <label class="chord-panel-title-key mr2">{{getPanelTitle()}}</label>
                 <div class="chord-panel-title-buttons">
-                    <mat-button-toggle [checked]="show_chord_tones" matTooltip="Show/Hide the actual chord tones" 
-                                    (change)="chord_tone_change($event)" (click)="stopPropagation($event)">
-                        <span class="f7">Chord Tones</span>
-                    </mat-button-toggle>
-                    <span>
-                        <button class="ml4 ba br2" matTooltip="Download midi file for the chords" (click)="generate_midi($event)" >midi</button>
-                    </span>
+                    <button mat-icon-button class="material-symbols-outlined"
+                                matTooltip="Show/Hide the actual chord tones"  
+                                (click)="chord_tone_change($event)">
+                        <mat-icon>{{ show_chord_tones ? 'visibility_off' : 'visibility' }} </mat-icon>
+                    </button>
+                    <button class="ml4 ba br2" mat-icon-button class="material-symbols-outlined" 
+                            matTooltip="Download midi file for the chords" (click)="generate_midi($event)" >
+                        <mat-icon>download</mat-icon>
+                    </button>
                 </div>
             </div>
           </mat-panel-title>
@@ -123,8 +127,8 @@
 <!-- FOOTNOTES -->
 <ul class="mv4 i f6 indent-small">
     <li>Two chords are consider duplicate if the root notes are the same - inversion and quality are not consulted.</li>
-    <li>Only triads and 7ths (for now)</li>
     <li>3rd Inversion 7ths are never generated.</li>
+    <li>For 9ths, the 9th is never "inverted", any inversion is calculated as if the chord was a triad or 7th.</li>
     <li>In <span class="b">Chromatic</span> mode
         <ul class="indent-small">
             <li>Dominant 7ths are never generated</li>    

@@ -25,17 +25,19 @@
 .chord-panel-title-container {
     display : grid;
     grid-template-columns: [key] 5rem [buttons] 1fr;
+    width : 100%;
 }
 
 .chord-panel-title-key {
     grid-column-start: key;
     align-self: center;
+    color: rgba(0,0,0,.87);
 }
 
 .chord-panel-title-buttons {
     grid-column-start:  buttons;
     align-self: center;
-    justify-self: start;
+    justify-self: end;
 }
 
 

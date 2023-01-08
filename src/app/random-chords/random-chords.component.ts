@@ -8,7 +8,6 @@ import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType, DuplicateControl } from '../random-chord.service';
 import { Note, Scale, ScaleType } from '../key';
 import { AudioService } from '../audio.service';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 const HELP_TEXT = "This page will let you generate a series of random chords";
 const HELP_PAGE_NAME = "Random Chords";
@@ -45,6 +44,7 @@ export class RandomChordsComponent implements OnInit {
 
   allow_triads = true;
   allow_sevenths = false;
+  allow_ninths = false;
 
 
   selected_sonority  = 'major';
@@ -81,9 +81,11 @@ export class RandomChordsComponent implements OnInit {
     evnt.stopPropagation();
   }
 
-  chord_tone_change(evnt : MatButtonToggleChange) {
+  chord_tone_change(evnt : Event) {
 
-    this.show_chord_tones = evnt.source.checked
+    this.stopPropagation(evnt);
+
+    this.show_chord_tones = ! this.show_chord_tones;
   }
 
   get chord_count_max() : number {
@@ -105,6 +107,7 @@ export class RandomChordsComponent implements OnInit {
     const chordTypes : ChordType[] = [];
     if (this.allow_triads) { chordTypes.push('triad'); }
     if (this.allow_sevenths) { chordTypes.push('7th'); }
+    if (this.allow_ninths) { chordTypes.push('9th'); }
 
     if (this.mode === 'Diatonic') {
 
@@ -131,7 +134,10 @@ export class RandomChordsComponent implements OnInit {
 
     const builder = this.randomChordService.builder();
 
-    builder.setChordTypes(chordTypes).setCount(this.chord_count).setDuplicate(this.duplicates).setKey(picked_key);
+    builder.setChordTypes(chordTypes)
+        .setCount(this.chord_count)
+        .setDuplicate(this.duplicates)
+        .setKey(picked_key);
 
     this.chords = builder.generate_chords();
 

@@ -10,7 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatGridListModule} from '@angular/material/grid-list';
-
+import { MatIconModule } from '@angular/material/icon';
 import { RandomChordsComponent } from './random-chords.component';
 import { AudioService } from '../audio.service';
 
@@ -33,6 +33,7 @@ describe('RandomChordsComponent', () => {
         MatCheckboxModule,
         MatRadioModule,
         MatGridListModule,
+        MatIconModule,
         NoopAnimationsModule,
       ],
       declarations: [ RandomChordsComponent ],
@@ -51,7 +52,7 @@ describe('RandomChordsComponent', () => {
 
   it("should generate chords when button is clicked", fakeAsync(() => {
     const topElement: HTMLElement = fixture.nativeElement;
-    const genButton  = topElement.querySelector('#generate_chords_buton');
+    const genButton  = topElement.querySelector('#generate_chords_button');
 
     expect(genButton).toBeTruthy();
     (genButton as HTMLElement).click();

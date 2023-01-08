@@ -27,17 +27,31 @@ export class Chooser<T> {
     }
 
     pick() : Choice<T> {
+
+        /* This might be optimized out since
+         * you can't see the results, but I hope
+         * not. The PNG in javascript seems to be
+         * very "streaky". Over the long run the 
+         * distribution is flat. But in short runs
+         * not so much.
+         */
+        const drop_count = Math.floor( ( Math.random() * 100.0 ) % 10 );
+        for (let j = 0 ; j < drop_count; ++j ) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const _x = Math.random();
+        }
+
         const rnd_num = Math.random() * this.total_weight;
         
         let index = 0;
         for (const w of this.weights) {
-            if (rnd_num < w) {
+            if (rnd_num <= w) {
                 return this.choices[index];
             }
             index += 1;
         }
 
-        /* SHouldn't get here. Only way this could happen is if somebody
+        /* Shouldn't get here. Only way this could happen is if somebody
          * messed with the fields of the object. Don't do that.
          */
     
@@ -51,7 +65,7 @@ export class Chooser<T> {
 
 
 export function equalWeightedChooser<T>(choices : T[]) : Chooser<T> {
-    return new Chooser(choices.map(v => mkch(v)));
+    return new Chooser(choices.map(v => mkch(v, 1)));
 }
 
 export function chooseFrom<T>(choices : Choice<T>[]) : T {
