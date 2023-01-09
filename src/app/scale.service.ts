@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, mkch } from './chooser';
-import { Note, Scale, ScaleType } from './key'
+import { Note, Scale, ScaleType } from './utils/music-theory/key'
 
 
 function mk_min_kc(root: string, weight? : number) {

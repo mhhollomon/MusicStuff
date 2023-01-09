@@ -1,4 +1,4 @@
-import {capitalize} from './capitalize.lib';
+import {capitalize} from '../capitalize.lib';
 
 export interface GenericNoteData {
     name : string,

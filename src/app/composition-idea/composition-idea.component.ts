@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import { Choice, Chooser, equalWeightedChooser, chooseFrom, mkch } from '../chooser';
 import { ScaleService } from '../scale.service';
-import {capitalize} from '../capitalize.lib';
+import {capitalize} from '../utils/capitalize.lib';
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 
 const HELP_TEXT = "This is the conposition ideas page.";
