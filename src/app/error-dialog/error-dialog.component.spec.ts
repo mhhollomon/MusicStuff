@@ -12,7 +12,7 @@ describe('ErrorDialogComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ErrorDialogComponent ],
       imports : [
-        MatDialogModule, 
+        MatDialogModule,
         NoopAnimationsModule
       ],
       providers : [{provide : MAT_DIALOG_DATA, useValue : "Ooopsy" }],

@@ -2,17 +2,7 @@ import { Injectable } from '@angular/core';
 import { Choice, Chooser, equalWeightedChooser, mkch } from './utils/chooser';
 import { Scale, Note, ScaleType } from './utils/music-theory/music-theory';
 import { ScaleService } from './scale.service';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function rotateArray(arr : any[], k : number) : any[] {
-  return arr.slice(k).concat(arr.slice(0, k));
-}
-
-const noteChoices : Choice<number>[] = [
-  mkch(1, 3), mkch(2, 1),
-  mkch(3, 2), mkch(4, 1),
-  mkch(5, 2), mkch(6, 1), mkch(7, 1)
-]
+import { rotateArray, range } from './utils/util-library';
 
 
 const qualityToScaleType : { [key : string] : ScaleType } = {
@@ -75,7 +65,7 @@ export class ChordSequenceBuilder {
   public chordList : Chord[] = [];
 
 
-  private noteChooser = new Chooser(noteChoices);
+  private noteChooser = equalWeightedChooser(range(0,8));
   private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
   private chordTypeChooser = new Chooser([mkch<ChordType>('triad', 1)])
 
