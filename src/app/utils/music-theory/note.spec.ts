@@ -251,3 +251,34 @@ describe("Note.toSharp", () => {
 
 
 });
+
+describe("Note.interval", () => {
+
+    it("should be zero if notes are the same", () => {
+
+        expect(new Note("C#").interval(new Note("Db"))).toEqual(0);
+        expect(new Note("E").interval(new Note("Fb"))).toEqual(0);
+        expect(new Note("C#").interval(new Note("Bx"))).toEqual(0);
+        expect(new Note("G").interval(new Note("Abb"))).toEqual(0);
+
+    });
+
+    it("should handle the alters of the same note", () => {
+
+        expect(new Note("C").interval(new Note("G"))).toEqual(7);
+        expect(new Note("Cb").interval(new Note("C#"))).toEqual(2);
+        expect(new Note("E").interval(new Note("Ex"))).toEqual(2);
+        expect(new Note("C#").interval(new Note("Cx"))).toEqual(1);
+        expect(new Note("Gbb").interval(new Note("G"))).toEqual(2);
+
+    });
+
+    it("should handle octave wraps", () => {
+
+        expect(new Note("G").interval(new Note("C"))).toEqual(5);
+        expect(new Note("C#").interval(new Note("C"))).toEqual(11);
+        expect(new Note("F").interval(new Note("Eb"))).toEqual(10);
+        expect(new Note("Cx").interval(new Note("Cb"))).toEqual(9);
+
+    });
+});

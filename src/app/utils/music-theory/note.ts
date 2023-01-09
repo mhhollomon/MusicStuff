@@ -113,6 +113,25 @@ export class Note {
         return new Note(this.noteClass, this.alter);
     }
 
+    interval(o : Note) {
+        const me = this.toSharp();
+        const they = o.toSharp();
+
+        let interval = they.alter - me.alter;
+        let noteClass = me.noteClass;
+
+        while (noteClass !== they.noteClass) {
+            interval += noteGraph[noteClass].nextDist;
+            noteClass = noteGraph[noteClass].nextNote;
+        }
+
+        if (interval < 0) {
+            interval += 12;
+        }
+
+        return interval;
+    }
+
     
 
 
