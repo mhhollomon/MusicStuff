@@ -1,12 +1,12 @@
 import {capitalize} from '../capitalize.lib';
 
-export interface GenericNoteData {
+interface GenericNoteData {
     name : string,
     next : number,
     prev : number
   }
 
-  export interface NoteGraphData {
+interface NoteGraphData {
     name : string;
     nextNote : string;
     prevNote : string;
@@ -18,7 +18,7 @@ function gnd(name: string, prev : number, next : number) : GenericNoteData {
     return {'name' : name, 'next' : next, 'prev' : prev };
 }
   
-export const genericNotes : GenericNoteData[] = [
+const genericNotes : GenericNoteData[] = [
     gnd('A', 2, 2), gnd('B', 2, 1), gnd('C', 1, 2), gnd('D', 2, 2), gnd('E', 2, 1), gnd('F', 1, 2), gnd('G', 2, 2),
     gnd('A', 2, 2), gnd('B', 2, 1), gnd('C', 1, 2), gnd('D', 2, 2), gnd('E', 2, 1), gnd('F', 1, 2), gnd('G', 2, 2),
 ]
@@ -151,7 +151,7 @@ export class Note {
     }
 }
 
-export const ScaleTypeEnum = {
+const ScaleTypeEnum = {
     minor : 'minor',
     major : 'major',
     phrygian : 'phrygian',
