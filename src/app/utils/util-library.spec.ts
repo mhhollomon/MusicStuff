@@ -1,4 +1,4 @@
-import { capitalize } from "./capitalize.lib";
+import { capitalize } from "./util-library";
 
 describe('Capitalize', () => {
     it ("Should work correctly", () => {

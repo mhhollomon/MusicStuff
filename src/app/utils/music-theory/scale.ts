@@ -1,5 +1,5 @@
 
-import {capitalize} from '../capitalize.lib';
+import {capitalize} from '../util-library';
 import { Note } from "./note";
 
 interface GenericNoteData {
