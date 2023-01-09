@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Choice, Chooser, equalWeightedChooser, mkch } from './chooser';
+import { Choice, Chooser, equalWeightedChooser, mkch } from './utils/chooser';
 import { Scale, Note, ScaleType } from './utils/music-theory/music-theory';
 import { ScaleService } from './scale.service';
 

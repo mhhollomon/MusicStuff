@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Chooser, mkch } from './chooser';
+import { Chooser, mkch } from './utils/chooser';
 import { Scale, Note } from './utils/music-theory/music-theory';
 
 import { ScaleService } from './scale.service';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { equalWeightedChooser } from '../chooser';
+import { equalWeightedChooser } from '../utils/chooser';
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 
 const HELP_TEXT = "This page will show you fingerings to various scales on a 4 string bass guitar";

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import {ActivatedRoute, Router} from '@angular/router';
 
-import { Choice, Chooser, equalWeightedChooser, chooseFrom, mkch } from '../chooser';
+import { Choice, Chooser, equalWeightedChooser, chooseFrom, mkch } from '../utils/chooser';
 import { ScaleService } from '../scale.service';
 import {capitalize} from '../utils/capitalize.lib';
 import { HelpTextEmitterService } from '../help-text-emitter.service';
