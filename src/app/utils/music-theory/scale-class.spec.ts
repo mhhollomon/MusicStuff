@@ -1,4 +1,4 @@
-import { Scale, Note } from "./key";
+import { Scale, Note } from "./music-theory";
 
 describe("Scale", () => {
     it("should properly use string for root note", () => {

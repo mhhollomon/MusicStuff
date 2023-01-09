@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, equalWeightedChooser, mkch } from './chooser';
-import { Scale, Note, ScaleType } from './utils/music-theory/key';
+import { Scale, Note, ScaleType } from './utils/music-theory/music-theory';
 import { ScaleService } from './scale.service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

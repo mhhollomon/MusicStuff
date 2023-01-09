@@ -6,7 +6,7 @@ import  * as Midiwriter  from 'midi-writer-js'
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 import {ScaleService } from '../scale.service';
 import { RandomChordService, Chord, ChordType, DuplicateControl } from '../random-chord.service';
-import { Note, Scale, ScaleType } from '../utils/music-theory/key';
+import { Note, Scale, ScaleType } from '../utils/music-theory/music-theory';
 import { AudioService } from '../audio.service';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';

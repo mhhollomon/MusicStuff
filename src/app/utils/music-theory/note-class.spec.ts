@@ -1,4 +1,4 @@
-import { Note } from "./key";
+import { Note } from "./music-theory";
 
 describe("Note constructor", () => {
     it ('should create instance with simple string note name', () => {
