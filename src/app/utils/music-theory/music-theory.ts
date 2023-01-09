@@ -9,13 +9,6 @@ interface GenericNoteData {
     prev : number
   }
 
-interface NoteGraphData {
-    name : string;
-    nextNote : string;
-    prevNote : string;
-    nextDist : number;
-    prevDist : number;
-  }
   
 function gnd(name: string, prev : number, next : number) : GenericNoteData {
     return {'name' : name, 'next' : next, 'prev' : prev };
@@ -26,22 +19,7 @@ const genericNotes : GenericNoteData[] = [
     gnd('A', 2, 2), gnd('B', 2, 1), gnd('C', 1, 2), gnd('D', 2, 2), gnd('E', 2, 1), gnd('F', 1, 2), gnd('G', 2, 2),
 ]
 
-const noteGraph : { [ index : string ] : NoteGraphData } = {
-    'A' : { name : 'A', nextNote : 'B', prevNote : 'G', nextDist : 2, prevDist : -2},
-    'B' : { name : 'B', nextNote : 'C', prevNote : 'A', nextDist : 1, prevDist : -2},
-    'C' : { name : 'C', nextNote : 'D', prevNote : 'B', nextDist : 2, prevDist : -1},
-    'D' : { name : 'D', nextNote : 'E', prevNote : 'C', nextDist : 2, prevDist : -2},
-    'E' : { name : 'E', nextNote : 'F', prevNote : 'D', nextDist : 1, prevDist : -2},
-    'F' : { name : 'F', nextNote : 'G', prevNote : 'E', nextDist : 2, prevDist : -1},
-    'G' : { name : 'G', nextNote : 'A', prevNote : 'F', nextDist : 2, prevDist : -2},
-}
   
-const accidentalToAlter : { [ index : string ] : number } = {
-    'b' : -1,
-    '#' : +1,
-    'x' : +2,
-    'bb' : -2,
-}
 
 /* number of semi-tones between notes */
 const scaleStepData = {
