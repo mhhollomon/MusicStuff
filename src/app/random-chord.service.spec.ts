@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Chord, ChordSequenceBuilder, RandomChordService } from './random-chord.service';
+import { Chord } from './utils/music-theory/music-theory';
+import { ChordSequenceBuilder, RandomChordService } from './random-chord.service';
 import { ScaleService } from './scale.service';
 
 describe('RandomChordService', () => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, equalWeightedChooser, mkch } from './utils/chooser';
-import { Scale, Note, ScaleType } from './utils/music-theory/music-theory';
+import { Scale, Note, Chord, ScaleType, ChordType } from './utils/music-theory/music-theory';
 import { ScaleService } from './scale.service';
 import { rotateArray, range } from './utils/util-library';
 
@@ -21,26 +21,6 @@ const invertChooser = new Chooser([mkch(0, 5), mkch(1, 3), mkch(2, 2)]);
 const chromaticNotes = ['A', 'Bb', 'C', 'C#', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'Ab'];
 const chromaticQualityChooser = new Chooser([ mkch('min', 3), mkch('maj', 3), mkch('dim', 1), mkch('aug', 1) ]);
 
-export class Chord {
-  root : string;
-  name : string;
-  inversion : number;
-  chordType : ChordType;
-  chordTones : Note[] = [];
-
-  constructor(root  = 'C', name  = 'Cmaj', chordType : ChordType = 'triad', inversion  = 0) {
-    this.root = root;
-    this.name = name;
-    this.inversion = inversion;
-    this.chordType = chordType;
-  }
-
-  isSame(other : Chord) {
-    return this.root === other.root;
-  }
-}
-
-export type ChordType = 'triad' | '7th' | '9th';
 
 const diatonicChordQuailty : { [ index : string ] : string[] } = {
   'minor-triad' : [ 'min', 'dim', '', 'min', 'min', '', 'maj'],
