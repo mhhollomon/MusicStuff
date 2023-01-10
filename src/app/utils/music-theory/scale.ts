@@ -22,16 +22,22 @@ const genericNotes : GenericNoteData[] = [
 
 /* number of semi-tones between notes */
 const scaleStepData = {
-    minor : [0, 2, 1, 2, 2, 1, 2],
-    major : [0, 2, 2, 1, 2, 2, 2],
-    phrygian : [0, 1, 2, 2, 1, 2, 2],
-    augmented : [0, 2, 2, 2, 2, 1, 2],
+    major :     [0, 2, 2, 1, 2, 2, 2 ],
+    lydian :    [0, 2, 2, 2, 1, 2, 2 ],
+    mixolydian: [0, 2, 2, 1, 2, 2, 1 ],
+    dorian :    [0, 2, 1, 2, 2, 2, 1 ],
+    minor :     [0, 2, 1, 2, 2, 1, 2 ],
+    phrygian :  [0, 1, 2, 2, 1, 2, 2 ],
+    augmented : [0, 2, 2, 2, 2, 1, 2 ],
   } as const;
 
 
 const ScaleTypeEnum = {
     minor : 'minor',
     major : 'major',
+    lydian : 'lydian',
+    mixolydian : 'mixolydian',
+    dorian : 'dorian',
     phrygian : 'phrygian',
     augmented : 'augmented'
 }

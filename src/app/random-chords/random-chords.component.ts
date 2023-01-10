@@ -72,7 +72,7 @@ const HELP_TEXT = `
       <ul>
         <li><span class="b">Random</span> - (default) Let the computer decide</li>
         <li><span class="b">Selected</span> - The user selects. If chosen, another set of boxes will appear allowing you to choose
-              the tonality (major or minor) and the key center.</li>
+              the tonality (major, minor, dorian, etc) and the key center (or leave the key center random).</li>
       </ul>
       
   </td>
