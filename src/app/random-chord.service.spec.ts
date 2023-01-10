@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Chord } from './utils/music-theory/music-theory';
+import { Chord, Note } from './utils/music-theory/music-theory';
 import { ChordSequenceBuilder, RandomChordService } from './random-chord.service';
 import { ScaleService } from './scale.service';
 
@@ -37,7 +37,7 @@ describe('ChordSequenceBuilder', () => {
   });
 
   it('should fail if it can\'t dedup', () => {
-    spyOn(builder, 'gen_one_chord').and.returnValue(new Chord("C", "maj", 'triad', 0));
+    spyOn(builder, 'gen_one_chord').and.returnValue(new Chord(new Note("C"), 'triad', 0));
 
     builder.setCount(2).setChordTypes(['triad']);
 

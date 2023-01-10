@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Choice, Chooser, equalWeightedChooser, mkch } from './utils/chooser';
 import { Scale, Note, Chord, ScaleType, ChordType } from './utils/music-theory/music-theory';
 import { ScaleService } from './scale.service';
-import { rotateArray, range } from './utils/util-library';
+import { range } from './utils/util-library';
 
 
 const qualityToScaleType : { [key : string] : ScaleType } = {
@@ -22,15 +22,6 @@ const chromaticNotes = ['A', 'Bb', 'C', 'C#', 'Db', 'D', 'Eb', 'E', 'F', 'F#', '
 const chromaticQualityChooser = new Chooser([ mkch('min', 3), mkch('maj', 3), mkch('dim', 1), mkch('aug', 1) ]);
 
 
-const diatonicChordQuailty : { [ index : string ] : string[] } = {
-  'minor-triad' : [ 'min', 'dim', '', 'min', 'min', '', 'maj'],
-  'major-triad' : ['', 'min', 'min', '', '', 'min', 'dim' ],
-  'minor-7th' : [ 'min7', 'dim7', 'maj7', 'min7', 'min7', 'maj7', 'maj7'],
-  'major-7th' : ['maj7', 'min7', 'min7', 'maj7', '7', 'min7', 'dim7' ],
-  'minor-9th' : [ 'min9', 'dim9', 'maj9', 'min9', 'min9', 'maj9', 'maj9'],
-  'major-9th' : ['maj9', 'min9', 'min9', 'maj9', '9', 'min9', 'dim9' ],
-}
-
 export type DuplicateControl = 'any' | 'not-adjacent' | 'none';
 
 export class ChordSequenceBuilder {
@@ -45,7 +36,7 @@ export class ChordSequenceBuilder {
   public chordList : Chord[] = [];
 
 
-  private noteChooser = equalWeightedChooser(range(0,8));
+  private noteChooser = equalWeightedChooser(range(1,8));
   private chromaticChooser = new Chooser(chromaticNotes.map(v => mkch(v)));
   private chordTypeChooser = new Chooser([mkch<ChordType>('triad', 1)])
 
@@ -166,22 +157,9 @@ export class ChordSequenceBuilder {
 
     const chordType = this.chordTypeChooser.choose();
 
-    const qualKey = this.key.scaleType + '-' +  chordType;
-
-    const chQual =  diatonicChordQuailty[qualKey];
-    let name = note.noteDisplay() + chQual[root-1];
-
     const inversion = invertChooser.choose();
 
-    if (inversion > 0) {
-      const invOffset = inversionOffset[inversion];
-      const bassDegree = ((root-1) + invOffset) % 7;
-      const bassNote = scale[bassDegree];
-
-      name = name + '/' + bassNote.noteDisplay();
-    }
-
-    return this.mkchord(this.key, note, name, inversion, chordType, root);
+    return this.mkchord(this.key, note, inversion, chordType, root);
 
   }
 
@@ -189,29 +167,14 @@ export class ChordSequenceBuilder {
 
     const note = new Note(this.chromaticChooser.choose());
     const chQual = chromaticQualityChooser.choose();
-    let name = note.noteDisplay() + chQual;
 
     const chordType = this.chordTypeChooser.choose();
-
-
-    name += (chordType ==='7th' ? '7' : (chordType == '9th' ? '9' : ''));
    
     const sn = new Scale(note, qualityToScaleType[chQual]);
 
-    const scale = this.scaleService.getScaleNotes(sn);
-
     const inversion = invertChooser.choose();
 
-    if (inversion > 0) {
-      const invOffset = inversionOffset[inversion];
-      const bassDegree = invOffset % 7;
-      const bassNote = scale[bassDegree];
-
-      name = name + '/' + bassNote.noteDisplay();      
-  
-    }
-
-    return this.mkchord(sn, note, name, inversion, chordType, 1);
+    return this.mkchord(sn, note, inversion, chordType, 1);
   }
 
   gen_one_chord() : Chord {
@@ -224,7 +187,7 @@ export class ChordSequenceBuilder {
 
   }
 
-  private mkchord(key: Scale, note : Note, name : string, 
+  private mkchord(key: Scale, note : Note, 
           inv : number, 
           chordType : ChordType, 
           rootDegree : number) : Chord {
@@ -233,41 +196,30 @@ export class ChordSequenceBuilder {
     const toneCount = chordType === 'triad' ? 3 : (chordType === '7th' ? 4 : 5);
     let tones = inversionOffset.slice(0, toneCount).map(i => scale[(i+(rootDegree-1))%7]);
 
-    if (inv > 0) {
-      if (chordType != '9th') {
-        tones = rotateArray(tones, inv);
-      } else {
-        if (equalWeightedChooser([true, false]).choose()) {
-          // true = "add9", false = "9"
-          // get rid of the 7th
-          tones = tones.splice(0, 3).concat(tones.splice(-1));
-          // rewrite the name - this is ugly, should move this up further
-          const slash = name.lastIndexOf('/');
-          let suffix = '';
-          if (slash !== -1) {
-            suffix = name.substring(slash);
-            name = name.substring(0, slash);
-          }
-
-          // the last character of name is now 9 - remove it
-          // and replace with (add9)
-          name = name.substring(0, name.length-1) + "(add9)" + suffix;
-        }
-
-        // For ninths, we want that ninth to stay on top
-        const topnote = tones[tones.length-1];
-        let others = tones.slice(0, -1);
-
-        others = rotateArray(others, inv);
-        others.push(topnote);
-
-        tones = others;
+    if (chordType === '9th') {
+      if (equalWeightedChooser([true, false]).choose()) {
+        // true = "add9", false = "9"
+        // get rid of the 7th
+        tones = tones.splice(0, 3).concat(tones.splice(-1));
       }
+
     }
 
-    const chord = new Chord(note.note(), name, chordType, inv);
-    chord.chordTones = tones;
+    const chord = new Chord(note, chordType, inv);
+    chord.addChordTone(1, tones[0]);
+    chord.addChordTone(3, tones[1]);
+    chord.addChordTone(5, tones[2]);
 
+    if (chordType === '7th') {
+      chord.addChordTone(7, tones[3]);     
+    } else if (chordType === '9th') {
+      if (tones.length == 4) {
+        chord.addChordTone(9, tones[3])
+      } else {
+        chord.addChordTone(7, tones[3])
+        chord.addChordTone(9, tones[4])
+      }
+    }
     return chord;
 
   }

@@ -227,13 +227,16 @@ export class RandomChordsComponent implements OnInit {
       if (typeof e === "string") {
         error_msg = e;
       } else if (e instanceof Error) {
-          error_msg = e.message
+          error_msg = e.message;
+          if (e.stack) {
+            error_msg += "\n" + e.stack;
+          }
+
+        this.error_dialog.open(ErrorDialogComponent, {
+          data: error_msg,
+        });
+
       }
-
-      this.error_dialog.open(ErrorDialogComponent, {
-        data: error_msg,
-    });
-
     }
 
   }
@@ -245,7 +248,7 @@ export class RandomChordsComponent implements OnInit {
     let last  = -1;
     let isBassNote = true;
 
-    for (const c of chord.chordTones) {
+    for (const c of chord.invertedChordTones()) {
 
       const simpleNote = c.toSharp();
 
@@ -283,7 +286,7 @@ export class RandomChordsComponent implements OnInit {
   
       const options : Midiwriter.Options = {sequential: false, duration : '1', pitch : []}
 
-      for (const n of c.chordTones) {
+      for (const n of c.invertedChordTones()) {
 
         const simpleNote = n.toSharp();
         if (octavePlacement[simpleNote.noteClass] < last) {

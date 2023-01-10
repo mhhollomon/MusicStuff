@@ -1,6 +1,6 @@
 .chord-container {
     display : grid;
-    grid-template-columns: [chordname] 10rem [tones] 1fr;
+    grid-template-columns: [chordname] 15rem [tones] 1fr [info] 5rem;
 }
 
 
@@ -8,6 +8,12 @@
 .chord-name {
     grid-column-start: chordname;
     align-self: center;
+}
+
+.chord-info {
+    grid-column-start:  info;
+    align-self: center;
+    justify-self: start;
 }
 
 .chord-tones {
