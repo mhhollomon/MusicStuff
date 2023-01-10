@@ -47,7 +47,7 @@ export class ScaleService {
       throw Error("Cannot 'choose' with scale type augmented");
     }
 
-    let keysig = sigChooser.choose();
+    const keysig = sigChooser.choose();
     const keycenter = sigNames[sonority][keysig + sigOffset];
     return new Scale(keycenter, sonority);
   }

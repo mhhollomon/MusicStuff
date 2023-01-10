@@ -67,3 +67,7 @@ export function equalWeightedChooser<T>(choices : T[]) : Chooser<T> {
 export function chooseFrom<T>(choices : Choice<T>[]) : T {
     return (new Chooser(choices)).choose();
 }
+
+export function yesno(trueWeight : number, falseWeight : number) : boolean {
+    return new Chooser([mkch(true, trueWeight), mkch(false, falseWeight)]).choose();
+}

@@ -152,7 +152,7 @@ describe('Chord.computeName', () => {
     const c = new Chord();
 
     c.chordTones = { 1: new Note('C'), 3 : new Note('Eb') };
-    expect(c.name()).toBe(undefined);
+    expect(() => {c.name()}).toThrowError();
 
   });
 
@@ -160,19 +160,20 @@ describe('Chord.computeName', () => {
     const c = new Chord();
 
     c.chordTones = { 1: new Note('C'), 3 : new Note('D'), 5 : new Note('G') };
-    expect(c.name()).toBe(undefined);
+    expect(() => {c.name()}).toThrowError();
     c.chordTones = { 1: new Note('C'), 3 : new Note('F'), 5 : new Note('G') };
-    expect(c.name()).toBe(undefined);
+    expect(() => {c.name()}).toThrowError();
     c.chordTones = { 1: new Note('C'), 3 : new Note('E'), 5 : new Note('A') };
-    expect(c.name()).toBe(undefined);
+    expect(() => {c.name()}).toThrowError();
     c.chordTones = { 1: new Note('C'), 3 : new Note('E'), 5 : new Note('F#') };
-    expect(c.name()).toBe(undefined);
+    expect(() => {c.name()}).toThrowError();
 
   });
 
   it('should handle add 9', () => {
     const c = new Chord();
-    c.chordType = '9th';
+    c.extensions = { '9th' : true, '11th' : false}
+    c.chordType = 'triad';
 
     c.chordTones = { 1: new Note('C'), 3 : new Note('E'), 5 : new Note('G'), 9: new Note('D') };
     expect(c.name()).toBe('Cmaj(add9)');
@@ -193,13 +194,14 @@ describe('Chord.invertedChordTones', () => {
   it('should handle Emaj(add9)/G♯', () => {
     const c = new Chord();
     c.inversion = 1;
-    c.chordType = '9th';
+    c.chordType = 'triad';
+    c.extensions = { '9th' : true, '11th' : false}
     c.addChordTone(1, new Note('E') ).addChordTone(3, new Note("G#"))
           .addChordTone(5, new Note("B"))
           .addChordTone(9, new Note("F#"))
 
     expect(c.invertedChordTones()).toEqual(
-      [new Note("G#"), new Note("B"), new Note('E'), new Note("F#")]
+      [new Note("G#"), new Note("E"), new Note('B'), new Note("F#")]
     )
 
   });

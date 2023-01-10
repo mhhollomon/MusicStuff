@@ -1,7 +1,13 @@
-import { rotateArray } from "../util-library";
 import { Note } from "./note";
 
-export type ChordType = 'triad' | '7th' | '9th';
+export type ChordType = 'triad' | '7th';
+
+export type ExtensionType = '9th' | '11th';
+
+export interface ExtensionFlags {
+  '9th' : boolean;
+  '11th' : boolean;
+}
 
 type ChordToneList = { [key : string] : Note };
 
@@ -10,6 +16,7 @@ export class Chord {
     inversion : number;
     chordType : ChordType;
     chordTones : ChordToneList = {};
+    extensions : ExtensionFlags = {'9th' : false, '11th' : false};
   
     constructor(root  = new Note('C'),  chordType : ChordType = 'triad', inversion  = 0) {
       this.root = root;
@@ -39,28 +46,29 @@ export class Chord {
       }
     }
 
-    name() : string | undefined {
+    name() : string {
 
       // Just for convenience 
       const ct = this.chordTones;
 
       if (! (1 in ct)) {
-        return  'undefined. (no root)'
+        throw Error("No root tone in the chordTones")
       }
 
       if (! ( 3 in ct)) {
-        return undefined;
+        throw Error("No mediant tone in the chordTones")
       }
       if (! ( 5 in ct)) {
-        return undefined;
+        throw Error("No dominant tone in the chordTones")
       }
 
       const chordalOne = ct[1];
 
-      let name : string | undefined = chordalOne.note();
-      let quality : string | undefined = undefined;
+      let name : string = chordalOne.note();
+      let quality = '';
       let seventh  = '';
       let ninth = '';
+      let eleventh = '';
 
       const int1to3 = chordalOne.interval(ct[3]);
       const int3to5 = ct[3].interval(ct[5]);
@@ -71,7 +79,7 @@ export class Chord {
         } else if (int3to5 === 4) {
           quality = 'min';
         } else {
-          name = undefined;
+          throw Error("Invalid lower chord structure (min first)");
         }
       } else if (int1to3 === 4) {
         if (int3to5 === 3) {
@@ -79,10 +87,10 @@ export class Chord {
         } else if (int3to5 === 4) {
           quality = 'aug';
         } else {
-          name = undefined;
+          throw Error("Invalid lower chord structure (maj first)");
         }
       } else {
-        name = undefined;
+        throw Error("invalid first interval in chord.");
       }
 
       if (name && ( 7 in ct)) {
@@ -103,12 +111,12 @@ export class Chord {
           }
 
         } else if (this.chordType === '7th') {
-          name = undefined;
+          throw Error("Invalid interval to 7th");
         }
 
       }
 
-      if (name && this.chordType === '9th') {
+      if (this.extensions["9th"]) {
         // Has a nine
 
         const int1to9 = ct[1].interval(ct[9]);
@@ -123,19 +131,36 @@ export class Chord {
             ninth = '(add9)';
           }
         } else if (int1to9 === 3) {
-          if (! ct[9].same(ct[2])) {
+          if (! ct[9].same(ct[3])) {
             ninth = '(add#9)';
           } else {
             // not actually a  ninth chord, 
             // the chordal 3 is simply repeated.
           }
         } else {
-          name = undefined;
+          throw Error("Invalid interval to 9th");
         }
 
       }
 
-      if (quality == 'maj' && seventh === '' && ninth === '') {
+      if (this.extensions["11th"]) {
+
+        const int1to11 = ct[1].interval(ct[11]);
+
+        if (int1to11 === 5 ) {
+          eleventh = '11';
+          if (quality === '' || ninth === '9') {
+            eleventh = '';
+          } else if (ninth !== '9') {
+            eleventh = '(add11)';
+          }
+        }
+
+
+      }
+
+
+      if (quality == 'maj' && seventh === '' && ninth === '' && eleventh === '') {
         quality = '';
       }
 
@@ -143,6 +168,7 @@ export class Chord {
         name += quality;
         name += seventh;
         name += ninth;
+        name += eleventh;
       }
 
       if (this.inversion != 0) {
@@ -179,12 +205,12 @@ export class Chord {
       }
 
       if (this.inversion > 0) {
-        if (this.chordType != '9th') {
-          retval = rotateArray(retval, this.inversion);
-        } else {
-          const ninth = retval[retval.length-1];
-          retval = rotateArray(retval.slice(0, -1), this.inversion).concat(ninth);
-        }
+
+        // want to "pull out" the nominated root and
+        // stick it on the bottom.
+        const newRoot = retval[this.inversion];
+        const top = retval.slice(this.inversion+1);
+        retval = [newRoot].concat(retval.slice(0, this.inversion)).concat(top);
   
       }
 

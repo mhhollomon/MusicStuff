@@ -120,6 +120,8 @@ export class RandomChordsComponent implements OnInit {
   allow_ninths = false;
   ninths_weight = 3;
 
+  allow_elevenths = false;
+  elevenths_weight = 3;
 
   selected_sonority  = 'major';
   selected_key  = 'Random';
@@ -180,7 +182,6 @@ export class RandomChordsComponent implements OnInit {
     const chordTypes : ChordType[] = [];
     if (this.allow_triads) { chordTypes.push('triad'); }
     if (this.allow_sevenths) { chordTypes.push('7th'); }
-    if (this.allow_ninths) { chordTypes.push('9th'); }
 
     if (this.mode === 'Diatonic') {
 
@@ -210,7 +211,9 @@ export class RandomChordsComponent implements OnInit {
 
       if (this.allow_triads) builder.addChordType('triad', this.triad_weight);
       if (this.allow_sevenths) builder.addChordType('7th', this.sevenths_weight);
-      if (this.allow_ninths) builder.addChordType('9th', this.ninths_weight);
+
+      if (this.allow_ninths) builder.addExtension('9th', this.ninths_weight);
+      if (this.allow_elevenths) builder.addExtension('11th', this.elevenths_weight);
 
       builder.setCount(this.chord_count)
           .setDuplicate(this.duplicates)
@@ -219,6 +222,10 @@ export class RandomChordsComponent implements OnInit {
       this.chords = builder.generate_chords();
 
       this.show_chords = true;
+
+      for (const c in this.chords) {
+        console.log(c, this.chords[c]);
+      }
     } catch(e) {
       let error_msg = 'oopsy - unknown error';
       if (typeof e === "string") {
