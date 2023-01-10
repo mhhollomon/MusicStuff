@@ -123,9 +123,6 @@ export class RandomChordsComponent implements OnInit {
 
   selected_sonority  = 'major';
   selected_key  = 'Random';
-
-  minorkeys = this.scaleService.getMinorKeyList();
-  majorkeys = this.scaleService.getMajorKeyList();
   
 
   constructor(private scaleService : ScaleService,
@@ -344,6 +341,10 @@ export class RandomChordsComponent implements OnInit {
       this.show_key = false;
       this.scale_disabled = true;
     }
+  }
+
+  getKeyList() : string[] {
+    return this.scaleService.getKeyList(this.selected_sonority as ScaleType);
   }
 
 }

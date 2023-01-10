@@ -3,28 +3,31 @@ import { Choice, Chooser, mkch } from './utils/chooser';
 import { Note, Scale, ScaleType } from './utils/music-theory/music-theory'
 
 
-function mk_min_kc(root: string, weight? : number) {
-  return mkch(new Scale(root, 'minor'), weight);
-}
-
-function mk_maj_kc(root: string, weight? : number) {
-  return mkch(new Scale(root, 'major'), weight);
-}
-
 const sonorityChoices : Choice<ScaleType>[] = [
   mkch('major'), mkch('minor')
 ]
 
-const majorKeyChoices : Choice<string>[] = [
-  mkch('C', 30), mkch('F', 17), mkch('G', 17),
-  mkch('D', 14), mkch('Bb', 11), mkch('A', 5),
-  mkch('Eb', 5)
-]
+// Other things depend on this order (e.g. getKeyList)
+// Change with care.
+const sigChooser = new Chooser<number>([
+  mkch(0, 20), 
+  mkch(1, 17), mkch(-1, 17),
+  mkch(2, 14), mkch(-2, 14),
+  mkch(3,  8), mkch(-3, 14),
+  mkch(4,  5), mkch(-4,  8),
+]);
 
-const minorKeyChoices : Choice<string>[] = [
-  mkch('A', 30), mkch('D', 17), mkch('E', 24), 
-  mkch('C', 17), mkch('G', 17), mkch('B', 10)
-]
+const sigOffset = 4;
+
+const sigNames = {
+  lydian :      [ 'Db', 'Ab', 'Eb', 'Bb', 'F', 'C', 'G',  'D',  'A'  ],
+  major  :      [ 'Ab', 'Eb', 'Bb', 'F',  'C', 'G', 'D',  'A',  'E'  ],
+  mixolydian  : [ 'Eb', 'Bb', 'F',  'C',  'G', 'D', 'A',  'E',  'B'  ],
+  dorian      : [ 'Bb', 'F',  'C',  'G',  'D', 'A', 'E',  'B',  'F#' ],
+  minor  :      [ 'F',  'C',  'G',  'D',  'A', 'E', 'B',  'F#', 'Db' ],
+  phrygian    : [ 'C',  'G',  'D',  'A',  'E', 'B', 'F#', 'Db', 'Ab' ],
+
+}
 
 
 @Injectable({
@@ -35,13 +38,17 @@ export class ScaleService {
   private cache : { [index: string] : Note[] } = {};
 
   private sonorityChooser = new Chooser(sonorityChoices);
-  private majorChooser = new Chooser(majorKeyChoices); 
-  private minorChooser = new Chooser(minorKeyChoices);
 
   choose(sonority? : ScaleType ) : Scale {
 
     sonority = sonority ? sonority : this.sonorityChooser.choose();
-    const keycenter = ((sonority == 'minor') ? this.minorChooser : this.majorChooser).choose();
+
+    if (sonority === 'augmented' ) {
+      throw Error("Cannot 'choose' with scale type augmented");
+    }
+
+    let keysig = sigChooser.choose();
+    const keycenter = sigNames[sonority][keysig + sigOffset];
     return new Scale(keycenter, sonority);
   }
 
@@ -55,10 +62,11 @@ export class ScaleService {
   }
 
 
-  getMinorKeyList() : string[] {
-    return minorKeyChoices.map(v => v.choice);
-  }
-  getMajorKeyList() : string[] {
-    return majorKeyChoices.map(v => v.choice);
+  getKeyList(sonority : ScaleType) : string[] {
+    if (sonority === 'augmented' ) {
+      throw Error("Cannot get the key list for scale type augmented");
+    }
+
+    return sigChooser.choices.map(v => sigNames[sonority][v.choice+sigOffset])
   }
 }

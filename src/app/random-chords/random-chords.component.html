@@ -97,7 +97,7 @@
             <mat-select  [(ngModel)]="selected_key">
                 <mat-option value="Random">Random</mat-option>
                 <mat-option value={{k}} 
-                    *ngFor="let k of (selected_sonority==='minor' ? minorkeys : majorkeys)">
+                    *ngFor="let k of getKeyList()">
                         {{k}}
                 </mat-option>
             </mat-select>
