@@ -30,11 +30,6 @@ const HELP_TEXT = `
     </ul>
 </td></tr>
 
-<tr class="bg-light-gray"><td class="b">Chord Count</td></tr>
-<tr><td>
-  <p>How many chords to generate. The allowable range depends on how duplicates are handled.</p>
-</td></tr>
-
 <tr class="bg-light-gray"><td class="b">Duplicates</td></tr>
 <tr>
   <td>What duplicates are allowed. A chord is considered a "duplicate" if it has the same root note. 
@@ -48,20 +43,36 @@ const HELP_TEXT = `
   </td>
 </tr>
 
+<tr class="bg-light-gray"><td class="b">Chord Count</td></tr>
+<tr><td>
+  <p>How many chords to generate. You can choose range of numbers and the actual number returned will be
+  in that range - inclusive.</p>
+</td></tr>
+
+
 
 <tr class="bg-light-gray"><td class="b">Chord Types</td></tr>
 <tr>
   <td>
       Which chord types are allowed to be generated. At least one chord type must be allowed.
-      <p>Underneath each checkbox is a slider which sets the relative wieghting of that chord types.</p>
+      <p>Underneath each checkbox is a slider which sets the relative weighting of that chord types.</p>
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
         <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7)</li>
-        <li><span class="b">9ths</span> - Chords may contain the 9th degree. Note that both "pure" 9ths (1,3,5,7,9) as well
-                    as "add 9" (1,3,5,9) are generated with equal weighting.
         </li>
       </ul>
       
+  </td>
+</tr>
+
+<tr class="bg-light-gray"><td class="b">Extensions</td></tr>
+<tr>
+  <td>
+      These are additional chord tones that can be added "on top" of the chord.
+      <p>Underneath each checkbox is a slider which sets the probability that the associated extension
+        will be added to the chord. Note that these are independent of each other. When the slider
+        is far to the right, the extension is not very likeyl to be added. Conversely, when the slider
+        is far to the left, the extension is very likely to be added.</p>      
   </td>
 </tr>
 
