@@ -1,31 +1,23 @@
 
 <!--- CONTROLS -->
 
-<!-- Mode Selection -->
 <div class="ma2">
-    <div class="flex">
-        <mat-form-field>
-            <mat-label>Mode</mat-label>
-            <mat-select [(ngModel)]="mode" (selectionChange)="mode_change()" >
-                <mat-option value="Diatonic">Diatonic</mat-option>
-                <mat-option value="Chromatic">Chromatic</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-</div>    
-
-<!-- General Parameters -->
-<div class="ma2">
-    <div class="param-container">
-
-        <!-- Chord Count -->
+    <div class="general-params-container">
+        <!-- Mode Selection -->
+        <div class="general-params-item">
             <mat-form-field>
-                <mat-label>Chord Count</mat-label>
-                <input name="chord_count" matNativeControl type="number" 
-                    [max]="chord_count_max" min="1" required [(ngModel)]="chord_count" #count_control="ngModel">
-                <mat-error *ngIf="count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
+                <mat-label>Mode</mat-label>
+                <mat-select [(ngModel)]="mode" (selectionChange)="mode_change()" >
+                    <mat-option value="Diatonic">Diatonic</mat-option>
+                    <mat-option value="Chromatic">Chromatic</mat-option>
+                </mat-select>
             </mat-form-field>
+        </div>
+
+        <!-- General Parameters -->
+
         <!-- Duplicates -->
+        <div class="general-params-item">
             <mat-form-field>
                 <mat-label>Duplicates</mat-label>
                 <mat-select [(ngModel)]="duplicates" >
@@ -34,6 +26,32 @@
                     <mat-option value="any">Any</mat-option>
                 </mat-select>
             </mat-form-field>
+        </div>
+
+    <!-- Chord Count -->
+        <div class="general-params-item chord-count-container">
+            <div>
+                <mat-form-field  class="small-input">
+                    <mat-label>Min Count</mat-label>
+                    <input name="chord_count" matNativeControl type="number"
+                        [max]="chord_count_max" min="1" required [(ngModel)]="min_chord_count" #min_count_control="ngModel">
+                    <mat-error *ngIf="min_count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
+                </mat-form-field>
+                <mat-form-field class="small-input">
+                    <mat-label>Max Count</mat-label>
+                    <input name="chord_count" matNativeControl type="number" 
+                        [max]="chord_count_max" min="1" required [(ngModel)]="max_chord_count" #max_count_control="ngModel">
+                    <mat-error *ngIf="max_count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="chord-count-slider">
+                <mat-slider class="chord-count-slider-width" min="1" [max]="chord_count_max" step="1" 
+                            matTooltip="Set range of number of chords to generate">
+                    <input matSliderStartThumb [(ngModel)]="min_chord_count">
+                    <input matSliderEndThumb [(ngModel)]="max_chord_count">
+            </mat-slider> 
+            </div>          
+        </div>
     </div>
 </div>
 

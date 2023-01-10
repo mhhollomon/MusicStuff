@@ -105,8 +105,8 @@ export class RandomChordsComponent implements OnInit {
 
   new_chord_tones = true;
 
-  // Model elements
-  chord_count = 4;
+  min_chord_count = 3;
+  max_chord_count = 5;
   duplicates : DuplicateControl = 'none';
   mode  = 'Diatonic';
   scale_source  = "Random";
@@ -173,8 +173,17 @@ export class RandomChordsComponent implements OnInit {
 
   generate() {
 
-    if (this.chord_count > this.chord_count_max || this.chord_count < 1) {
+    if (this.max_chord_count > this.chord_count_max || this.min_chord_count < 1) {
       return;
+    }
+
+    if (this.min_chord_count > this.max_chord_count) {
+      this.error_dialog.open(ErrorDialogComponent, {
+        data: "min count must be less than or equal to max chord count",
+      });
+
+      return;
+
     }
 
     let picked_key : Scale | null = null;
@@ -215,7 +224,7 @@ export class RandomChordsComponent implements OnInit {
       if (this.allow_ninths) builder.addExtension('9th', this.ninths_weight);
       if (this.allow_elevenths) builder.addExtension('11th', this.elevenths_weight);
 
-      builder.setCount(this.chord_count)
+      builder.setCount(this.min_chord_count, this.max_chord_count)
           .setDuplicate(this.duplicates)
           .setKey(picked_key);
 
