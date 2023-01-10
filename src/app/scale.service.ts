@@ -15,15 +15,15 @@ const sonorityChoices : Choice<ScaleType>[] = [
   mkch('major'), mkch('minor')
 ]
 
-const majorKeyChoices : Choice<Scale>[] = [
-  mk_maj_kc('C', 30), mk_maj_kc('F', 17), mk_maj_kc('G', 17),
-  mk_maj_kc('D', 14), mk_maj_kc('Bb', 11), mk_maj_kc('A', 5),
-  mk_maj_kc('Eb', 5)
+const majorKeyChoices : Choice<string>[] = [
+  mkch('C', 30), mkch('F', 17), mkch('G', 17),
+  mkch('D', 14), mkch('Bb', 11), mkch('A', 5),
+  mkch('Eb', 5)
 ]
 
-const minorKeyChoices : Choice<Scale>[] = [
-  mk_min_kc('A', 30), mk_min_kc('D', 17), mk_min_kc('E', 24), 
-  mk_min_kc('C', 17), mk_min_kc('G', 17), mk_min_kc('B', 10)
+const minorKeyChoices : Choice<string>[] = [
+  mkch('A', 30), mkch('D', 17), mkch('E', 24), 
+  mkch('C', 17), mkch('G', 17), mkch('B', 10)
 ]
 
 
@@ -41,7 +41,8 @@ export class ScaleService {
   choose(sonority? : ScaleType ) : Scale {
 
     sonority = sonority ? sonority : this.sonorityChooser.choose();
-    return ((sonority == 'minor') ? this.minorChooser : this.majorChooser).choose();
+    const keycenter = ((sonority == 'minor') ? this.minorChooser : this.majorChooser).choose();
+    return new Scale(keycenter, sonority);
   }
 
   getScaleNotes(scale: Scale) : Note[] {
@@ -55,9 +56,9 @@ export class ScaleService {
 
 
   getMinorKeyList() : string[] {
-    return minorKeyChoices.map(v => v.choice.root());
+    return minorKeyChoices.map(v => v.choice);
   }
   getMajorKeyList() : string[] {
-    return majorKeyChoices.map(v => v.choice.root());
+    return majorKeyChoices.map(v => v.choice);
   }
 }
