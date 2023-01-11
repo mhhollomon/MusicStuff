@@ -37,9 +37,9 @@ describe('ChordSequenceBuilder', () => {
   });
 
   it('should fail if it can\'t dedup', () => {
-    spyOn(builder, 'gen_one_chord').and.returnValue(new Chord(new Note("C"), 'triad', 0));
+    spyOn(builder, 'gen_one_chord').and.returnValue(new Chord(new Note("C"), 'triad', 'root'));
 
-    builder.setCount(2).setChordTypes(['triad']);
+    builder.setCount(2).setChordTypes(['triad']).addInversion('root',  1);
 
     expect(() => {builder.setDuplicate('none').generate_chords(); }).withContext('none').toThrowError();
     expect(() => {builder.setDuplicate('not-adjacent').generate_chords(); }).withContext('not adjacent').toThrowError();

@@ -15,7 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { RandomChordsComponent } from './random-chords.component';
 import { AudioService } from '../audio.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 describe('RandomChordsComponent', () => {
   let component: RandomChordsComponent;
   let fixture: ComponentFixture<RandomChordsComponent>;
@@ -38,6 +38,7 @@ describe('RandomChordsComponent', () => {
         MatIconModule,
         MatDialogModule,
         MatSliderModule,
+        MatTooltipModule,
         NoopAnimationsModule,
       ],
       declarations: [ RandomChordsComponent ],

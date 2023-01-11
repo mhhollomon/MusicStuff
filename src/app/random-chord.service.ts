@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Choice, Chooser, equalWeightedChooser, mkch, yesno } from './utils/chooser';
-import { Scale, Note, Chord, ScaleType, ChordType, ExtensionType } from './utils/music-theory/music-theory';
+import { Scale, Note, Chord, ScaleType, ChordType, ExtensionType, InversionType } from './utils/music-theory/music-theory';
 import { ScaleService } from './scale.service';
 import { range } from './utils/util-library';
 
@@ -12,7 +12,6 @@ const qualityToScaleType : { [key : string] : ScaleType } = {
   'aug' : 'augmented'
 }
 
-const invertChooser = new Chooser([mkch(0, 5), mkch(1, 3), mkch(2, 2)]);
 
 /* This is for Chromatic generation - much simpler */
 
@@ -35,6 +34,9 @@ export class ChordSequenceBuilder {
   public chordList : Chord[] = [];
 
   public extensions : {[index : string ] : number } = {};
+  public inversions : {[index : string ] : number } = {};
+
+  invertChooser = new Chooser<InversionType>([mkch('root', 5), mkch('first', 3), mkch('second', 2)]);
 
 
   private noteChooser = equalWeightedChooser(range(1,8));
@@ -114,6 +116,13 @@ export class ChordSequenceBuilder {
     return this;
   }
 
+  addInversion(inv : InversionType, weight : number) : ChordSequenceBuilder {
+
+    this.inversions[inv] = weight;
+
+    return this;
+  }
+
   generate_chords() : Chord[] {
 
 
@@ -121,7 +130,17 @@ export class ChordSequenceBuilder {
       throw Error("must give at least one allowed chord type");
     }
 
+    if (Object.keys(this.inversions).length < 1) {
+      throw Error("must give at least one allowed inversion");
+    }
+
+    this.invertChooser = new Chooser<InversionType>(
+      Object.keys(this.inversions).map((k, v) => mkch(k as InversionType,v))
+    )
+
     const chord_count = equalWeightedChooser(range(this.min_count, this.max_count+1)).choose();
+
+
 
     this.chordList = [];
 
@@ -178,7 +197,6 @@ export class ChordSequenceBuilder {
 
     chord.chordType = this.chordTypeChooser.choose();
 
-    chord.inversion = invertChooser.choose();
 
     return this.mkchord(this.key, chord, rootDegree);
 
@@ -195,8 +213,6 @@ export class ChordSequenceBuilder {
 
     const scale = new Scale(note, qualityToScaleType[chQual]);
     chord.root = note;
-
-    chord.inversion = invertChooser.choose();
 
     return this.mkchord(scale, chord, 1);
   }
@@ -215,6 +231,8 @@ export class ChordSequenceBuilder {
 
 
     const scale = this.scaleService.getScaleNotes(key);
+
+    chord.inversion = this.invertChooser.choose();
 
     chord.addChordTone(1, scale[degreeToScale(rootDegree, 1)]);
     chord.addChordTone(5, scale[degreeToScale(rootDegree, 5)]);
@@ -236,7 +254,9 @@ export class ChordSequenceBuilder {
 
     if (this.extensions['7th']) {
       chord.addChordTone(7, scale[degreeToScale(rootDegree, 7)]);
+      chord.extensions['7th'] = true;
     }
+    
     if (this.extensions['9th']) {
       if (yesno(this.extensions['9th'], 3)) {
         chord.addChordTone(9, scale[degreeToScale(rootDegree, 9)]);

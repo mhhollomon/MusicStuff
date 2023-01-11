@@ -4,6 +4,8 @@ export type ChordType = 'triad' | 'sus2' | 'sus4';
 
 export type ExtensionType = '7th' | '9th' | '11th';
 
+export type InversionType = 'root' | 'first' | 'second'; 
+
 export interface ExtensionFlags {
   '7th' : boolean,
   '9th' : boolean;
@@ -14,19 +16,16 @@ type ChordToneList = { [key : string] : Note };
 
 export class Chord {
     root : Note;
-    inversion : number;
+    inversion : InversionType;
     chordType : ChordType;
     chordTones : ChordToneList = {};
     extensions : ExtensionFlags = {'7th' : false, '9th' : false, '11th' : false};
   
-    constructor(root  = new Note('C'),  chordType : ChordType = 'triad', inversion  = 0) {
+    constructor(root  = new Note('C'),  chordType : ChordType = 'triad', inversion : InversionType = 'root') {
       this.root = root;
       this.inversion = inversion;
       this.chordType = chordType;
 
-      if (inversion > 2 || inversion < 0) {
-        throw Error(`Invalid inversion number ${inversion}`);
-      }
     }
 
     addChordTone(chordalPosition : number, note : Note) : Chord {
@@ -39,11 +38,12 @@ export class Chord {
       return this.root === other.root;
     }
 
-    inversionAbbrev() {
-      if (this.inversion === 0) {
-        return '(R)'
-      } else {
-        return `(${this.inversion})`
+    inversionAbbrev() : string {
+
+      switch (this.inversion) {
+        case 'root' : return '(R)';
+        case 'first' : return '(1)';
+        case 'second' : return '(2)';
       }
     }
 
@@ -194,23 +194,24 @@ export class Chord {
         name += addtext;
       }
 
-      if (this.inversion != 0) {
-        if (this.inversion > 2 || this.inversion < 0) {
-          throw Error(`Invalid inversion number ${this.inversion}`);
-        }
 
-        const offset = ['1'];
-        if (this.chordType == 'sus2') {
-          offset.push('2');
-        } else if (this.chordType == 'sus4') {
-          offset.push('4');
-        } else {
-          offset.push('3');
-        }
+      if (this.inversion !== 'root') {
 
-        offset.push('5');
-  
-        name += '/' + ct[offset[this.inversion]].note();
+        let  chordalBassTone = 1;
+
+        switch(this.inversion) {
+          case 'first' : {
+            switch (this.chordType) {
+              case 'sus2' : { chordalBassTone = 2; break; }
+              case 'sus4' : { chordalBassTone = 4; break; }
+              case 'triad' : { chordalBassTone = 3; break; }
+            }
+            break;
+          }
+          case 'second' : { chordalBassTone = 5; break; }
+        } 
+
+        name += '/' + ct[chordalBassTone].note();
       }
 
       return name;
@@ -229,22 +230,25 @@ export class Chord {
     }
 
     invertedChordTones() : Note[] {
-      if (this.inversion > 2 || this.inversion < 0) {
-        throw Error(`Invalid inversion number ${this.inversion}`);
-      }
 
       let retval : Note[] = [];
       for (const t in this.chordTones) {
         retval.push(this.chordTones[t]);
       }
 
-      if (this.inversion > 0) {
+      if (this.inversion !== 'root') {
 
         // want to "pull out" the nominated root and
         // stick it on the bottom.
-        const newRoot = retval[this.inversion];
-        const top = retval.slice(this.inversion+1);
-        retval = [newRoot].concat(retval.slice(0, this.inversion)).concat(top);
+
+        let offset = 0;
+        switch (this.inversion) {
+            case 'first' : { offset = 1; break }
+            case 'second' : { offset = 2; break; }
+        }
+        const newRoot = retval[offset];
+        const top = retval.slice(offset+1);
+        retval = [newRoot].concat(retval.slice(0, offset)).concat(top);
   
       }
 

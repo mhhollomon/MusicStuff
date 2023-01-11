@@ -193,7 +193,7 @@ describe('Chord.invertedChordTones', () => {
 
   it('should handle Emaj(add9)/G♯', () => {
     const c = new Chord();
-    c.inversion = 1;
+    c.inversion = 'first';
     c.chordType = 'triad';
     c.extensions = { '7th' : false,  '9th' : true, '11th' : false}
     c.addChordTone(1, new Note('E') ).addChordTone(3, new Note("G#"))

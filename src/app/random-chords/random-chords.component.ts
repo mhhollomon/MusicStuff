@@ -17,7 +17,7 @@ const HELP_TEXT = `
 <table>
 <tr class="bg-light-gray"><td class="b">Mode</td></tr>
 <tr><td>
-    <p>The mode sets how the generated chords are releated to each other and a  specified scale</p>
+    The mode sets how the generated chords are releated to each other and a  specified scale
     <ul>
       <li><span class="b">Diatonic</span> - (default) The chords generate will be "in" a key. The root note for
           each chord will be taken from the given scale. The quality will be set according to the scale.
@@ -45,8 +45,12 @@ const HELP_TEXT = `
 
 <tr class="bg-light-gray"><td class="b">Chord Count</td></tr>
 <tr><td>
-  <p>How many chords to generate. You can choose range of numbers and the actual number returned will be
-  in that range - inclusive.</p>
+  How many chords to generate.
+  <p>By default the interface allows you to pick a particluar number of chords
+    to generate. This number must be in the range of 1-6 inclusive if Duplicates = 'None' and 
+    1-30 otherwise.</p>
+  <p> The expander to the right allows you to open the interface so that You can choose range 
+    of numbers and the actual number returned will be  in that range - inclusive.</p>
 </td></tr>
 
 
@@ -58,7 +62,10 @@ const HELP_TEXT = `
       <p>Underneath each checkbox is a slider which sets the relative weighting of that chord types.</p>
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
-        <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7)</li>
+        <li><span class="b">Sus2</span> - The chord will cotain the second rather than third</li>
+        <li><span class="b">Sus4</span> - The chord will cotain the fourth rather than third</li>
+        <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7) - 7sus2 and 7sus4 is possible if those
+            options are also chosen</li>
         </li>
       </ul>
       
@@ -76,10 +83,24 @@ const HELP_TEXT = `
   </td>
 </tr>
 
+<tr class="bg-light-gray"><td class="b">Inversions</td></tr>
+<tr>
+  <td>
+      The chord will be inverted - the lowest note will something other than the root of the chord
+      <p>Underneath each checkbox is a slider which sets the probability that the associated inversion
+        will be generated.
+        Note that these are independent of each other. When the slider
+        is far to the right, the inversion is not very likey. Conversely, when the slider
+        is far to the left, the inversion is very likely to be added.</p> 
+      <p>At least one inversion must be allowed or an error will be generated</p>
+      <p>The default weightings are the weightings that were used by the application before this change.</p>     
+  </td>
+</tr>
+
 <tr class="bg-light-gray"><td class="b">Key (Diatonic Only)</td></tr>
 <tr>
   <td>
-    <p>Control how the key used by the Diatonic Mode is chosen.
+    Control how the key used by the Diatonic Mode is chosen.
       <ul>
         <li><span class="b">Random</span> - (default) Let the computer decide</li>
         <li><span class="b">Selected</span> - The user selects. If chosen, another set of boxes will appear allowing you to choose
@@ -142,6 +163,15 @@ export class RandomChordsComponent implements OnInit {
   allow_elevenths = false;
   elevenths_weight = 3;
 
+  allow_root_inv = true;
+  root_inv_weight = 5;
+
+  allow_first_inv = true;
+  first_inv_weight = 3;
+
+  allow_scnd_inv = true;
+  scnd_inv_weight = 2;
+
   selected_sonority  = 'major';
   selected_key  = 'Random';
   
@@ -182,7 +212,7 @@ export class RandomChordsComponent implements OnInit {
     this.show_chord_tones = ! this.show_chord_tones;
   }
 
-  range_mode_change(evnt : Event) {
+  range_mode_change() {
     this.count_range_mode = ! this.count_range_mode;
 
     if (this.count_range_mode) {
@@ -260,6 +290,10 @@ export class RandomChordsComponent implements OnInit {
       if (this.allow_sevenths) builder.addExtension('7th', this.sevenths_weight);
       if (this.allow_ninths) builder.addExtension('9th', this.ninths_weight);
       if (this.allow_elevenths) builder.addExtension('11th', this.elevenths_weight);
+
+      if (this.allow_root_inv) builder.addInversion('root', this.root_inv_weight);
+      if (this.allow_first_inv) builder.addInversion('first', this.first_inv_weight);
+      if (this.allow_scnd_inv) builder.addInversion('second', this.scnd_inv_weight);
 
       builder.setCount(this.min_chord_count, this.count_range_mode ? this.max_chord_count : this.min_chord_count);
 
