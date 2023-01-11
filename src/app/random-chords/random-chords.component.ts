@@ -6,7 +6,7 @@ import  * as Midiwriter  from 'midi-writer-js'
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 import {ScaleService } from '../scale.service';
 import { RandomChordService, DuplicateControl } from '../random-chord.service';
-import { Chord, ChordType, } from '../utils/music-theory/music-theory';
+import { Chord } from '../utils/music-theory/music-theory';
 import { Note, Scale, ScaleType } from '../utils/music-theory/music-theory';
 import { AudioService } from '../audio.service';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
@@ -128,6 +128,12 @@ export class RandomChordsComponent implements OnInit {
   allow_sevenths = false;
   sevenths_weight = 3;
 
+  allow_sus2 = false;
+  sus2_weight = 3;
+
+  allow_sus4 = false;
+  sus4_weight = 3;
+
   allow_ninths = false;
   ninths_weight = 3;
 
@@ -199,10 +205,6 @@ export class RandomChordsComponent implements OnInit {
 
     let picked_key : Scale | null = null;
 
-    const chordTypes : ChordType[] = [];
-    if (this.allow_triads) { chordTypes.push('triad'); }
-    if (this.allow_sevenths) { chordTypes.push('7th'); }
-
     if (this.mode === 'Diatonic') {
 
       if (this.scale_source === "Selected") {
@@ -230,8 +232,10 @@ export class RandomChordsComponent implements OnInit {
       const builder = this.randomChordService.builder();
 
       if (this.allow_triads) builder.addChordType('triad', this.triad_weight);
-      if (this.allow_sevenths) builder.addChordType('7th', this.sevenths_weight);
+      if (this.allow_sus2) builder.addChordType('sus2', this.sus2_weight);
+      if (this.allow_sus4) builder.addChordType('sus4', this.sus4_weight);
 
+      if (this.allow_sevenths) builder.addExtension('7th', this.sevenths_weight);
       if (this.allow_ninths) builder.addExtension('9th', this.ninths_weight);
       if (this.allow_elevenths) builder.addExtension('11th', this.elevenths_weight);
 

@@ -12,8 +12,6 @@ const qualityToScaleType : { [key : string] : ScaleType } = {
   'aug' : 'augmented'
 }
 
-const chordToneOffset = [0, 2, 4, 6, 8, 10];
-
 const invertChooser = new Chooser([mkch(0, 5), mkch(1, 3), mkch(2, 2)]);
 
 /* This is for Chromatic generation - much simpler */
@@ -217,25 +215,38 @@ export class ChordSequenceBuilder {
 
 
     const scale = this.scaleService.getScaleNotes(key);
-    const toneCount = chord.chordType === 'triad' ? 3 : (chord.chordType === '7th' ? 4 : 5);
-    const tones = chordToneOffset.slice(0, toneCount).map(i => scale[(i+(rootDegree-1))%7]);
 
-    chord.addChordTone(1, tones[0]);
-    chord.addChordTone(3, tones[1]);
-    chord.addChordTone(5, tones[2]);
-    if (chord.chordType === '7th') {
-      chord.addChordTone(7, tones[3]);
+    chord.addChordTone(1, scale[degreeToScale(rootDegree, 1)]);
+    chord.addChordTone(5, scale[degreeToScale(rootDegree, 5)]);
+
+    // The chord quality is a diminished - can't have a sus chord.
+    if ((chord.chordType === 'sus2' || chord.chordType === 'sus4') && 
+            chord.chordTones[1].interval(chord.chordTones[5]) !== 7 ) {
+      chord.chordType = 'triad';
+    }
+
+    if (chord.chordType === 'sus2') {
+      chord.addChordTone(2, scale[degreeToScale(rootDegree, 2)]);
+    } else if (chord.chordType === 'sus4') {
+      chord.addChordTone(4, scale[degreeToScale(rootDegree, 4)]);
+    } else {
+      chord.addChordTone(3, scale[degreeToScale(rootDegree, 3)]);
+    }
+
+
+    if (this.extensions['7th']) {
+      chord.addChordTone(7, scale[degreeToScale(rootDegree, 7)]);
     }
     if (this.extensions['9th']) {
       if (yesno(this.extensions['9th'], 3)) {
-        chord.addChordTone(9, scale[(8+(rootDegree-1))%7]);
+        chord.addChordTone(9, scale[degreeToScale(rootDegree, 9)]);
         chord.extensions['9th'] = true;
       }
     }
 
     if (this.extensions['11th']) {
       if (yesno(this.extensions['11th'], 3)) {
-        chord.addChordTone(11, scale[(10+(rootDegree-1))%7]);
+        chord.addChordTone(11, scale[degreeToScale(rootDegree, 11)]);
         chord.extensions['11th'] = true;
       }
     }
@@ -245,6 +256,10 @@ export class ChordSequenceBuilder {
 
   }
 
+}
+
+function degreeToScale(rootDegree : number, chordal : number) {
+  return (chordal-1 + rootDegree-1)%7
 }
 
 /********************************************************

@@ -63,6 +63,6 @@ describe('RandomChordsComponent', () => {
 
     tick();
 
-    expect(component.chord_count).toBeGreaterThan(0);
+    expect(component.chords.length).toBeGreaterThan(0);
   }));
 });

@@ -1,10 +1,11 @@
 import { Note } from "./note";
 
-export type ChordType = 'triad' | '7th';
+export type ChordType = 'triad' | 'sus2' | 'sus4';
 
-export type ExtensionType = '9th' | '11th';
+export type ExtensionType = '7th' | '9th' | '11th';
 
 export interface ExtensionFlags {
+  '7th' : boolean,
   '9th' : boolean;
   '11th' : boolean;
 }
@@ -16,7 +17,7 @@ export class Chord {
     inversion : number;
     chordType : ChordType;
     chordTones : ChordToneList = {};
-    extensions : ExtensionFlags = {'9th' : false, '11th' : false};
+    extensions : ExtensionFlags = {'7th' : false, '9th' : false, '11th' : false};
   
     constructor(root  = new Note('C'),  chordType : ChordType = 'triad', inversion  = 0) {
       this.root = root;
@@ -55,9 +56,17 @@ export class Chord {
         throw Error("No root tone in the chordTones")
       }
 
-      if (! ( 3 in ct)) {
-        throw Error("No mediant tone in the chordTones")
+      if (this.chordType === 'sus2' && ! (2 in ct)) {
+        throw Error("No supertonic tone in  sus2")
       }
+      if (this.chordType === 'sus4' && ! (4 in ct)) {
+        throw Error("No predominant tone in sus4")
+      }
+
+      if ((this.chordType === 'triad') && ! ( 3 in ct)) {
+        throw Error("No mediant tone in triad")
+      }
+
       if (! ( 5 in ct)) {
         throw Error("No dominant tone in the chordTones")
       }
@@ -66,54 +75,62 @@ export class Chord {
 
       let name : string = chordalOne.note();
       let quality = '';
-      let seventh  = '';
-      let ninth = '';
-      let eleventh = '';
+      let sus = '';
+      let ext = '';
+      const add : string[] = [];
 
-      const int1to3 = chordalOne.interval(ct[3]);
-      const int3to5 = ct[3].interval(ct[5]);
-
-      if (int1to3 === 3) {
-        if (int3to5 === 3) {
-          quality = 'dim';
-        } else if (int3to5 === 4) {
-          quality = 'min';
-        } else {
-          throw Error("Invalid lower chord structure (min first)");
-        }
-      } else if (int1to3 === 4) {
-        if (int3to5 === 3) {
-          quality = 'maj';
-        } else if (int3to5 === 4) {
-          quality = 'aug';
-        } else {
-          throw Error("Invalid lower chord structure (maj first)");
-        }
+      if (this.chordType === 'sus2') {
+        sus = 'sus2';
+      } else if (this.chordType === 'sus4') {
+        sus = 'sus4';
       } else {
-        throw Error("invalid first interval in chord.");
+
+        // triad or 7th
+        const int1to3 = chordalOne.interval(ct[3]);
+        const int3to5 = ct[3].interval(ct[5]);
+
+        if (int1to3 === 3) {
+          if (int3to5 === 3) {
+            quality = 'dim';
+          } else if (int3to5 === 4) {
+            quality = 'min';
+          } else {
+            throw Error("Invalid lower chord structure (min first)");
+          }
+        } else if (int1to3 === 4) {
+          if (int3to5 === 3) {
+            quality = 'maj';
+          } else if (int3to5 === 4) {
+            quality = 'aug';
+          } else {
+            throw Error("Invalid lower chord structure (maj first)");
+          }
+        } else {
+          throw Error("invalid first interval in chord.");
+        }
       }
 
-      if (name && ( 7 in ct)) {
+      if ( 7 in ct ) {
         // has a 7th
         const int5to7 = ct[5].interval(ct[7]);
         if (int5to7 === 3) {
-          seventh = '7';
+          ext = '7';
           if (quality === 'maj') {
             quality = '';
           }
         } else if (int5to7 === 4) {
-          seventh = '7';
+          ext = '7';
           if (quality === 'min') {
-            seventh = 'maj7'
+            ext = 'maj7'
+          } else if (quality === ''){
+            ext = 'maj7'
           } else if (quality === 'dim') {
             quality = 'min';
-            seventh = '7b5'
+            ext = '7b5'
           }
-
-        } else if (this.chordType === '7th') {
+        } else if (this.extensions['7th']) {
           throw Error("Invalid interval to 7th");
         }
-
       }
 
       if (this.extensions["9th"]) {
@@ -122,17 +139,16 @@ export class Chord {
         const int1to9 = ct[1].interval(ct[9]);
 
         if (int1to9 == 1 ) {
-            ninth = '(addb9)';
+            add.push('b9');
         } else if (int1to9 === 2) { // this assumes not phrygian or locrian
-          ninth = '9';
-          if (quality === '' || seventh === '7') {
-            seventh = '';
-          } else if (seventh !== '7') {
-            ninth = '(add9)';
+          if (quality === '' && ext === '7') {
+            ext = '9';
+          } else if (ext !== '7') {
+            add.push('9');
           }
         } else if (int1to9 === 3) {
           if (! ct[9].same(ct[3])) {
-            ninth = '(add#9)';
+            add.push('#9');
           } else {
             // not actually a  ninth chord, 
             // the chordal 3 is simply repeated.
@@ -148,11 +164,10 @@ export class Chord {
         const int1to11 = ct[1].interval(ct[11]);
 
         if (int1to11 === 5 ) {
-          eleventh = '11';
-          if (quality === '' || ninth === '9') {
-            eleventh = '';
-          } else if (ninth !== '9') {
-            eleventh = '(add11)';
+          if (quality === '' && ext === '9') {
+            ext = '11';
+          } else if (ext !== '9') {
+            add.push('11');
           }
         }
 
@@ -160,23 +175,42 @@ export class Chord {
       }
 
 
-      if (quality == 'maj' && seventh === '' && ninth === '' && eleventh === '') {
+      if (quality == 'maj' && ext === '') {
         quality = '';
       }
 
+      let addtext = '';
+      if (add.length > 0) {
+        addtext = '(add'
+        add.forEach(v => addtext+=v+',');
+        addtext = addtext.substring(0, addtext.length-1) + ')';
+      }
+
+
       if (name) {
         name += quality;
-        name += seventh;
-        name += ninth;
-        name += eleventh;
+        name += ext;
+        name += sus;
+        name += addtext;
       }
 
       if (this.inversion != 0) {
         if (this.inversion > 2 || this.inversion < 0) {
           throw Error(`Invalid inversion number ${this.inversion}`);
         }
+
+        const offset = ['1'];
+        if (this.chordType == 'sus2') {
+          offset.push('2');
+        } else if (this.chordType == 'sus4') {
+          offset.push('4');
+        } else {
+          offset.push('3');
+        }
+
+        offset.push('5');
   
-        name += '/' + ct[['1', '3', '5'][this.inversion]].note();
+        name += '/' + ct[offset[this.inversion]].note();
       }
 
       return name;

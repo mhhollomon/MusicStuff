@@ -172,17 +172,17 @@ describe('Chord.computeName', () => {
 
   it('should handle add 9', () => {
     const c = new Chord();
-    c.extensions = { '9th' : true, '11th' : false}
+    c.extensions = { '7th' : false,  '9th' : true, '11th' : false}
     c.chordType = 'triad';
 
     c.chordTones = { 1: new Note('C'), 3 : new Note('E'), 5 : new Note('G'), 9: new Note('D') };
-    expect(c.name()).toBe('Cmaj(add9)');
+    expect(c.name()).toBe('C(add9)');
 
     c.chordTones = { 1: new Note('Bb'), 3 : new Note('D'), 5 : new Note('F'), 9: new Note('C') };
-    expect(c.name()).toBe('Bbmaj(add9)');
+    expect(c.name()).toBe('Bb(add9)');
 
     c.chordTones = { 1: new Note('D'), 3 : new Note('F#'), 5 : new Note('A'), 9: new Note('E') };
-    expect(c.name()).toBe('Dmaj(add9)');
+    expect(c.name()).toBe('D(add9)');
 
   }); 
 
@@ -195,7 +195,7 @@ describe('Chord.invertedChordTones', () => {
     const c = new Chord();
     c.inversion = 1;
     c.chordType = 'triad';
-    c.extensions = { '9th' : true, '11th' : false}
+    c.extensions = { '7th' : false,  '9th' : true, '11th' : false}
     c.addChordTone(1, new Note('E') ).addChordTone(3, new Note("G#"))
           .addChordTone(5, new Note("B"))
           .addChordTone(9, new Note("F#"))
