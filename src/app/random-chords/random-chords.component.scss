@@ -1,6 +1,6 @@
 .chord-container {
     display : grid;
-    grid-template-columns: [chordname] 15rem [tones] 1fr [info] 5rem;
+    grid-template-columns: [chordname] minmax(5rem, 15rem) [tones] minmax(8rem, 1fr) [info] 5rem;
 }
 
 
@@ -36,7 +36,7 @@
 
 // main point of this is the color attribute.
 // Force the title to be shown not "grayed-out"
-// event when the expansion panel is disabled.
+// even when the expansion panel is disabled.
 .chord-panel-title-key {
     grid-column-start: key;
     align-self: center;
@@ -74,7 +74,9 @@
 
 
 .small-input {
-    max-width: 100px;
+    // This is tuned to make two of them 
+    // the same size as one "normal"
+    max-width: 106px;
 }
 
 .general-params-container {
@@ -93,14 +95,27 @@
 
 .chord-count-container {
     display : grid;
-    grid-template-columns: auto;
+    grid-template-columns: [controls] 1fr [switch] 2rem ;
     gap : 1rem;
+    justify-items: center;
+}
+
+.chord-count-icon {
+    grid-column : switch;
+    grid-row-start: 1;
 }
 
 .chord-count-slider {
+    grid-column : controls;
     justify-self:  stretch;
+    justify-content: center;
+}
+
+.chord-count-input {
+    grid-column : controls;
+    justify-self: center;
 }
 
 .chord-count-slider-width {
-    width : 100%;
+    width : 90%;
 }

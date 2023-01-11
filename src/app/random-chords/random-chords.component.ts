@@ -118,6 +118,8 @@ export class RandomChordsComponent implements OnInit {
 
   min_chord_count = 3;
   max_chord_count = 5;
+  count_range_mode = false;
+
   duplicates : DuplicateControl = 'none';
   mode  = 'Diatonic';
   scale_source  = "Random";
@@ -180,6 +182,19 @@ export class RandomChordsComponent implements OnInit {
     this.show_chord_tones = ! this.show_chord_tones;
   }
 
+  range_mode_change(evnt : Event) {
+    this.count_range_mode = ! this.count_range_mode;
+
+    if (this.count_range_mode) {
+      if (this.min_chord_count > this.max_chord_count) {
+        const temp = this.min_chord_count;
+        this.min_chord_count = this.max_chord_count;
+        this.max_chord_count = temp;
+      }
+
+    }
+  }
+
   get chord_count_max() : number {
     if (this.duplicates !== 'none') {
       return 30;
@@ -190,11 +205,18 @@ export class RandomChordsComponent implements OnInit {
 
   generate() {
 
-    if (this.max_chord_count > this.chord_count_max || this.min_chord_count < 1) {
-      return;
+    if (this.count_range_mode) {
+      if (this.max_chord_count > this.chord_count_max || this.min_chord_count < 1) {
+        return;
+      }
+    } else {
+      if (this.min_chord_count > this.chord_count_max || this.min_chord_count < 1) {
+        return;
+      }
+
     }
 
-    if (this.min_chord_count > this.max_chord_count) {
+    if (this.count_range_mode && this.min_chord_count > this.max_chord_count) {
       this.error_dialog.open(ErrorDialogComponent, {
         data: "min count must be less than or equal to max chord count",
       });
@@ -239,17 +261,19 @@ export class RandomChordsComponent implements OnInit {
       if (this.allow_ninths) builder.addExtension('9th', this.ninths_weight);
       if (this.allow_elevenths) builder.addExtension('11th', this.elevenths_weight);
 
-      builder.setCount(this.min_chord_count, this.max_chord_count)
-          .setDuplicate(this.duplicates)
+      builder.setCount(this.min_chord_count, this.count_range_mode ? this.max_chord_count : this.min_chord_count);
+
+      builder.setDuplicate(this.duplicates)
           .setKey(picked_key);
 
       this.chords = builder.generate_chords();
 
       this.show_chords = true;
-
+      /*
       for (const c in this.chords) {
         console.log(c, this.chords[c]);
       }
+      */
     } catch(e) {
       let error_msg = 'oopsy - unknown error';
       if (typeof e === "string") {

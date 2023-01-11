@@ -28,9 +28,12 @@
             </mat-form-field>
         </div>
 
-    <!-- Chord Count -->
+        <!-- Chord Count -->
+        <!-- Two different modes "ranged" and "single" -->
         <div class="general-params-item chord-count-container">
-            <div>
+
+            <ng-template [ngIf]="count_range_mode" [ngIfElse]="singleRangeMode">
+            <div class="chord-count-input">
                 <mat-form-field  class="small-input">
                     <mat-label>Min Count</mat-label>
                     <input name="chord_count" matNativeControl type="number"
@@ -50,7 +53,26 @@
                     <input matSliderStartThumb [(ngModel)]="min_chord_count">
                     <input matSliderEndThumb [(ngModel)]="max_chord_count">
             </mat-slider> 
-            </div>          
+            </div>
+            </ng-template>
+            <ng-template #singleRangeMode>
+                <div class="chord-count-input">
+                    <mat-form-field>
+                        <mat-label>Chord Count</mat-label>
+                        <input name="chord_count" matNativeControl type="number"
+                            [max]="chord_count_max" min="1" required [(ngModel)]="min_chord_count" #single_min_count_control="ngModel">
+                        <mat-error *ngIf="single_min_count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
+                    </mat-form-field>
+                </div>
+            </ng-template> 
+
+            <!-- Switch range mode -->
+            <button mat-icon-button class="material-symbols-outlined chord-count-icon"
+                        matTooltip="Switch to {{ count_range_mode ? 'single' : 'range' }} mode"  
+                        (click)="range_mode_change($event)">
+                <mat-icon>{{count_range_mode ? 'unfold_less' : 'unfold_more'}}</mat-icon>
+            </button>
+
         </div>
     </div>
 </div>
