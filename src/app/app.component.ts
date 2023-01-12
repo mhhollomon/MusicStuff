@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HelpTextEmitterService } from './help-text-emitter.service';
+import { DOCUMENT } from '@angular/common';
 
 
 interface nav_link_data {
@@ -24,6 +25,9 @@ export class AppComponent implements OnInit {
   current_help_page = 'Unknown';
 
   activeLinkIndex = -1; 
+
+  darkMode = false;
+  @HostBinding('class') className = '';
 
   navLinks : nav_link_data[] = [
         {
@@ -48,7 +52,8 @@ export class AppComponent implements OnInit {
     constructor(
         private router: Router, 
         public dialog: MatDialog, 
-        private help_text : HelpTextEmitterService) {
+        private help_text : HelpTextEmitterService,
+        @Inject(DOCUMENT) private document: Document) {
     }
 
     ngOnInit(): void {
@@ -73,5 +78,17 @@ export class AppComponent implements OnInit {
                 page_name : this.current_help_page,
             },
         });
+    }
+
+    toggleDarkMode() {
+        this.darkMode = ! this.darkMode;
+
+        const darkModeClass = 'darkMode';
+
+        if (this.darkMode) {
+            this.document.body.classList.add(darkModeClass);
+        } else {
+            this.document.body.classList.remove(darkModeClass);
+        }
     }
 }

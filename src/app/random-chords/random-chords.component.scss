@@ -3,8 +3,6 @@
     grid-template-columns: [chordname] minmax(5rem, 15rem) [tones] minmax(8rem, 1fr) [info] 5rem;
 }
 
-
-
 .chord-name {
     grid-column-start: chordname;
     align-self: center;
@@ -40,7 +38,6 @@
 .chord-panel-title-key {
     grid-column-start: key;
     align-self: center;
-    color: rgba(0,0,0,.87);
 }
 
 
@@ -66,10 +63,6 @@
 
 .mdc-fab--mini {
     transform : scale(0.5);
-}
-
-.mhh-mat-label {
-    font-family: var(--mdc-typography-body2-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
 }
 
 
@@ -122,7 +115,6 @@
 
 .chord-count-icon-button-label {
     font-size: .75rem;
-    color : rgba(0, 0, 0, 0.6);
 }
 
 .config-action-button {

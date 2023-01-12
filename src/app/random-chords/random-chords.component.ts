@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 const HELP_TEXT = `
 <p>This page will let you generate a series of random chords</p>
 <table>
-<tr class="bg-light-gray"><td class="b">Mode</td></tr>
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Mode</td></tr>
 <tr><td>
     The mode sets how the generated chords are releated to each other and a  specified scale
     <ul>
@@ -30,7 +30,7 @@ const HELP_TEXT = `
     </ul>
 </td></tr>
 
-<tr class="bg-light-gray"><td class="b">Duplicates</td></tr>
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Duplicates</td></tr>
 <tr>
   <td>What duplicates are allowed. A chord is considered a "duplicate" if it has the same root note. 
       Quality (maj, min, etc), type (triad, 7th, etc), and inversion are not considered.
@@ -43,7 +43,7 @@ const HELP_TEXT = `
   </td>
 </tr>
 
-<tr class="bg-light-gray"><td class="b">Chord Count</td></tr>
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Chord Count</td></tr>
 <tr><td>
   How many chords to generate.
   <p>By default the interface allows you to pick a particular number of chords
@@ -64,7 +64,7 @@ const HELP_TEXT = `
 </td></tr>
 
 
-<tr class="bg-light-gray"><td class="b">Selection Actions</td></tr>
+<tr class="bg-light-gray  mhh-mat-label"><td class="b">Selection Actions</td></tr>
 <tr>
   <td>
       Shortcut actions for chord constraints.
@@ -78,7 +78,7 @@ const HELP_TEXT = `
   </td>
 </tr>
 
-<tr class="bg-light-gray"><td class="b">Chord Types</td></tr>
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Chord Types</td></tr>
 <tr>
   <td>
       Which chord types are allowed to be generated. At least one chord type must be allowed.
@@ -98,7 +98,7 @@ const HELP_TEXT = `
   </td>
 </tr>
 
-<tr class="bg-light-gray"><td class="b">Extensions</td></tr>
+<tr class="bg-light-gray  mhh-mat-label"><td class="b">Extensions</td></tr>
 <tr>
   <td>
       These are additional chord tones that can be added "on top" of the chord.
@@ -109,7 +109,7 @@ const HELP_TEXT = `
   </td>
 </tr>
 
-<tr class="bg-light-gray"><td class="b">Inversions</td></tr>
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Inversions</td></tr>
 <tr>
   <td>
       The chord will be inverted - the lowest note will something other than the root of the chord
@@ -123,7 +123,7 @@ const HELP_TEXT = `
   </td>
 </tr>
 
-<tr class="bg-light-gray"><td class="b">Key (Diatonic Only)</td></tr>
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Key (Diatonic Only)</td></tr>
 <tr>
   <td>
     Control how the key used by the Diatonic Mode is chosen.
