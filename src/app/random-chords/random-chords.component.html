@@ -67,11 +67,14 @@
             </ng-template> 
 
             <!-- Switch range mode -->
-            <button mat-icon-button class="material-symbols-outlined chord-count-icon"
-                        matTooltip="Switch to {{ count_range_mode ? 'single' : 'range' }} mode"  
-                        (click)="range_mode_change()">
-                <mat-icon>{{count_range_mode ? 'unfold_less' : 'unfold_more'}}</mat-icon>
-            </button>
+            <div class="chord-count-icon">
+                <button mat-mini-fab class="material-symbols-outlined"
+                            matTooltip="Switch to {{ count_range_mode ? 'single' : 'range' }} mode"  
+                            (click)="range_mode_change()">
+                    <mat-icon>{{count_range_mode ? 'unfold_less' : 'unfold_more'}}</mat-icon>
+                </button>
+                <label class="chord-count-icon-button-label">{{count_range_mode ? 'SINGLE' : 'RANGE'}}</label>
+            </div>
 
         </div>
     </div>
