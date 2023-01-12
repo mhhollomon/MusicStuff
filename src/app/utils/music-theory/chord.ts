@@ -35,7 +35,7 @@ export class Chord {
     }
   
     isSame(other : Chord) {
-      return this.root === other.root;
+      return this.root === other.root && this.chordType === other.chordType;
     }
 
     inversionAbbrev() : string {

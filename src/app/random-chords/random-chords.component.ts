@@ -238,6 +238,15 @@ export class RandomChordsComponent implements OnInit {
       return 30;
     }
 
+    let types = 0;
+    if (this.allow_triads) types += 1;
+    if (this.allow_sus2) types += 1;
+    if (this.allow_sus4) types += 1;
+
+    if (types > 1) {
+      return 10;
+    }
+    
     return 6;
   }
 
