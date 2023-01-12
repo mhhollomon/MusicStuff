@@ -225,6 +225,14 @@ export class RandomChordsComponent implements OnInit {
     }
   }
 
+  yesno_slider_ticks(value : number) : string {
+    if (value <= 1.5 ) return 'rare';
+    if (value < 3) return 'less';
+    if (value === 3) return '50/50';
+    if (value <= 4.5) return 'more';
+    return 'lots';
+  }
+
   get chord_count_max() : number {
     if (this.duplicates !== 'none') {
       return 30;
