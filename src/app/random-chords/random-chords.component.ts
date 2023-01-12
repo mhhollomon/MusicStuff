@@ -187,6 +187,7 @@ export class RandomChordsComponent implements OnInit {
 
   ngOnInit(): void {
     this.help_text.setHelp({ help_text : HELP_TEXT, page_name : HELP_PAGE_NAME });
+    this.slide_value_change();
   }
 
 
@@ -212,6 +213,69 @@ export class RandomChordsComponent implements OnInit {
     this.show_chord_tones = ! this.show_chord_tones;
   }
 
+  slide_value_change() {
+
+    console.log("----- start change -----")
+    let total_weight = 0; 
+    if (this.allow_triads) total_weight += this.triad_weight;
+    if (this.allow_sus2) total_weight += this.sus2_weight;
+    if (this.allow_sus4) total_weight += this.sus4_weight;
+    if (this.allow_sevenths) total_weight += this.sevenths_weight;
+
+    console.log(`total_weight = ${total_weight}`)
+
+
+
+    let ele = document.getElementById("Triads");
+    if (ele) {
+      if (this.allow_triads) {
+        const width = 100*this.triad_weight/total_weight;
+        ele.style.width = ''+ width + '%'
+        console.log(`set triads = ${width}`)
+      } else {
+        ele.style.width = '0';
+        console.log(`set triads = 0`)
+      }
+    }
+
+    ele = document.getElementById("Sus2");
+    if (ele) {
+      if (this.allow_sus2) {
+        const width = 100*this.sus2_weight/total_weight;
+        ele.style.width = ''+ width + '%'
+        console.log(`set sus2 = ${width}`)
+      } else {
+        ele.style.width = '0';
+        console.log(`set sus2 = 0`)
+      }
+    }
+
+    ele = document.getElementById("Sus4");
+    if (ele) {
+      if (this.allow_sus4) {
+        const width = 100*this.sus4_weight/total_weight;
+        ele.style.width = ''+ width + '%'
+        console.log(`set sus4 = ${width}`)
+      } else {
+        ele.style.width = '0';
+        console.log(`set sus4 = 0`)
+      }
+    }
+
+    ele = document.getElementById("7ths");
+    if (ele) {
+      if (this.allow_sevenths) {
+        const width = 100*this.sevenths_weight/total_weight;
+        ele.style.width = ''+ width + '%'
+        console.log(`set sevenths = ${width}`)
+      } else {
+        ele.style.width = '0';
+        console.log(`set sevenths = 0`)
+      }
+    }
+
+  }
+
   range_mode_change() {
     this.count_range_mode = ! this.count_range_mode;
 
@@ -223,6 +287,14 @@ export class RandomChordsComponent implements OnInit {
       }
 
     }
+  }
+
+  yesno_slider_ticks(value : number) : string {
+    if (value <= 1.5 ) return 'rare';
+    if (value < 3) return 'less';
+    if (value === 3) return '50/50';
+    if (value <= 4.5) return 'more';
+    return 'lots';
   }
 
   get chord_count_max() : number {

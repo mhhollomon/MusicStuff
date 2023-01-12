@@ -81,36 +81,42 @@
 <div class="ma2 chord-type-container" >
     <mat-label class="mr2 mt2 mhh-mat-label">Chord Types</mat-label>
     <div class="chord-type-checkbox-container">
-        <div>
-            <mat-checkbox [(ngModel)]="allow_triads" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
+        <div style="background-color: #ffdddd">
+            <mat-checkbox [(ngModel)]="allow_triads" (change)="slide_value_change()" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_triads" matTooltip="Set the relative weighting for triads">
-                <input matSliderThumb [(ngModel)]="triad_weight">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_triads" matTooltip="Set the relative weighting for triads" discrete>
+                <input matSliderThumb [(ngModel)]="triad_weight" (valueChange)="slide_value_change()" (dragEnd)="slide_value_change()">
             </mat-slider>
         </div>
 
-        <div>
-            <mat-checkbox [(ngModel)]="allow_sus2" matTooltip="Allow sus2 chords to be generated">Sus2</mat-checkbox>
+        <div style="background-color: #ddddff">
+            <mat-checkbox [(ngModel)]="allow_sus2" (change)="slide_value_change()" matTooltip="Allow sus2 chords to be generated">Sus2</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus2" matTooltip="Set the relative weighting for sus2">
-                <input matSliderThumb [(ngModel)]="sus2_weight">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus2" matTooltip="Set the relative weighting for sus2" discrete>
+                <input matSliderThumb [(ngModel)]="sus2_weight" (valueChange)="slide_value_change()" (dragEnd)="slide_value_change()">
             </mat-slider>
         </div>
 
-        <div>
-            <mat-checkbox [(ngModel)]="allow_sus4" matTooltip="Allow sus4 chords to be generated">Sus4</mat-checkbox>
+        <div style="background-color: #ddffdd">
+            <mat-checkbox [(ngModel)]="allow_sus4" (change)="slide_value_change()" matTooltip="Allow sus4 chords to be generated">Sus4</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus4" matTooltip="Set the relative weighting for sus4">
-                <input matSliderThumb [(ngModel)]="sus4_weight">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus4" matTooltip="Set the relative weighting for sus4" discrete>
+                <input matSliderThumb [(ngModel)]="sus4_weight" (valueChange)="slide_value_change()" (dragEnd)="slide_value_change()">
             </mat-slider>
         </div>
 
-        <div>
-            <mat-checkbox [(ngModel)]="allow_sevenths" matTooltip="Allow 7th chords to be generated">7ths</mat-checkbox>
+        <div style="background-color: #fcfcdd">
+            <mat-checkbox [(ngModel)]="allow_sevenths" (change)="slide_value_change()" matTooltip="Allow 7th chords to be generated">7ths</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sevenths" matTooltip="Set the relative weighting for 7ths">
-                <input matSliderThumb [(ngModel)]="sevenths_weight">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sevenths" matTooltip="Set the relative weighting for 7ths" discrete>
+                <input matSliderThumb [(ngModel)]="sevenths_weight" (valueChange)="slide_value_change()" (dragEnd)="slide_value_change()">
             </mat-slider>
+        </div>
+        <div style="width:200px; height:22px;">
+            <div class="dib" id="Triads" style="background-color: red; width:25%;height: 22px;"></div>
+            <div class="dib" id="Sus2" style="background-color: blue; width:25%;height: 22px;"></div>
+            <div class="dib" id="Sus4" style="background-color: green; width:25%;height: 22px;"></div>
+            <div class="dib" id="7ths" style="background-color: yellow; width:25%;height: 22px;"></div>
         </div>
         
     </div>
@@ -123,14 +129,16 @@
         <div>
             <mat-checkbox [(ngModel)]="allow_ninths" matTooltip="Allow 9th chords to be generated">9ths</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_ninths" matTooltip="Set the relative weighting for 9ths">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_ninths" discrete [displayWith]="yesno_slider_ticks" 
+                            matTooltip="Set the relative weighting for 9ths">
                 <input matSliderThumb [(ngModel)]="ninths_weight">
             </mat-slider>
         </div>
         <div>
-            <mat-checkbox [(ngModel)]="allow_elevenths" matTooltip="Allow 9th chords to be generated">11ths</mat-checkbox>
+            <mat-checkbox [(ngModel)]="allow_elevenths" matTooltip="Allow 11th chords to be generated">11ths</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_elevenths" matTooltip="Set the relative weighting for 11ths">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_elevenths" discrete [displayWith]="yesno_slider_ticks"
+                            matTooltip="Set the relative weighting for 11ths">
                 <input matSliderThumb [(ngModel)]="elevenths_weight">
             </mat-slider>
         </div>
