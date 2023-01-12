@@ -46,25 +46,51 @@ const HELP_TEXT = `
 <tr class="bg-light-gray"><td class="b">Chord Count</td></tr>
 <tr><td>
   How many chords to generate.
-  <p>By default the interface allows you to pick a particluar number of chords
-    to generate. This number must be in the range of 1-6 inclusive if Duplicates = 'None' and 
-    1-30 otherwise.</p>
-  <p> The expander to the right allows you to open the interface so that You can choose range 
-    of numbers and the actual number returned will be  in that range - inclusive.</p>
+  <p>By default the interface allows you to pick a particular number of chords
+    to generate. The maximum allowed depends on the configuration. </p>
+
+    <ul>
+      <li> IF Duplicates = 'None' 
+        <ul>
+          <li> IF more than one of triads, sus2, sus4 are chosen, then : 1-10</li>
+          <li> ELSE 1-6</li>
+        </ul>
+      </li>
+      <li>ELSE 1-30</li>
+    </ul>
+
+  <p> The expander to the right allows you to open the interface so that You can choose a range 
+    of numbers. The actual number of chords returned will be in that range - inclusive.</p>
 </td></tr>
 
 
+<tr class="bg-light-gray"><td class="b">Selection Actions</td></tr>
+<tr>
+  <td>
+      Shortcut actions for chord constraints.
+      <p>Note that thes buttons only change things that are below them - so, Chord Types, Extensions, Inversions.
+      Mode, Duplicates, Chord Count are not affected.
+      <ul>
+        <li><span class="b">All the feels</span> - Turn on all selections. Weight sliders are not affected.</li>
+        <li><span class="b">Reset</span> - Set the selections <i>and sliders</i> to default values.</li>
+      </ul>
+      
+  </td>
+</tr>
 
 <tr class="bg-light-gray"><td class="b">Chord Types</td></tr>
 <tr>
   <td>
       Which chord types are allowed to be generated. At least one chord type must be allowed.
       <p>Underneath each checkbox is a slider which sets the relative weighting of that chord types.</p>
+      <p>The chance that a particular chord type will be chosen is dependent on the relative positions 
+      of all the sliders that are active. So if all are set high (or low), then they are equally likey to
+      be chosen. The different options will have different weights only if the sliders are in different positions.</p>
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
-        <li><span class="b">Sus2</span> - The chord will cotain the second rather than third</li>
-        <li><span class="b">Sus4</span> - The chord will cotain the fourth rather than third</li>
-        <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7) - 7sus2 and 7sus4 is possible if those
+        <li><span class="b">Sus2</span> - The chord will contain the second rather than third</li>
+        <li><span class="b">Sus4</span> - The chord will contain the fourth rather than third</li>
+        <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7) - 7sus2 and 7sus4 are possible if those
             options are also chosen</li>
         </li>
       </ul>
@@ -78,8 +104,8 @@ const HELP_TEXT = `
       These are additional chord tones that can be added "on top" of the chord.
       <p>Underneath each checkbox is a slider which sets the probability that the associated extension
         will be added to the chord. Note that these are independent of each other. When the slider
-        is far to the right, the extension is not very likeyl to be added. Conversely, when the slider
-        is far to the left, the extension is very likely to be added.</p>      
+        is far to the right, the extension is very likey to be added. Conversely, when the slider
+        is far to the left, the extension is not very likely to be added.</p>      
   </td>
 </tr>
 
@@ -90,8 +116,8 @@ const HELP_TEXT = `
       <p>Underneath each checkbox is a slider which sets the probability that the associated inversion
         will be generated.
         Note that these are independent of each other. When the slider
-        is far to the right, the inversion is not very likey. Conversely, when the slider
-        is far to the left, the inversion is very likely to be added.</p> 
+        is far to the right, the inversion is very likey. Conversely, when the slider
+        is far to the left, the inversion is not very likely to be added.</p> 
       <p>At least one inversion must be allowed or an error will be generated</p>
       <p>The default weightings are the weightings that were used by the application before this change.</p>     
   </td>
@@ -248,6 +274,44 @@ export class RandomChordsComponent implements OnInit {
     }
     
     return 6;
+  }
+
+  turn_on_all() {
+    this.allow_triads = true;
+    this.allow_sus2 = true;
+    this.allow_sus4 = true;
+
+    this.allow_sevenths = true;
+    this.allow_ninths = true;
+    this.allow_elevenths = true;
+
+    this.allow_root_inv = true;
+    this.allow_first_inv = true;
+    this.allow_scnd_inv = true;
+  }
+
+  set_defaults() {
+    this.allow_triads = true;
+    this.triad_weight = 3;
+    this.allow_sus2 = false;
+    this.sus2_weight = 3;
+    this.allow_sus4 = false;
+    this.sus4_weight = 3;
+
+    this.allow_sevenths = false;
+    this.sevenths_weight = 3;
+    this.allow_ninths = false;
+    this.ninths_weight = 3;
+    this.allow_elevenths = false;
+    this.elevenths_weight = 3;
+
+    this.allow_root_inv = true;
+    this.root_inv_weight = 5;
+    this.allow_first_inv = true;
+    this.first_inv_weight = 3;
+    this.allow_scnd_inv = true;
+    this.scnd_inv_weight = 2;
+
   }
 
   generate() {
