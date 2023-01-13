@@ -4,6 +4,8 @@ import { DOCUMENT } from '@angular/common';
 
 export type ThemeType = 'dark' | 'light';
 
+const ls_key = 'theme';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +14,17 @@ export class ThemeService {
   private theme : ThemeType = 'light';
   public themeChange = new EventEmitter();
 
-  constructor(@Inject(DOCUMENT) private document: Document) { }
+  constructor(@Inject(DOCUMENT) private document: Document) {
+    const savedValue = localStorage.getItem(ls_key);
+
+    console.log('localStorage = ', savedValue);
+    if (savedValue) {
+      if ( savedValue === 'dark') {
+        this.setTheme('dark');
+      }
+    }
+  }
+
 
   setTheme(newTheme : ThemeType) {
     const darkModeClass = 'darkMode';
@@ -26,6 +38,7 @@ export class ThemeService {
 
       this.theme = newTheme;
       this.themeChange.emit(newTheme);
+      localStorage.setItem(ls_key, this.theme);
     }
 
   }

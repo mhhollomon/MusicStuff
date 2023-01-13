@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
   activeLinkIndex = -1; 
 
   darkMode = false;
-  @HostBinding('class') className = '';
 
   navLinks : nav_link_data[] = [
         {
@@ -69,6 +68,8 @@ export class AppComponent implements OnInit {
             this.current_help_text = data.help_text;
             this.current_help_page = data.page_name;
         })
+
+        this.darkMode = this.theme_service.isDarkMode();
     }
 
     openHelpDialog() {

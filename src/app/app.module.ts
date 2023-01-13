@@ -15,6 +15,7 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
 import { HelpTextEmitterService } from './help-text-emitter.service';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
+import { ThemeService } from './services/theme.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,8 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
   ],
   providers: [
     HelpTextEmitterService,
-    { provide: AudioContext, useClass: AudioContext }
+    { provide: AudioContext, useClass: AudioContext },
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })
