@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DOCUMENT } from '@angular/common';
 
 import { saveAs } from 'file-saver';
 import  * as Midiwriter  from 'midi-writer-js'
@@ -9,8 +12,7 @@ import { RandomChordService, DuplicateControl } from '../random-chord.service';
 import { Chord } from '../utils/music-theory/music-theory';
 import { Note, Scale, ScaleType } from '../utils/music-theory/music-theory';
 import { AudioService } from '../audio.service';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { ThemeService } from '../services/theme.service';
 
 const HELP_TEXT = `
 <p>This page will let you generate a series of random chords</p>
@@ -32,8 +34,8 @@ const HELP_TEXT = `
 
 <tr class="bg-light-gray mhh-mat-label"><td class="b">Duplicates</td></tr>
 <tr>
-  <td>What duplicates are allowed. A chord is considered a "duplicate" if it has the same root note. 
-      Quality (maj, min, etc), type (triad, 7th, etc), and inversion are not considered.
+  <td>What duplicates are allowed. A chord is considered a "duplicate" if it has the same root note and the same
+      chord type (triad, sus2, sus4). extensions and inversion are not considered. 
       <ul>
         <li><span class="b">None</span> - (default) No duplicates are allowed.</li>
         <li><span class="b">Not Adjacent</span> - Duplicates are allowed as long as they are not next to each other in the set of chords</li>
@@ -59,7 +61,7 @@ const HELP_TEXT = `
       <li>ELSE 1-30</li>
     </ul>
 
-  <p> The expander to the right allows you to open the interface so that You can choose a range 
+  <p> The expander to the right allows you to open the interface so that you can choose a range 
     of numbers. The actual number of chords returned will be in that range - inclusive.</p>
 </td></tr>
 
@@ -86,11 +88,13 @@ const HELP_TEXT = `
       <p>The chance that a particular chord type will be chosen is dependent on the relative positions 
       of all the sliders that are active. So if all are set high (or low), then they are equally likey to
       be chosen. The different options will have different weights only if the sliders are in different positions.</p>
+      <p>Since the different silders interact in posiibly non-inutive ways, the background color of the chord type
+      is changed based on how likely it is to be picked. The closer it is to the "neutral" background, the less likely it
+      is to be chosen.
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
         <li><span class="b">Sus2</span> - The chord will contain the second rather than third</li>
         <li><span class="b">Sus4</span> - The chord will contain the fourth rather than third</li>
-        <li><span class="b">7ths</span> - Chords may contain the 7th degree as well (1,3,5,7) - 7sus2 and 7sus4 are possible if those
             options are also chosen</li>
         </li>
       </ul>
@@ -135,6 +139,19 @@ const HELP_TEXT = `
       
   </td>
 </tr>
+
+<tr class="bg-light-gray mhh-mat-label"><td class="b">Limitations/Caveats</td></tr>
+<tr><td>
+<li>3rd Inversion 7ths are never generated.</li>
+<li>For 9ths, the 9th is never "inverted", any inversion is calculated as if the chord was a triad or 7th.</li>
+<li>In <span class="b">Chromatic</span> mode
+    <ul>
+        <li>Dominant 7ths are never generated</li>    
+        <li>The chord qualities are weighted in the ratio they appear in a major scale.</li>  
+    </ul>
+</li> 
+</td></tr> 
+
 </table>
 `;
 const HELP_PAGE_NAME = "Random Chords";
@@ -206,13 +223,20 @@ export class RandomChordsComponent implements OnInit {
     private randomChordService : RandomChordService,
     private audioService : AudioService,
     public error_dialog: MatDialog, 
+    @Inject(DOCUMENT) private document : Document,
+    private help_text : HelpTextEmitterService,
+    private theme_service : ThemeService
 
-    private help_text : HelpTextEmitterService) {
+    ) {
 
   }
 
   ngOnInit(): void {
     this.help_text.setHelp({ help_text : HELP_TEXT, page_name : HELP_PAGE_NAME });
+
+    this.theme_service.themeChange.subscribe(() => { this.linked_slider_change() });
+
+    this.linked_slider_change();
   }
 
 
@@ -311,6 +335,71 @@ export class RandomChordsComponent implements OnInit {
     this.first_inv_weight = 3;
     this.allow_scnd_inv = true;
     this.scnd_inv_weight = 2;
+
+    this.linked_slider_change();
+
+  }
+
+  linked_slider_change() {
+
+    const base_color = (this.theme_service.isDarkMode() ? 48 : 250);
+    const target_color = (this.theme_service.isDarkMode() ? 127 : 130);
+
+    const total_range = target_color - base_color;
+
+    const disabled_color_string = `rgb(${base_color}, ${base_color}, ${base_color})`
+
+    console.log(`base_color = `, base_color);
+
+    let total_weight = 0; 
+    if (this.allow_triads) total_weight += this.triad_weight;
+    if (this.allow_sus2) total_weight += this.sus2_weight;
+    if (this.allow_sus4) total_weight += this.sus4_weight;
+
+    console.log(`total_weight = ${total_weight}`)
+
+
+
+    let ele = document.getElementById("Triads");
+    if (ele) {
+      if (this.allow_triads) {
+        const color_change_amt = total_range * this.triad_weight/total_weight;
+        const newColor = Math.floor(base_color + color_change_amt);
+        ele.style.backgroundColor = `rgb(${newColor}, ${newColor}, ${newColor})`
+        console.log(`set triads = ${newColor}`)
+      } else {
+        ele.style.backgroundColor = disabled_color_string;
+        console.log(`set triads = ${base_color}`)
+      }
+    }
+
+    ele = document.getElementById("Sus2");
+    if (ele) {
+      if (this.allow_sus2) {
+        const color_change_amt = total_range * this.sus2_weight/total_weight;
+        const newColor = Math.floor(base_color + color_change_amt);
+        ele.style.backgroundColor = `rgb(${newColor}, ${newColor}, ${newColor})`
+        console.log(`set sus2 = ${newColor}`)
+      } else {
+        ele.style.backgroundColor = disabled_color_string;
+        console.log(`set sus2 = ${base_color}`)
+      }
+    }
+
+    ele = document.getElementById("Sus4");
+    if (ele) {
+      if (this.allow_sus4) {
+        const color_change_amt = total_range * this.sus4_weight/total_weight;
+        const newColor = Math.floor(base_color + color_change_amt);
+        ele.style.backgroundColor = `rgb(${newColor}, ${newColor}, ${newColor})`
+        console.log(`set sus4 = ${newColor}`)
+      } else {
+        ele.style.backgroundColor = disabled_color_string;
+        console.log(`set sus4 = ${base_color}`)
+      }
+    }
+
+
 
   }
 

@@ -87,29 +87,29 @@
 </div>
 <!-- Chord Type Selection -->
 <div class="ma2 chord-type-container" >
-    <mat-label class="mr2 mt2 mhh-mat-label">Chord Types</mat-label>
+    <mat-label id="chord-type-label" class="mr2 mt2 mhh-mat-label">Chord Types</mat-label>
     <div class="chord-type-checkbox-container">
-        <div>
-            <mat-checkbox [(ngModel)]="allow_triads" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
+        <div id="Triads">
+            <mat-checkbox [(ngModel)]="allow_triads" (change)="linked_slider_change()" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5" [disabled]="!allow_triads" matTooltip="Set the relative weighting for triads" discrete>
-                <input matSliderThumb [(ngModel)]="triad_weight">
+            <mat-slider min="1" max="5" step="0.5" [disabled]="!allow_triads" matTooltip="Set the relative weighting for triads">
+                <input matSliderThumb [(ngModel)]="triad_weight" (valueChange)="linked_slider_change()" (dragEnd)="linked_slider_change()">
             </mat-slider>
         </div>
 
-        <div>
-            <mat-checkbox [(ngModel)]="allow_sus2" matTooltip="Allow sus2 chords to be generated">Sus2</mat-checkbox>
+        <div id="Sus2">
+            <mat-checkbox [(ngModel)]="allow_sus2" (change)="linked_slider_change()" matTooltip="Allow sus2 chords to be generated">Sus2</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus2" matTooltip="Set the relative weighting for sus2" discrete>
-                <input matSliderThumb [(ngModel)]="sus2_weight">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus2" matTooltip="Set the relative weighting for sus2">
+                <input matSliderThumb [(ngModel)]="sus2_weight" (valueChange)="linked_slider_change()" (dragEnd)="linked_slider_change()">
             </mat-slider>
         </div>
 
-        <div>
-            <mat-checkbox [(ngModel)]="allow_sus4" matTooltip="Allow sus4 chords to be generated">Sus4</mat-checkbox>
+        <div id="Sus4">
+            <mat-checkbox [(ngModel)]="allow_sus4" (change)="linked_slider_change()" matTooltip="Allow sus4 chords to be generated">Sus4</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus4" matTooltip="Set the relative weighting for sus4" discrete>
-                <input matSliderThumb [(ngModel)]="sus4_weight">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus4" matTooltip="Set the relative weighting for sus4">
+                <input matSliderThumb [(ngModel)]="sus4_weight" (valueChange)="linked_slider_change()" (dragEnd)="linked_slider_change()">
             </mat-slider>
         </div>
 
@@ -260,16 +260,3 @@
         </ng-template>
     </div>
 </div>
-
-<!-- FOOTNOTES -->
-<ul class="mv4 i f6 indent-small">
-    <li>Two chords are consider duplicate if the root notes are the same - inversion and quality are not consulted.</li>
-    <li>3rd Inversion 7ths are never generated.</li>
-    <li>For 9ths, the 9th is never "inverted", any inversion is calculated as if the chord was a triad or 7th.</li>
-    <li>In <span class="b">Chromatic</span> mode
-        <ul class="indent-small">
-            <li>Dominant 7ths are never generated</li>    
-            <li>The chord qualities are weighted in the ratio they appear in a major scale.</li>  
-        </ul>
-    </li>  
-</ul>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HelpTextEmitterService } from './help-text-emitter.service';
-import { DOCUMENT } from '@angular/common';
+import { ThemeService } from './services/theme.service';
 
 
 interface nav_link_data {
@@ -53,7 +53,8 @@ export class AppComponent implements OnInit {
         private router: Router, 
         public dialog: MatDialog, 
         private help_text : HelpTextEmitterService,
-        @Inject(DOCUMENT) private document: Document) {
+        private theme_service : ThemeService
+        ) {
     }
 
     ngOnInit(): void {
@@ -83,12 +84,10 @@ export class AppComponent implements OnInit {
     toggleDarkMode() {
         this.darkMode = ! this.darkMode;
 
-        const darkModeClass = 'darkMode';
-
         if (this.darkMode) {
-            this.document.body.classList.add(darkModeClass);
+            this.theme_service.setTheme('dark');
         } else {
-            this.document.body.classList.remove(darkModeClass);
+            this.theme_service.setTheme('light');
         }
     }
 }

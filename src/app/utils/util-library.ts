@@ -12,3 +12,30 @@ export function range(start : number, end : number) {
     start = Math.floor(start);
     return Array.from({length: (end - start)}, (v, k) => k + start)
 }
+
+
+export function getInheritedBackgroundColor(el : HTMLElement) : string {
+    // get default style for current browser
+    var defaultStyle = getDefaultBackground() // typically "rgba(0, 0, 0, 0)"
+    
+    // get computed color for el
+    var backgroundColor = window.getComputedStyle(el).backgroundColor
+    
+    // if we got a real value, return it
+    if (backgroundColor != defaultStyle) return backgroundColor
+  
+    // if we've reached the top parent el without getting an explicit color, return default
+    if (!el.parentElement) return defaultStyle
+    
+    // otherwise, recurse and try again on parent element
+    return getInheritedBackgroundColor(el.parentElement)
+  }
+  
+  function getDefaultBackground() {
+    // have to add to the document in order to use getComputedStyle
+    var div = document.createElement("div")
+    document.head.appendChild(div)
+    var bg = window.getComputedStyle(div).backgroundColor
+    document.head.removeChild(div)
+    return bg
+  }
