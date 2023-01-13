@@ -250,7 +250,12 @@
     <div class="chord-container ml3 pb3">
         <ng-template ngFor let-c [ngForOf]="chords">
             <div class="chord-name mv2">
-                <button class="dif" matTooltip="Play the chord through your speakers or headphones" (click)="play_chord(c)" mat-mini-fab>>></button>
+                <button class="dif material-symbols-outlined"
+                            matTooltip="Play the chord through your speakers or headphones" (click)="play_chord(c)" mat-mini-fab>
+                    <mat-icon>
+                        play_arrow
+                    </mat-icon>
+                </button>
                 <span class="dif">{{c.computeNameDisplay()}}</span>
             </div>
             <div class="chord-tones mv2 mr1" *ngIf="show_chord_tones">

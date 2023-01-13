@@ -312,6 +312,8 @@ export class RandomChordsComponent implements OnInit {
     this.allow_root_inv = true;
     this.allow_first_inv = true;
     this.allow_scnd_inv = true;
+    
+    this.linked_slider_change();
   }
 
   set_defaults() {
