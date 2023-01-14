@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 
 const HELP_TEXT = `
-<h2>Go check out <a href="https://mhhollomon.github.io/RachGen/">RachGen</a> instead
+<h2>Go check out <a class="mhh-mat-label" href="https://mhhollomon.github.io/RachGen/">RachGen</a> instead
 `;
 const HELP_PAGE_NAME = "Random Chords";
 
