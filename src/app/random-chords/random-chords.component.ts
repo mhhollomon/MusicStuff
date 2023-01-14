@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DOCUMENT } from '@angular/common';
 
 import { saveAs } from 'file-saver';
 import  * as Midiwriter  from 'midi-writer-js'
@@ -9,10 +8,9 @@ import  * as Midiwriter  from 'midi-writer-js'
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 import {ScaleService } from '../scale.service';
 import { RandomChordService, DuplicateControl } from '../random-chord.service';
-import { Chord } from '../utils/music-theory/music-theory';
+import { Chord, ChordType, ExtensionType, InversionType } from '../utils/music-theory/music-theory';
 import { Note, Scale, ScaleType } from '../utils/music-theory/music-theory';
 import { AudioService } from '../audio.service';
-import { ThemeService } from '../services/theme.service';
 import { sleep } from '../utils/util-library';
 
 const HELP_TEXT = `
@@ -87,11 +85,9 @@ const HELP_TEXT = `
       Which chord types are allowed to be generated. At least one chord type must be allowed.
       <p>Underneath each checkbox is a slider which sets the relative weighting of that chord types.</p>
       <p>The chance that a particular chord type will be chosen is dependent on the relative positions 
-      of all the sliders that are active. So if all are set high (or low), then they are equally likey to
+      of all the sliders that are active. So if all are set high (or low), then they are equally likely to
       be chosen. The different options will have different weights only if the sliders are in different positions.</p>
-      <p>Since the different silders interact in posiibly non-inutive ways, the background color of the chord type
-      is changed based on how likely it is to be picked. The closer it is to the "neutral" background, the less likely it
-      is to be chosen.
+      <p>The sliders will show you in real-time the probability that its option will be picked.</p>
       <ul>
         <li><span class="b">Triads</span> - (default) Chords can be the "basic" triads (1,3,5)</li>
         <li><span class="b">Sus2</span> - The chord will contain the second rather than third</li>
@@ -117,12 +113,14 @@ const HELP_TEXT = `
 <tr class="bg-light-gray mhh-mat-label"><td class="b">Inversions</td></tr>
 <tr>
   <td>
-      The chord will be inverted - the lowest note will something other than the root of the chord
+      The chord will be inverted - the lowest note will be something other than the root of the chord.
       <p>Underneath each checkbox is a slider which sets the probability that the associated inversion
-        will be generated.
-        Note that these are independent of each other. When the slider
-        is far to the right, the inversion is very likey. Conversely, when the slider
-        is far to the left, the inversion is not very likely to be added.</p> 
+        will be generated.</p>
+      <p>The chance that a particular inversion will be chosen is dependent on the relative positions 
+      of all the sliders that are active. So if all are set high (or low), then they are equally likely to
+      be chosen. The different options will have different weights only if the sliders are in different positions.</p>
+      <p>The sliders will show you in real-time the probability that its option will be picked.</p>
+  
       <p>At least one inversion must be allowed or an error will be generated</p>
       <p>The default weightings are the weightings that were used by the application before this change.</p>     
   </td>
@@ -224,9 +222,7 @@ export class RandomChordsComponent implements OnInit {
     private randomChordService : RandomChordService,
     private audioService : AudioService,
     public error_dialog: MatDialog, 
-    @Inject(DOCUMENT) private document : Document,
     private help_text : HelpTextEmitterService,
-    private theme_service : ThemeService
 
     ) {
 
@@ -234,11 +230,25 @@ export class RandomChordsComponent implements OnInit {
 
   ngOnInit(): void {
     this.help_text.setHelp({ help_text : HELP_TEXT, page_name : HELP_PAGE_NAME });
-
-    this.theme_service.themeChange.subscribe(() => { this.linked_slider_change() });
-
-    this.linked_slider_change();
   }
+
+  get chord_count_max() : number {
+    if (this.duplicates !== 'none') {
+      return 30;
+    }
+
+    let types = 0;
+    if (this.allow_triads) types += 1;
+    if (this.allow_sus2) types += 1;
+    if (this.allow_sus4) types += 1;
+
+    if (types > 1) {
+      return 10;
+    }
+    
+    return 6;
+  }
+
 
 
   getPanelTitle() : string {
@@ -276,6 +286,8 @@ export class RandomChordsComponent implements OnInit {
     }
   }
 
+  /********   CHORD LOCKING ***************/
+
   lock_chord(index : number) : void {
     if (this.chords.length > index) {
       this.chords[index].keep = ! this.chords[index].keep;
@@ -303,30 +315,124 @@ export class RandomChordsComponent implements OnInit {
     return false;
   }
 
+
   yesno_slider_ticks(value : number) : string {
-    if (value <= 1.5 ) return 'rare';
-    if (value < 3) return 'less';
-    if (value === 3) return '50/50';
-    if (value <= 4.5) return 'more';
-    return 'lots';
+    return '' + value + '%';
   }
 
-  get chord_count_max() : number {
-    if (this.duplicates !== 'none') {
-      return 30;
+
+  /************** INVERSION SLIDER FUNCTIONS  **************/
+
+  inversion_slider_ticks(slider : InversionType, value : number) : string {
+
+    let total_weight = 0;
+
+    if (slider === 'root') {
+      total_weight += value;
+    } else if (this.allow_root_inv) {
+      total_weight += this.root_inv_weight;
     }
 
-    let types = 0;
-    if (this.allow_triads) types += 1;
-    if (this.allow_sus2) types += 1;
-    if (this.allow_sus4) types += 1;
 
-    if (types > 1) {
-      return 10;
+    if (slider === 'first') {
+      total_weight += value;
+    } else if (this.allow_first_inv) {
+      total_weight += this.first_inv_weight;
     }
-    
-    return 6;
+
+
+    if (slider === 'second') {
+      total_weight += value;
+    } else if (this.allow_scnd_inv) {
+      total_weight += this.scnd_inv_weight;
+    }
+
+    const weight = Math.floor(100*value/total_weight);
+
+    return '' + weight + '%';
+
   }
+
+  mk_inv_slider_func(inv : InversionType) {
+    return (value : number)  => { return this.inversion_slider_ticks(inv, value); }
+  }
+
+
+  // This is to get around a problem that the value
+  // labels (produced by chord_type_slider_ticks)
+  // is cached by the slider itself. So when turn on
+  // (or off) an option, it doesn't update the label until
+  // you move the slider.
+  // This basically artifically moves the slider by updating
+  // the model.
+  inv_checkbox_change() {
+    if (this.allow_root_inv) {
+      this.root_inv_weight += 0.0001;
+    }
+    if (this.allow_first_inv) {
+      this.first_inv_weight += 0.0001;
+    }
+    if (this.allow_scnd_inv) {
+      this.scnd_inv_weight += 0.0001;
+    }
+  }
+
+  /************** CHORRD TYPE  SLIDER FUNCTIONS  **************/
+
+  chord_type_slider_ticks(slider : ChordType, value : number) : string {
+
+    let total_weight = 0;
+
+    if (slider === 'triad') {
+      total_weight += value;
+    } else if (this.allow_triads) {
+      total_weight += this.triad_weight;
+    }
+
+
+    if (slider === 'sus2') {
+      total_weight += value;
+    } else if (this.allow_sus2) {
+      total_weight += this.sus2_weight;
+    }
+
+
+    if (slider === 'sus4') {
+      total_weight += value;
+    } else if (this.allow_sus4) {
+      total_weight += this.sus4_weight;
+    }
+
+    const weight = Math.floor(100*value/total_weight);
+
+    return '' + weight + '%';
+
+  }
+
+  mk_ct_slider_func(ct : ChordType) {
+    return (value : number)  => { return this.chord_type_slider_ticks(ct, value); }
+  }
+
+
+  // This is to get around a problem that the value
+  // labels (produced by chord_type_slider_ticks)
+  // is cached by the slider itself. So when turn on
+  // (or off) an option, it doesn't update the label until
+  // you move the slider.
+  // This basically artifically moves the slider by updating
+  // the model.
+  ct_checkbox_change() {
+    if (this.allow_triads) {
+      this.triad_weight += 0.0001;
+    }
+    if (this.allow_sus2) {
+      this.sus2_weight += 0.0001;
+    }
+    if (this.allow_sus4) {
+      this.sus4_weight += 0.0001;
+    }
+  }
+
 
   turn_on_all() {
     this.allow_triads = true;
@@ -341,7 +447,6 @@ export class RandomChordsComponent implements OnInit {
     this.allow_first_inv = true;
     this.allow_scnd_inv = true;
     
-    this.linked_slider_change();
   }
 
   set_defaults() {
@@ -366,72 +471,8 @@ export class RandomChordsComponent implements OnInit {
     this.allow_scnd_inv = true;
     this.scnd_inv_weight = 2;
 
-    this.linked_slider_change();
-
   }
 
-  linked_slider_change() {
-
-    const base_color = (this.theme_service.isDarkMode() ? 48 : 250);
-    const target_color = (this.theme_service.isDarkMode() ? 127 : 130);
-
-    const total_range = target_color - base_color;
-
-    const disabled_color_string = `rgb(${base_color}, ${base_color}, ${base_color})`
-
-    console.log(`base_color = `, base_color);
-
-    let total_weight = 0; 
-    if (this.allow_triads) total_weight += this.triad_weight;
-    if (this.allow_sus2) total_weight += this.sus2_weight;
-    if (this.allow_sus4) total_weight += this.sus4_weight;
-
-    console.log(`total_weight = ${total_weight}`)
-
-
-
-    let ele = document.getElementById("Triads");
-    if (ele) {
-      if (this.allow_triads) {
-        const color_change_amt = total_range * this.triad_weight/total_weight;
-        const newColor = Math.floor(base_color + color_change_amt);
-        ele.style.backgroundColor = `rgb(${newColor}, ${newColor}, ${newColor})`
-        console.log(`set triads = ${newColor}`)
-      } else {
-        ele.style.backgroundColor = disabled_color_string;
-        console.log(`set triads = ${base_color}`)
-      }
-    }
-
-    ele = document.getElementById("Sus2");
-    if (ele) {
-      if (this.allow_sus2) {
-        const color_change_amt = total_range * this.sus2_weight/total_weight;
-        const newColor = Math.floor(base_color + color_change_amt);
-        ele.style.backgroundColor = `rgb(${newColor}, ${newColor}, ${newColor})`
-        console.log(`set sus2 = ${newColor}`)
-      } else {
-        ele.style.backgroundColor = disabled_color_string;
-        console.log(`set sus2 = ${base_color}`)
-      }
-    }
-
-    ele = document.getElementById("Sus4");
-    if (ele) {
-      if (this.allow_sus4) {
-        const color_change_amt = total_range * this.sus4_weight/total_weight;
-        const newColor = Math.floor(base_color + color_change_amt);
-        ele.style.backgroundColor = `rgb(${newColor}, ${newColor}, ${newColor})`
-        console.log(`set sus4 = ${newColor}`)
-      } else {
-        ele.style.backgroundColor = disabled_color_string;
-        console.log(`set sus4 = ${base_color}`)
-      }
-    }
-
-
-
-  }
 
   generate() {
 

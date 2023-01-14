@@ -12,6 +12,10 @@ const qualityToScaleType : { [key : string] : ScaleType } = {
   'aug' : 'augmented'
 }
 
+function yesno100(yesWeight : number) : boolean {
+  return yesno(yesWeight, 100-yesWeight);
+}
+
 
 /* This is for Chromatic generation - much simpler */
 
@@ -109,6 +113,7 @@ export class ChordSequenceBuilder {
     return this;
   }
 
+  // The weight is presumed to be out of 100
   addExtension (ext : ExtensionType, weight : number) : ChordSequenceBuilder {
 
     this.extensions[ext] = weight;
@@ -271,19 +276,21 @@ export class ChordSequenceBuilder {
 
 
     if (this.extensions['7th']) {
-      chord.addChordTone(7, scale[degreeToScale(rootDegree, 7)]);
-      chord.extensions['7th'] = true;
+      if (yesno100(this.extensions['7th'])) {
+        chord.addChordTone(7, scale[degreeToScale(rootDegree, 7)]);
+        chord.extensions['7th'] = true;
+      }
     }
     
     if (this.extensions['9th']) {
-      if (yesno(this.extensions['9th'], 3)) {
+      if (yesno100(this.extensions['9th'])) {
         chord.addChordTone(9, scale[degreeToScale(rootDegree, 9)]);
         chord.extensions['9th'] = true;
       }
     }
 
     if (this.extensions['11th']) {
-      if (yesno(this.extensions['11th'], 3)) {
+      if (yesno100(this.extensions['11th'])) {
         chord.addChordTone(11, scale[degreeToScale(rootDegree, 11)]);
         chord.extensions['11th'] = true;
       }

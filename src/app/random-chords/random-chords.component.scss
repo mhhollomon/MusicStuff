@@ -1,11 +1,18 @@
 .chord-container {
     display : grid;
-    grid-template-columns: [lockbutton] 3rem [chordname] minmax(5rem, 15rem) [tones] minmax(8rem, 1fr) [info] 5rem;
+    grid-template-columns: [lockbutton] 3rem [playbutton] 2rem [chordname] minmax(5rem, 15rem) [tones] minmax(8rem, 1fr) [info] 5rem;
+    column-gap: 0.5rem;
 }
 
 .chord-lock {
     grid-column-start: lockbutton;
     align-self: center;
+}
+
+.chord-play {
+    grid-column-start: playbutton;
+    align-self: center;
+    justify-self: center;
 }
 
 .chord-name {

@@ -7,7 +7,9 @@
         <div class="general-params-item">
             <mat-form-field>
                 <mat-label>Mode</mat-label>
-                <mat-select [(ngModel)]="mode" [disabled]="any_chords_locked()" (selectionChange)="mode_change()" >
+                <mat-select [(ngModel)]="mode" [disabled]="any_chords_locked()" 
+                        [matTooltip]="any_chords_locked() ? 'Disabled due chords being locked' : 'Set the key mode'"
+                        (selectionChange)="mode_change()" >
                     <mat-option value="Diatonic">Diatonic</mat-option>
                     <mat-option value="Chromatic">Chromatic</mat-option>
                 </mat-select>
@@ -90,26 +92,29 @@
     <mat-label id="chord-type-label" class="mr2 mt2 mhh-mat-label">Chord Types</mat-label>
     <div class="chord-type-checkbox-container">
         <div id="Triads">
-            <mat-checkbox [(ngModel)]="allow_triads" (change)="linked_slider_change()" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
+            <mat-checkbox [(ngModel)]="allow_triads" (change)="ct_checkbox_change()" matTooltip="Allow Triads to be generated">Triads</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5" [disabled]="!allow_triads" matTooltip="Set the relative weighting for triads">
-                <input matSliderThumb [(ngModel)]="triad_weight" (valueChange)="linked_slider_change()" (dragEnd)="linked_slider_change()">
+            <mat-slider min="1" max="5" step="0.25" [disabled]="!allow_triads" discrete [displayWith]="mk_ct_slider_func('triad')"
+                    matTooltip="Set the relative weighting for triads">
+                <input matSliderThumb [(ngModel)]="triad_weight">
             </mat-slider>
         </div>
 
         <div id="Sus2">
-            <mat-checkbox [(ngModel)]="allow_sus2" (change)="linked_slider_change()" matTooltip="Allow sus2 chords to be generated">Sus2</mat-checkbox>
+            <mat-checkbox [(ngModel)]="allow_sus2"  (change)="ct_checkbox_change()" matTooltip="Allow sus2 chords to be generated">Sus2</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus2" matTooltip="Set the relative weighting for sus2">
-                <input matSliderThumb [(ngModel)]="sus2_weight" (valueChange)="linked_slider_change()" (dragEnd)="linked_slider_change()">
+            <mat-slider min="1" max="5" step="0.25"  [disabled]="!allow_sus2" discrete [displayWith]="mk_ct_slider_func('sus2')"
+                    matTooltip="Set the relative weighting for sus2">
+                <input matSliderThumb [(ngModel)]="sus2_weight">
             </mat-slider>
         </div>
 
         <div id="Sus4">
-            <mat-checkbox [(ngModel)]="allow_sus4" (change)="linked_slider_change()" matTooltip="Allow sus4 chords to be generated">Sus4</mat-checkbox>
+            <mat-checkbox [(ngModel)]="allow_sus4" (change)="ct_checkbox_change()" matTooltip="Allow sus4 chords to be generated">Sus4</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sus4" matTooltip="Set the relative weighting for sus4">
-                <input matSliderThumb [(ngModel)]="sus4_weight" (valueChange)="linked_slider_change()" (dragEnd)="linked_slider_change()">
+            <mat-slider min="1" max="5" step="0.25"  [disabled]="!allow_sus4" discrete [displayWith]="mk_ct_slider_func('sus4')"
+                    matTooltip="Set the relative weighting for sus4">
+                <input matSliderThumb [(ngModel)]="sus4_weight">
             </mat-slider>
         </div>
 
@@ -123,7 +128,7 @@
         <div>
             <mat-checkbox [(ngModel)]="allow_sevenths" matTooltip="Allow 7th chords to be generated">7ths</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_sevenths" discrete [displayWith]="yesno_slider_ticks"
+            <mat-slider min="20" max="80" step="5"  [disabled]="!allow_sevenths" discrete [displayWith]="yesno_slider_ticks"
                             matTooltip="Set the relative weighting for 7ths">
                 <input matSliderThumb [(ngModel)]="sevenths_weight">
             </mat-slider>
@@ -131,7 +136,7 @@
         <div>
             <mat-checkbox [(ngModel)]="allow_ninths" matTooltip="Allow 9th chords to be generated">9ths</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_ninths" discrete [displayWith]="yesno_slider_ticks" 
+            <mat-slider min="20" max="80" step="5"  [disabled]="!allow_ninths" discrete [displayWith]="yesno_slider_ticks" 
                             matTooltip="Set the relative weighting for 9ths">
                 <input matSliderThumb [(ngModel)]="ninths_weight">
             </mat-slider>
@@ -139,7 +144,7 @@
         <div>
             <mat-checkbox [(ngModel)]="allow_elevenths" matTooltip="Allow 11th chords to be generated">11ths</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_elevenths" discrete [displayWith]="yesno_slider_ticks"
+            <mat-slider min="20" max="80" step="5"  [disabled]="!allow_elevenths" discrete [displayWith]="yesno_slider_ticks"
                             matTooltip="Set the relative weighting for 11ths">
                 <input matSliderThumb [(ngModel)]="elevenths_weight">
             </mat-slider>
@@ -154,21 +159,24 @@
         <div>
             <mat-checkbox [(ngModel)]="allow_root_inv" matTooltip="Allow root inversions to be generated">Root</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_root_inv" matTooltip="Set the relative weighting for root inversions">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_root_inv" discrete [displayWith]="mk_inv_slider_func('root')"
+                        matTooltip="Set the relative weighting for root inversions">
                 <input matSliderThumb [(ngModel)]="root_inv_weight">
             </mat-slider>
         </div>
         <div>
             <mat-checkbox [(ngModel)]="allow_first_inv" matTooltip="Allow first inversions to be generated">First Inv</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_first_inv" matTooltip="Set the relative weighting for first inversios">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_first_inv" discrete [displayWith]="mk_inv_slider_func('first')"
+                    matTooltip="Set the relative weighting for first inversios">
                 <input matSliderThumb [(ngModel)]="first_inv_weight">
             </mat-slider>
         </div>
         <div>
             <mat-checkbox [(ngModel)]="allow_scnd_inv" matTooltip="Allow second inversions to be generated">Second Inv</mat-checkbox>
             <br>
-            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_scnd_inv" matTooltip="Set the relative weighting for second inversios">
+            <mat-slider min="1" max="5" step="0.5"  [disabled]="!allow_scnd_inv" discrete [displayWith]="mk_inv_slider_func('second')"
+                        matTooltip="Set the relative weighting for second inversios">
                 <input matSliderThumb [(ngModel)]="scnd_inv_weight">
             </mat-slider>
         </div>
@@ -257,7 +265,7 @@
                 <mat-icon>lock_reset</mat-icon>
             </button>
         </div>
-        <div class="chord-name">
+        <div class="chord-play">
             <button mat-icon-button class="material-symbols-outlined" (click)="play_all_chords()"
                     *ngIf="show_chords" matTooltip="play all chords">
                 <mat-icon>fast_forward</mat-icon>
@@ -265,20 +273,24 @@
         </div>
 
         <ng-template ngFor let-c [ngForOf]="chords" let-i="index">
-            <div class="chord-lock"><button mat-icon-button class="chord-lock" [color]="chord_locked(i) ? 'accent' : ''" 
+            <div class="chord-lock">
+                <button mat-icon-button class="chord-lock" [color]="chord_locked(i) ? 'accent' : ''" 
                         class="material-symbols-outlined" matTooltip="Lock chord" (click)="lock_chord(i)">
-                <mat-icon>{{chord_locked(i) ? 'lock' : 'lock_open'}}</mat-icon>
-            </button></div>
-            <div class="chord-name mv2">
+                    <mat-icon>{{chord_locked(i) ? 'lock' : 'lock_open'}}</mat-icon>
+                </button>
+            </div>
+            <div class="chord-play">
                 <button class="dif material-symbols-outlined"
                             matTooltip="Play the chord through your speakers or headphones" (click)="play_chord(c)" mat-mini-fab>
                     <mat-icon>
                         play_arrow
                     </mat-icon>
                 </button>
+            </div>
+            <div class="chord-name">
                 <span class="dif">{{c.computeNameDisplay()}}</span>
             </div>
-            <div class="chord-tones mv2 mr1" *ngIf="show_chord_tones">
+            <div class="chord-tones" *ngIf="show_chord_tones">
                 <span class="dib mh2" *ngFor="let t of c.invertedChordTones()" >{{t.noteDisplay()}}</span>
             </div>
             <span class="chord-info mh2" *ngIf="show_chord_tones" >{{c.chordType}} {{c.inversionAbbrev()}}</span>
