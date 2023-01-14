@@ -7,7 +7,7 @@
         <div class="general-params-item">
             <mat-form-field>
                 <mat-label>Mode</mat-label>
-                <mat-select [(ngModel)]="mode" (selectionChange)="mode_change()" >
+                <mat-select [(ngModel)]="mode" [disabled]="any_chords_locked()" (selectionChange)="mode_change()" >
                     <mat-option value="Diatonic">Diatonic</mat-option>
                     <mat-option value="Chromatic">Chromatic</mat-option>
                 </mat-select>
@@ -36,19 +36,19 @@
             <div class="chord-count-input">
                 <mat-form-field  class="small-input">
                     <mat-label>Min Count</mat-label>
-                    <input name="chord_count" matNativeControl type="number"
+                    <input name="chord_count" matNativeControl type="number" [disabled]="any_chords_locked()"
                         [max]="chord_count_max" min="1" required [(ngModel)]="min_chord_count" #min_count_control="ngModel">
                     <mat-error *ngIf="min_count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
                 </mat-form-field>
                 <mat-form-field class="small-input">
                     <mat-label>Max Count</mat-label>
-                    <input name="chord_count" matNativeControl type="number" 
+                    <input name="chord_count" matNativeControl type="number" [disabled]="any_chords_locked()"
                         [max]="chord_count_max" min="1" required [(ngModel)]="max_chord_count" #max_count_control="ngModel">
                     <mat-error *ngIf="max_count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
                 </mat-form-field>
             </div>
             <div class="chord-count-slider">
-                <mat-slider class="chord-count-slider-width" min="1" [max]="chord_count_max" step="1" 
+                <mat-slider class="chord-count-slider-width" min="1" [max]="chord_count_max" step="1" [disabled]="any_chords_locked()"
                             matTooltip="Set range of number of chords to generate">
                     <input matSliderStartThumb [(ngModel)]="min_chord_count">
                     <input matSliderEndThumb [(ngModel)]="max_chord_count">
@@ -59,7 +59,7 @@
                 <div class="chord-count-input">
                     <mat-form-field>
                         <mat-label>Chord Count</mat-label>
-                        <input name="chord_count" matNativeControl type="number"
+                        <input name="chord_count" matNativeControl type="number" [disabled]="any_chords_locked()"
                             [max]="chord_count_max" min="1" required [(ngModel)]="min_chord_count" #single_min_count_control="ngModel">
                         <mat-error *ngIf="single_min_count_control.invalid">count &lt;{{chord_count_max}} and &gt;1</mat-error>
                     </mat-form-field>
@@ -68,7 +68,7 @@
 
             <!-- Switch range mode -->
             <div class="chord-count-icon">
-                <button mat-mini-fab class="material-symbols-outlined"
+                <button mat-mini-fab class="material-symbols-outlined" [disabled]="any_chords_locked()"
                             matTooltip="Switch to {{ count_range_mode ? 'single' : 'range' }} mode"  
                             (click)="range_mode_change()">
                     <mat-icon>{{count_range_mode ? 'unfold_less' : 'unfold_more'}}</mat-icon>
@@ -217,8 +217,10 @@
 <div class="db mv4 br2 ma2">
     <button  mat-raised-button id="generate_chords_button" color="primary" (click)="generate()">Generate Chords</button>
 </div>
-
-<!-- OUTPUT -->
+<!--
+    --------------------------- OUTPUT ------------------------------------
+-->
+<!--  -->
 <div class="ba bw1 br3 ph2 min-h-2">
     <div class="mt2"></div>
     <!-- Key Information -->
@@ -247,8 +249,26 @@
     </mat-expansion-panel>
 
     <!-- Chord Information -->
-    <div class="chord-container ml3 pb3">
-        <ng-template ngFor let-c [ngForOf]="chords">
+    <div class="chord-container ml1 pb3">
+
+        <div class="chord-lock">
+            <button mat-icon-button class="material-symbols-outlined" (click)="unlock_all_chords()"
+                    *ngIf="show_chords" matTooltip="Unlock all chords">
+                <mat-icon>lock_reset</mat-icon>
+            </button>
+        </div>
+        <div class="chord-name">
+            <button mat-icon-button class="material-symbols-outlined" (click)="play_all_chords()"
+                    *ngIf="show_chords" matTooltip="play all chords">
+                <mat-icon>fast_forward</mat-icon>
+            </button>
+        </div>
+
+        <ng-template ngFor let-c [ngForOf]="chords" let-i="index">
+            <div class="chord-lock"><button mat-icon-button class="chord-lock" [color]="chord_locked(i) ? 'accent' : ''" 
+                        class="material-symbols-outlined" matTooltip="Lock chord" (click)="lock_chord(i)">
+                <mat-icon>{{chord_locked(i) ? 'lock' : 'lock_open'}}</mat-icon>
+            </button></div>
             <div class="chord-name mv2">
                 <button class="dif material-symbols-outlined"
                             matTooltip="Play the chord through your speakers or headphones" (click)="play_chord(c)" mat-mini-fab>

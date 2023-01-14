@@ -1,4 +1,4 @@
-import { Component, HostBinding, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';

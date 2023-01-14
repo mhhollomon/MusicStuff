@@ -13,13 +13,16 @@ export function range(start : number, end : number) {
     return Array.from({length: (end - start)}, (v, k) => k + start)
 }
 
+export async function  sleep(ms : number)  { return new Promise(r => setTimeout(r, ms)); }
+
+
 
 export function getInheritedBackgroundColor(el : HTMLElement) : string {
     // get default style for current browser
-    var defaultStyle = getDefaultBackground() // typically "rgba(0, 0, 0, 0)"
+    const defaultStyle = getDefaultBackground() // typically "rgba(0, 0, 0, 0)"
     
     // get computed color for el
-    var backgroundColor = window.getComputedStyle(el).backgroundColor
+    const backgroundColor = window.getComputedStyle(el).backgroundColor
     
     // if we got a real value, return it
     if (backgroundColor != defaultStyle) return backgroundColor
@@ -33,9 +36,9 @@ export function getInheritedBackgroundColor(el : HTMLElement) : string {
   
   function getDefaultBackground() {
     // have to add to the document in order to use getComputedStyle
-    var div = document.createElement("div")
+    const div = document.createElement("div")
     document.head.appendChild(div)
-    var bg = window.getComputedStyle(div).backgroundColor
+    const bg = window.getComputedStyle(div).backgroundColor
     document.head.removeChild(div)
     return bg
   }

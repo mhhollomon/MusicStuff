@@ -13,6 +13,7 @@ import { Chord } from '../utils/music-theory/music-theory';
 import { Note, Scale, ScaleType } from '../utils/music-theory/music-theory';
 import { AudioService } from '../audio.service';
 import { ThemeService } from '../services/theme.service';
+import { sleep } from '../utils/util-library';
 
 const HELP_TEXT = `
 <p>This page will let you generate a series of random chords</p>
@@ -275,6 +276,33 @@ export class RandomChordsComponent implements OnInit {
     }
   }
 
+  lock_chord(index : number) : void {
+    if (this.chords.length > index) {
+      this.chords[index].keep = ! this.chords[index].keep;
+    }
+  }
+
+  chord_locked(index : number) : boolean {
+    if (this.chords.length > index) {
+      return this.chords[index].keep;
+    }
+
+    return false;
+  }
+
+  unlock_all_chords() {
+    for (const c of this.chords) {
+      c.keep = false;
+    }
+  }
+
+  any_chords_locked() : boolean {
+    for (const c of this.chords) {
+      if (c.keep) return true;
+    }
+    return false;
+  }
+
   yesno_slider_ticks(value : number) : string {
     if (value <= 1.5 ) return 'rare';
     if (value < 3) return 'less';
@@ -472,7 +500,11 @@ export class RandomChordsComponent implements OnInit {
       builder.setDuplicate(this.duplicates)
           .setKey(picked_key);
 
-      this.chords = builder.generate_chords();
+      if (this.any_chords_locked()) {
+        this.chords = builder.generate_chords(this.chords);
+      } else {
+        this.chords = builder.generate_chords();
+      }
 
       this.show_chords = true;
       /*
@@ -499,7 +531,7 @@ export class RandomChordsComponent implements OnInit {
 
   }
 
-  async play_chord(chord : Chord) {
+  async play_chord(chord : Chord, seconds? : number) {
 
     const tones : string[] = [];
     let octave = 3;
@@ -523,8 +555,21 @@ export class RandomChordsComponent implements OnInit {
 
     }
   
-    this.audioService.play_chord(tones);
+    await this.audioService.play_chord(tones, seconds);
 
+    return '';
+
+  }
+
+  async play_all_chords() {
+
+    const beepLength = 0.5;
+    for (const c of this.chords) {
+
+      this.play_chord(c, beepLength);
+
+      await sleep(1000 * 2 * beepLength);
+    }
   }
 
   generate_midi(evnt : Event) {

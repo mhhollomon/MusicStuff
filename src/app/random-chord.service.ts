@@ -123,7 +123,7 @@ export class ChordSequenceBuilder {
     return this;
   }
 
-  generate_chords() : Chord[] {
+  generate_chords(inputChords? : Chord[]) : Chord[] {
 
 
     if (this.chordTypes.length < 1) {
@@ -138,21 +138,32 @@ export class ChordSequenceBuilder {
       Object.keys(this.inversions).map((k, v) => mkch(k as InversionType,v))
     )
 
-    const chord_count = equalWeightedChooser(range(this.min_count, this.max_count+1)).choose();
+    if (inputChords) {
+      this.chordList = inputChords;
+
+      for (let index = 0; index < this.chordList.length; ++index) {
+        if (this.chordList[index].keep == false) {
+          this.chordList[index] = this.find_a_chord(index);
+        }
+      }
 
 
+    } else {
 
-    this.chordList = [];
+      const chord_count = equalWeightedChooser(range(this.min_count, this.max_count+1)).choose();
 
-    for (let index = 0; index < chord_count; ++index) {
-      this.chordList.push(this.find_a_chord());
+      this.chordList = [];
+
+      for (let index = 0; index < chord_count; ++index) {
+        this.chordList.push(this.find_a_chord(index));
+      }
     }
 
     return this.chordList;
   }
 
   /* This tries to find a chord that meets the duplicates criteria */
-  find_a_chord() : Chord {
+  find_a_chord(index : number) : Chord {
 
     let try_again = true;
     let newChord = new Chord();
@@ -162,20 +173,27 @@ export class ChordSequenceBuilder {
       try_again = false;
       attempts -= 1;
 
-      if (attempts < 1) throw Error("Could not create a nonduplicate chord after 300 tries.")
-      if (this.chordList.length > 0) {
-        if (this.duplicates === 'not-adjacent') {
-          if (this.chordList[this.chordList.length-1].isSame(newChord)) {
-            try_again = true;
-          }
-        } else if (this.duplicates === 'none') {
-          for (const c of this.chordList) {
-            if (c.isSame(newChord)) {
+      if (attempts < 1) throw Error("Could not create a nonduplicate chord after 300 tries.");
+
+      if (this.duplicates === 'none') {
+        for (let j = 0; j < this.chordList.length; ++j) {
+          if (j < index || this.chordList[j].keep) {
+            if (this.chordList[j].isSame(newChord)) {
               try_again = true;
             }
           }
         }
-      }
+      } else  if (this.duplicates === 'not-adjacent') {
+        // look to the left
+        if (index > 0 && this.chordList[index-1].isSame(newChord)) {
+          try_again = true;
+
+        //look to the right
+      } else if (index < this.chordList.length-1 && 
+              this.chordList[index+1].keep && this.chordList[index+1].isSame(newChord) ) {
+          try_again = true;
+        }
+      } 
     }
 
     return newChord;

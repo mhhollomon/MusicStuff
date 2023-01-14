@@ -56,11 +56,13 @@ export class AudioService {
     }
   }
 
-   async play_chord(notes : string[]) {
+   async play_chord(notes : string[], seconds? : number) {
 
     if (this.audioContext.state === 'suspended') {
       await this.audioContext.resume();
     }
+
+    seconds = seconds ? seconds : beepLengthInSeconds;
 
     for (let i = 0; i < 4; ++i) {
 
@@ -75,7 +77,8 @@ export class AudioService {
 
     const now = this.audioContext.currentTime;
     this.topgain.gain.setTargetAtTime(1, now, smoothingInterval);
-    this.topgain.gain.setTargetAtTime(0, now + beepLengthInSeconds, smoothingInterval);
+    this.topgain.gain.setTargetAtTime(0, now + seconds, smoothingInterval);
+
   }
   
 

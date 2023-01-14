@@ -1,6 +1,11 @@
 .chord-container {
     display : grid;
-    grid-template-columns: [chordname] minmax(5rem, 15rem) [tones] minmax(8rem, 1fr) [info] 5rem;
+    grid-template-columns: [lockbutton] 3rem [chordname] minmax(5rem, 15rem) [tones] minmax(8rem, 1fr) [info] 5rem;
+}
+
+.chord-lock {
+    grid-column-start: lockbutton;
+    align-self: center;
 }
 
 .chord-name {
@@ -28,7 +33,7 @@
 
 .chord-panel-title-container {
     display : grid;
-    grid-template-columns: [key] 5rem [buttons] 1fr;
+    grid-template-columns: [lockbutton] 3rem [key] 5rem [buttons] 1fr;
     width : 100%;
 }
 
@@ -39,7 +44,6 @@
     grid-column-start: key;
     align-self: center;
 }
-
 
 // Force the action buttons to move to the
 // far right.

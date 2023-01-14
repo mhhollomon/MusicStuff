@@ -20,6 +20,9 @@ export class Chord {
     chordType : ChordType;
     chordTones : ChordToneList = {};
     extensions : ExtensionFlags = {'7th' : false, '9th' : false, '11th' : false};
+
+    // not used interally by the class. up to the UI to handle
+    keep = false;
   
     constructor(root  = new Note('C'),  chordType : ChordType = 'triad', inversion : InversionType = 'root') {
       this.root = root;
