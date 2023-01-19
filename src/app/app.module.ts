@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { CompositionIdeaComponent } from './composition-idea/composition-idea.component';
-import { RandomChordsComponent } from './random-chords/random-chords.component';
 import { MusicResourcesComponent } from './music-resources/music-resources.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BassScalesComponent } from './bass-scales/bass-scales.component';
@@ -20,7 +19,6 @@ import { ThemeService } from './services/theme.service';
   declarations: [
     AppComponent,
     CompositionIdeaComponent,
-    RandomChordsComponent,
     MusicResourcesComponent,
     PageNotFoundComponent,
     BassScalesComponent,
