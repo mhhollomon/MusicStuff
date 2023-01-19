@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { equalWeightedChooser } from '../utils/chooser';
 import { HelpTextEmitterService } from '../help-text-emitter.service';
 
-const HELP_TEXT = "This page will show you fingerings to various scales on a 4 string bass guitar";
+const HELP_TEXT = "This page will show you fingerings for various scales on a 4 string bass guitar";
 const HELP_PAGE_NAME = "Bass Scales";
 
 
@@ -21,8 +21,7 @@ const scale_positions : { [index : string] : { key : string, name : string, pos 
   'blues' : { key : 'blues', name : 'Blues', 
               pos : [ mkfg('p-1-1', 1), mkfg('p-4-1', 4),
                       mkfg('p-1-2', 1), mkfg('p-2-2', 2), mkfg('p-3-2', 3), 
-                      mkfg('p-1-3', 1), mkfg('p-3-3', 3),
-                      mkfg('p-1-4', 1), mkfg('p-3-4', 3), mkfg('p-4-4', 4), 
+                      mkfg('p-1-3', 1), mkfg('p-3-3', 3), mkfg('p-4-3', 4),
                      ] },
 
   'major-f1' : { key : 'major-f1', name : 'Major F1', 
