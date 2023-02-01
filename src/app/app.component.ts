@@ -38,11 +38,15 @@ export class AppComponent implements OnInit {
             link: './bass-scales',
             tooltip : 'Learn fingerings for scales on a bass guitar',
         }, {
+            label: 'CLEFS',
+            link: './clefs',
+            tooltip : 'Learn or review the musical clefs',
+        },{
             label: 'RESOURCES',
             link: './music-resources',
             tooltip : 'Links to resources about music',
         },
-    ];
+];
 
     constructor(
         private router: Router, 

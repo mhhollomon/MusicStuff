@@ -15,6 +15,7 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HelpTextEmitterService } from './help-text-emitter.service';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 import { ThemeService } from './services/theme.service';
+import { ClefsComponent } from './clefs/clefs.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +25,8 @@ import { ThemeService } from './services/theme.service';
     BassScalesComponent,
     HomeComponent,
     HelpDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    ClefsComponent
   ],
   imports: [
     BrowserModule, 
