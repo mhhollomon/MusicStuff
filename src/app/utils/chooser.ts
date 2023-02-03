@@ -29,8 +29,8 @@ export class Chooser<T> {
     pick() : Choice<T> {
 
         /*
-         * Use the cryupto interface to get random nubmers.
-         * Math.random is really aweful. While it is indeed a flat 
+         * Use the crypto interface to get random nubmers.
+         * Math.random is really awful. While it is indeed a flat 
          * distribution, it is very "streaky", with relative long runs
          * with only small changes in value.
          */
@@ -70,4 +70,21 @@ export function chooseFrom<T>(choices : Choice<T>[]) : T {
 
 export function yesno(trueWeight : number, falseWeight : number) : boolean {
     return new Chooser([mkch(true, trueWeight), mkch(false, falseWeight)]).choose();
+}
+
+export function shuffle<T>( input : T[]) : T[] {
+    const left : T[] = [...input];
+    const retval : T[] = [];
+
+    while (left.length > 0) {
+        const a = new Uint32Array(1);
+        crypto.getRandomValues(a);
+
+        const rnd_num = Math.floor(a[0] * left.length / Math.pow(2, 32));
+        // This is inefficent, but these lists are not huge.
+        retval.push(left[rnd_num]);
+        left.splice(rnd_num, 1);
+    }
+
+    return retval;
 }

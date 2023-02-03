@@ -41,6 +41,10 @@ export class AppComponent implements OnInit {
             label: 'CLEFS',
             link: './clefs',
             tooltip : 'Learn or review the musical clefs',
+        }, {
+            label: 'BIG18',
+            link: './big18',
+            tooltip : "The 'Big 18' chords",
         },{
             label: 'RESOURCES',
             link: './music-resources',

@@ -1,0 +1,5 @@
+// These assume that sub will not be used without sup and that the
+// sub tag comes lexically after the sup tag.
+sub, sup {vertical-align: baseline; position: relative; font-size: 70%;}
+sup {top: -0.6em; }
+sub {bottom: -0.40em; left : -0.5em;} 

@@ -1,0 +1,125 @@
+
+<div>
+
+    <div>
+        <!-- MAJOR/MINOR Switch --------->
+        <mat-button-toggle-group (change)="switchTonality($event.value)" [value]="tonalityValue" name="tonality" aria-label="Major or Minor">
+            <mat-button-toggle value="true">Major</mat-button-toggle>
+            <mat-button-toggle value="false">Minor</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-button-toggle-group class="ml4" (change)="switchMode($event)" [value]="screenMode" name="screenMode" aria-label="Study or Quiz Mode">
+            <mat-button-toggle value="study">Study</mat-button-toggle>
+            <mat-button-toggle value="quiz">Quiz</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+    <div #mainContainer class="main-container">
+
+        <div #sidePanel style="display:none;"  class="side-panel">
+            <!-- empty spacer for animation -->
+            <div></div>
+
+            <!-- toggles -->
+            <div>
+                <mat-button-toggle-group class="ml4" [value]='quizMode' (change)="switchDifficulty($event)" 
+                            name="difficulty" aria-label="How hard do you want it">
+                    <mat-button-toggle value="easy">Easy</mat-button-toggle>
+                    <mat-button-toggle value="hard">Hard</mat-button-toggle>
+                    <mat-button-toggle value="harder">Harder</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <!--Draw pile-->
+            <div >
+                <div class="draw-pile"
+                    dndDropzone 
+                    (dndDrop)="dropOnGrid($event, {area : 'draw', from : [-1, -1], data : drawTop})"
+                >
+                    <app-roman-chord class="pile-item" 
+                        [dndDraggable]="{area : 'draw', from : [-1,-1], data : drawTop}"
+                        [dndDisableDragIf]="!timerRunning"
+                        dndEffectAllowed="move"
+                        *ngIf="!drawTop.empty" [main_text]="drawTop.main" 
+                            [super_text]="drawTop.sup" [sub_text]="drawTop.sub">
+                    </app-roman-chord>
+                </div>
+                <label>Draw</label>
+            </div>
+
+            <div class="flex">
+                <!-- CLOCK -->
+                <label class="clock">{{timeRemaining}}</label>
+
+                <div class="dib" style="width : 2em;"></div>
+
+                <!--Discard pile-->
+                <div>           
+                    <div class="discard-pile"
+                        dndDropzone 
+                        (dndDrop)="dropOnGrid($event, {area : 'discard', from : [-1, -1], data : discardTop})"                    
+                    >
+                        <app-roman-chord class="pile-item" 
+                            [dndDraggable]="{area : 'discard', from : [-1,-1], data : discardTop}"
+                            [dndDisableDragIf]="!timerRunning"
+                            dndEffectAllowed="move"
+                            *ngIf="!discardTop.empty" [main_text]="discardTop.main" 
+                                [super_text]="discardTop.sup" [sub_text]="discardTop.sub">
+                        </app-roman-chord>
+
+                    </div>
+                    <label>Discard</label>
+                </div>
+            </div>
+
+            <!--- Buttons -->
+            <div>
+                <button mat-raised-button [disabled]="timerRunning" 
+                    (click)="clickStart()"   color="accent">Start</button> 
+
+                <div class="dib" style="width : 2em;"></div>
+
+                <button mat-raised-button (click)="clickReset()"  
+                    color="primary">Reset Quiz</button>
+
+                <div class="dib" style="width : 2em;"></div>
+
+                <button mat-raised-button 
+                    (click)="clickSubmit()"   color="accent">Submit</button> 
+                </div>
+
+        </div>
+
+        <!--   THE GRID --------------->
+        <div class="big-grid-container">
+
+            <!-- COLUMN HEADERS -------->
+            <div class="chord-grid-column-header"></div>
+            <div class="chord-grid-column-header" *ngFor="let h of currentHeaders" [innerHTML]="h"></div>
+
+            <!-- ROW HEADERS AND DATA -------->
+            <ng-template ngFor let-row [ngForOf]="currentGridData" let-rowIndex="index">
+                <div class="chord-grid-row-header"><span class="hat">{{rowIndex + 1}}</span></div>
+                    <div class="chord-grid-item {{col.wrong? 'wrong' : ''}} {{(colorEmpty && col.empty) ? 'empty' : ''}}" 
+                            dndDropzone 
+                            (dndDrop)="dropOnGrid($event, {area : 'grid', from : [rowIndex, colIndex], data : col})"
+                            [dndDisableIf]="colorEmpty && col.empty"
+                            *ngFor="let col of row; let colIndex=index">
+                        <app-roman-chord 
+                            [dndDraggable]="{area : 'grid', from : [rowIndex, colIndex], data : col}" 
+                                [dndDisableIf]="screenMode === 'study' || (colorEmpty && col.empty)"
+                                dndEffectAllowed="move" *ngIf="!col.empty" [main_text]="col.main" 
+                                [super_text]="col.sup" [sub_text]="col.sub"></app-roman-chord>
+                    </div>
+            </ng-template>
+
+        </div>
+    </div>
+
+    <p class="mv4 i f5">
+        Based on ideas from <a class="mhh-mat-label" href="https://music.yale.edu/people/seth-monahan">Dr. Seth Monahan</a>
+        <br>
+        See <a href="https://www.youtube.com/watch?v=hw3GfElNFPA">His Youtube Video</a> for more
+    </p>
+    
+</div>

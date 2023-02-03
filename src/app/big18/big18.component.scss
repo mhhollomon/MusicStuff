@@ -1,0 +1,122 @@
+
+$transition-timing : 2s;
+$grid_height : 2em;
+$cell_width : 3em;
+$font_size : 30px;
+
+.main-container {
+    display: grid;
+    grid-template-columns: [side] 0.5rem [grid-col] 1fr;
+    justify-items: center;
+    transition: grid-template-columns $transition-timing;
+}
+
+.main-container.quiz-mode {
+    grid-template-columns: [side] 30rem [grid-col] 1fr;
+}
+
+.big-grid-container {
+    grid-column-start: grid-col;
+    display : grid;
+    grid-template-columns:  2em repeat(7, $cell_width);
+    font-size : $font_size;
+    font-weight : bold;
+    font-family : serif;
+    transition: all $transition-timing;
+}
+
+
+.chord-grid-column-header {
+    border : none;
+    width : 100%;
+    height : $grid_height;
+    display : grid;
+    justify-items: center;
+    align-items: flex-end;
+    padding-bottom: 0.25em;
+}
+
+.chord-grid-row-header {
+    border : none;
+    width : 100%;
+    height : $grid_height;
+    display : grid;
+    justify-items: flex-end;
+    align-items: center;
+    padding-right: 0.3em;
+}
+
+.hat:before {
+    content: "^";
+    position: relative;
+    top : -0.39em;
+    left : 0.55em;
+}
+
+.chord-grid-item {
+    border : 1px solid black;
+    width : 100%;
+    height : $grid_height;
+    display : grid;
+    justify-items: center;
+    align-items: center;
+
+}
+
+.empty {
+    background-color: rgb(200, 200, 200);
+}
+
+.wrong {
+    border : 3px solid red;
+}
+
+.side-panel {
+    display : grid;
+    width : 100%;
+    grid-template-rows: 1em [toggle] 4em [draw] 10em [discard] 10em [buttons] 5em;
+    overflow: clip;
+    justify-items: center;
+}
+
+
+@mixin pile  {
+    width : $cell_width;
+    height : $grid_height;
+    font-size : $font_size;
+    font-weight : bold;
+    font-family : serif;
+    border : 1px solid black;
+}
+
+.discard-pile {
+    @include pile;
+    justify-self: end;
+}
+
+.draw-pile {
+    @include pile;
+}
+
+.pile-item {
+    width : 100%;
+    height : 100%;
+    display : grid;
+    justify-items: center;
+    align-items: center;
+
+}
+
+.clock {
+    display : grid;
+    font-size : $font_size;
+    font-weight : bold;
+    border : 1px solid black;
+    border-radius: 10%;
+    width : $cell_width;
+    height : $grid_height;
+    justify-content : center;
+    align-content : center;
+
+
+}

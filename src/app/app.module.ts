@@ -5,6 +5,8 @@ import { MaterialModule } from './material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { DndModule } from 'ngx-drag-drop';
+
 import { CompositionIdeaComponent } from './composition-idea/composition-idea.component';
 import { MusicResourcesComponent } from './music-resources/music-resources.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -16,6 +18,9 @@ import { HelpTextEmitterService } from './help-text-emitter.service';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 import { ThemeService } from './services/theme.service';
 import { ClefsComponent } from './clefs/clefs.component';
+import { Big18Component } from './big18/big18.component';
+import { RomanChordComponent } from './big18/roman-chord/roman-chord.component';
+import { QuizResultDialogComponent } from './big18/quiz-result-dialog/quiz-result-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,12 +31,17 @@ import { ClefsComponent } from './clefs/clefs.component';
     HomeComponent,
     HelpDialogComponent,
     ErrorDialogComponent,
-    ClefsComponent
+    ClefsComponent,
+    Big18Component,
+    RomanChordComponent,
+    QuizResultDialogComponent
   ],
   imports: [
     BrowserModule, 
     BrowserAnimationsModule,
     MaterialModule,
+
+    DndModule,
 
     AppRoutingModule,
   ],
