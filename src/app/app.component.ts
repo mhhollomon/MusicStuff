@@ -45,6 +45,10 @@ export class AppComponent implements OnInit {
             label: 'BIG18',
             link: './big18',
             tooltip : "The 'Big 18' chords",
+        }, {
+            label: 'FREQ',
+            link: './freq',
+            tooltip : "Frequency converter",
         },{
             label: 'RESOURCES',
             link: './music-resources',

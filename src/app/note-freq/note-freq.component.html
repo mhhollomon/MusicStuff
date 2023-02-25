@@ -1,0 +1,43 @@
+<div class="dt">
+    <div class="dtc pr4">
+        <h2>Octave Numbering</h2>
+        <mat-button-toggle-group vertical [(ngModel)]="octaveNumbering" (ngModelChange)="octave_change()">
+            <mat-button-toggle value="DAW">DAW (C3 = Middle C)</mat-button-toggle>
+            <mat-button-toggle value="ORCH">Orchestral (C4 = Middle C)</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <div class="dtc">
+        <div class="pb4">
+            <mat-button-toggle-group [(ngModel)]="inputType">
+                <mat-button-toggle value="FREQ">Frequency</mat-button-toggle>
+                <mat-button-toggle value="NAME">Name</mat-button-toggle>
+                <mat-button-toggle value="MIDI">MIDI #</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div>
+            <div>
+                <mat-form-field>
+                    <mat-label>Frequency</mat-label>
+                    <input [formControl]="frequency" type="number" (blur)="freq_change()" [readonly]="inputType !== 'FREQ'" matInput>
+                    <mat-error>Must be btween 16.35 and 4000</mat-error>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <mat-label>Note</mat-label>
+                    <input type="text" [formControl]="note_name" (blur)="name_change()" [readonly]="inputType !== 'NAME'" matInput>
+                    <mat-error>Invalid Note Name</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field>
+                    <mat-label>MIDI #</mat-label>
+                    <input [formControl]="midi_number" type="number" (input)="midi_change()" (blur)="midi_change()" [readonly]="inputType !== 'MIDI'" matInput>
+                    <mat-error>MIDI number must 0 to 127</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+</div>

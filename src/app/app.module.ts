@@ -19,8 +19,9 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 import { ThemeService } from './services/theme.service';
 import { ClefsComponent } from './clefs/clefs.component';
 import { Big18Component } from './big18/big18.component';
-import { RomanChordComponent } from './big18/roman-chord/roman-chord.component';
+import { RomanChordComponent } from './roman-chord/roman-chord.component';
 import { QuizResultDialogComponent } from './big18/quiz-result-dialog/quiz-result-dialog.component';
+import { NoteFreqComponent } from './note-freq/note-freq.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +35,8 @@ import { QuizResultDialogComponent } from './big18/quiz-result-dialog/quiz-resul
     ClefsComponent,
     Big18Component,
     RomanChordComponent,
-    QuizResultDialogComponent
+    QuizResultDialogComponent,
+    NoteFreqComponent
   ],
   imports: [
     BrowserModule, 

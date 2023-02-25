@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { BassScalesComponent } from './bass-scales/bass-scales.component';
 import { ClefsComponent } from './clefs/clefs.component';
 import { Big18Component } from './big18/big18.component';
+import { NoteFreqComponent } from './note-freq/note-freq.component';
 
 const routes: Routes = [
     { path : '',   redirectTo : 'home', pathMatch: 'full' },
@@ -15,8 +16,9 @@ const routes: Routes = [
     { path : 'composition-idea', component : CompositionIdeaComponent },
     { path : 'music-resources',  component : MusicResourcesComponent },
     { path : 'bass-scales',      component : BassScalesComponent },
-    { path : 'clefs',           component : ClefsComponent },
-    { path : 'big18',           component : Big18Component },
+    { path : 'clefs',            component : ClefsComponent },
+    { path : 'big18',            component : Big18Component },
+    { path : 'freq',             component : NoteFreqComponent },
 
     // page not found
     {path : 'page-not-found',    component : PageNotFoundComponent },
