@@ -26,7 +26,7 @@ function midi2freq(midi : number, tuning : number) : number {
 
 const note_offset : {[index : string ] : number }= {
   'C' : 0, 'C#' : 1, 'D' : 2, 'D#' : 3, "E" : 4, 'F' : 5, 'F#' : 6, 'G' : 7 , 'G#' : 8, 'A' : 9, 'A#' : 10, "B" : 11,
-           'Db' : 1,          'Eb' : 3,                   'Gb' : 6,           'Ab' : 8,          'Bb' : 10,
+  'B#': 0, 'Db' : 1,          'Eb' : 3, "Fb": 4, 'E#': 5, 'Gb' : 6,           'Ab' : 8,          'Bb' : 10, "Cb": 11,
 }
 
 const notes = ['C', 'C#', 'D', 'D#', "E", 'F', 'F#', 'G', 'G#', 'A', 'A#', "B"]
