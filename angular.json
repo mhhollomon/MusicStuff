@@ -70,7 +70,8 @@
               "browserTarget": "music-stuff:build:production"
             },
             "development": {
-              "browserTarget": "music-stuff:build:development"
+              "browserTarget": "music-stuff:build:development",
+              "host" : "172.28.203.156"
             }
           },
           "defaultConfiguration": "development"
